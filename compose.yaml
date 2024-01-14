@@ -1,0 +1,10 @@
+services:
+  db_pg:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_DB: tempDb
+      POSTGRES_USER: temp_user
+      POSTGRES_PASSWORD: tem_password
+    ports:
+      - 5432

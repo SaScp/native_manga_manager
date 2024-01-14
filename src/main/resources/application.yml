@@ -1,0 +1,8 @@
+spring:
+  sql:
+    init:
+      mode: always
+jwt:
+  secret:
+    access: '{"kty" : "oct", "k" : "hi7S5RX5ZRZooHA0RKGctZ-KtR9FoESgCnH-3BNg5XI"}'
+    refresh: '{"kty" : "oct", "k" : "956PBFst1FguLr5irJD-aQ"}'
