@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                 authorizationManagerRequestMatcherRegistry
                         .requestMatchers("/v1/admin/**").
                         hasRole("ADMIN")
-                        .requestMatchers("/v1/user/**", "/Hello.html")
+                        .requestMatchers("/v1/user/**")
                         .hasRole("USER")
                         .anyRequest()
                         .permitAll()
