@@ -55,12 +55,11 @@ public class DefaultMangaService implements MangaService {
         return mangas;
     }
 
-    private void checkOrderIsEmpty
-            (
-                    String order,
-                    List<Long> genreIds,
-                    List<Long> types
-            ) {
+    private void checkOrderIsEmpty(
+            String order,
+            List<Long> genreIds,
+            List<Long> types
+    ) {
         if (order != null) {
             Sort.sort(Manga.class);
             mangas = this.mangaRepository.findAll(Sort.by(order));
