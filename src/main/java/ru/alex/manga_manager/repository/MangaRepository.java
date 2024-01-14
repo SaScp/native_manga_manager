@@ -2,6 +2,7 @@ package ru.alex.manga_manager.repository;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +13,9 @@ import java.util.Collection;
 import java.util.List;
 
 
-/**Repository for {@link ru.alex.manga_manager.model.data.Manga}*/
+/**
+ * Repository for {@link ru.alex.manga_manager.model.data.Manga}
+ */
 @Repository
 public interface MangaRepository extends JpaRepository<Manga, String> {
 
@@ -24,7 +27,7 @@ public interface MangaRepository extends JpaRepository<Manga, String> {
     );
 
     @Query("select manga from Manga manga join manga.genres genres where genres.id in :genre and manga.type.id in :types")
-    List<Manga> findByTypeInAndGenresIn(@Param("types") Collection<Long> types, @Param("genre") Collection<Long> genres, Pageable pageable);
+    List<Manga> findAllByTypeInAndGenresIn(@Param("types") Collection<Long> types, @Param("genre") Collection<Long> genres, Pageable pageable);
 
 
     @Query(value = "select manga from Manga manga join manga.genres genres where genres.id in :genre")

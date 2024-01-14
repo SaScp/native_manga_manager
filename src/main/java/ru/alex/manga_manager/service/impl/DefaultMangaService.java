@@ -43,33 +43,61 @@ public class DefaultMangaService implements MangaService {
             String order
     ) {
         this.pageRequest = PageRequest.of(pageNumber, 20);
+        checkAllParams(order, types, genreIds);
+        return mangas;
+    }
+
+    private void checkAllParams(String order,
+                                List<Long> genreIds,
+                                List<Long> types
+    ) {
+        if (genreIds != null && types != null && order != null && order.startsWith("-")) {
+            mangas = this.mangaRepository.findByTypeInAndGenresAndGroupByOrderDescendingOrderIn(types,
+                    genreIds,
+                    order.substring(1),
+                    pageRequest
+            );
+        } else if (genreIds != null && types != null && order != null && order.startsWith("+")){
+            pageRequest.withSort(Sort.by(order.substring(1)));
+            mangas = this.mangaRepository.findAllByTypeInAndGenresIn(types, genreIds, this.pageRequest);
+        } else {
+            checkOrderIsEmpty(order, genreIds, types);
+        }
+    }
+    private void checkOrderIsEmpty(
+            String order,
+            List<Long> types,
+            List<Long> genreIds
+    ) {
+        if (genreIds != null && types != null) {
+            mangas = this.mangaRepository.findAllByTypeInAndGenresIn(types, genreIds, this.pageRequest);
+        } else {
+            if (order != null) {
+                Sort.sort(Manga.class);
+                mangas = this.mangaRepository.findAll(Sort.by(order.substring(1)));
+            } else {
+                checkTypesAndGenresIds(order, types, genreIds);
+            }
+        }
+
+    }
+
+    private void  checkTypesAndGenresIds(
+            String order,
+            List<Long> types,
+            List<Long> genreIds
+    ) {
         if (types != null) {
             mangas = this.mangaRepository.findAllByTypesIn(types, this.pageRequest);
         } else {
             if (genreIds != null) {
                 mangas = this.mangaRepository.findByGenresIn(genreIds, this.pageRequest);
             } else {
-                checkOrderIsEmpty(order, genreIds, types);
-            }
-        }
-        return mangas;
-    }
-
-    private void checkOrderIsEmpty(
-            String order,
-            List<Long> genreIds,
-            List<Long> types
-    ) {
-        if (order != null) {
-            Sort.sort(Manga.class);
-            mangas = this.mangaRepository.findAll(Sort.by(order));
-        } else {
-            if (genreIds != null && types != null) {
-                mangas = this.mangaRepository.findByTypeInAndGenresIn(types, genreIds, this.pageRequest);
-            } else {
                 mangas = this.mangaRepository.findAll(this.pageRequest).toList();
             }
         }
     }
+
+
 
 }
