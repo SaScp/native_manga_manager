@@ -67,6 +67,10 @@ public class Manga implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "manga_id"))
     @ToString.Exclude
     private List<User> users;
+
+    @OneToMany(mappedBy = "manga")
+    private List<Comment> comments;
+
     @Override
     public final boolean equals(Object object) {
         if (this == object) return true;
