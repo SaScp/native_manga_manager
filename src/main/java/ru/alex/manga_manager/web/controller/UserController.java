@@ -22,7 +22,7 @@ public class UserController {
     private final UserConverter<UserDto, User> userDtoConverter;
 
     @GetMapping("/")
-    public UserDto findUserByPrincipal(Authentication authentication) {
+    public UserDto findUserByAuthentication(Authentication authentication) {
         return userDtoConverter.convert(userService.findUserByAuthentication(authentication));
     }
 
