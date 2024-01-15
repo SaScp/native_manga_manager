@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class MangaManagerApplication {
@@ -18,4 +19,6 @@ public class MangaManagerApplication {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
+
 }
