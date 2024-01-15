@@ -33,8 +33,11 @@ public class Comment {
     @Column(name = "create_at", nullable = false)
     private ZonedDateTime createAt;
 
-    @OneToMany
-    @JoinColumn(name = "parent_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent")
     private List<Comment> comments;
 
     @Column(name = "update_at", nullable = false)

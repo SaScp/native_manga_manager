@@ -6,9 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.alex.manga_manager.model.data.Comment;
 import ru.alex.manga_manager.model.data.Manga;
+import ru.alex.manga_manager.model.dto.CommentDto;
 import ru.alex.manga_manager.model.dto.MangaDto;
+import ru.alex.manga_manager.repository.CommentRepository;
 import ru.alex.manga_manager.service.MangaService;
+import ru.alex.manga_manager.util.converter.CommentConverter;
 import ru.alex.manga_manager.util.converter.MangaConverter;
 
 import java.util.List;
@@ -24,9 +28,19 @@ public class TitleController {
     @Qualifier("defaultMangaDtoConverter")
     private final MangaConverter<MangaDto, Manga> mangaConverter;
 
+    @Qualifier("defaultCommentConverter")
+    private final CommentConverter<CommentDto, Comment> commentConverter;
+
+    private final CommentRepository commentRepository;
     @GetMapping("/")
     public MangaDto findMangaById(@PathVariable("id") String id) {
         return mangaConverter.convert(mangaService.findMangaById(id));
+    }
+
+    @GetMapping("/comments")
+    public List<CommentDto> commentDtos(@PathVariable String id) {
+        List<Comment> commentDtos = commentRepository.findRootComments();
+        return commentDtos.stream().map(commentConverter::convert).toList();
     }
 
     @GetMapping("/chapters")
