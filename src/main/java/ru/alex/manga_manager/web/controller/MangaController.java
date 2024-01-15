@@ -31,9 +31,10 @@ public class MangaController {
     public List<MangaDto> findAllMangas(@RequestParam(value = "type", required = false) ArrayList<Long> types,
                                         @RequestParam(value = "page", defaultValue = "0", required = false) Integer pageNumber,
                                         @RequestParam(value = "genres", required = false) ArrayList<Long> genres,
-                                        @RequestParam(value = "order", required = false) String order
+                                        @RequestParam(value = "order", required = false) String order,
+                                        @RequestParam(value = "count", required = false, defaultValue = "20") Integer pageSize
     ) {
-        return mangaService.findAllMangas(pageNumber, genres, types, order).stream().map(mangaConverter::convert).toList();
+        return mangaService.findAllMangas(pageNumber, genres, types, order, pageSize).stream().map(mangaConverter::convert).toList();
     }
 
     @ResponseStatus(HttpStatus.OK)

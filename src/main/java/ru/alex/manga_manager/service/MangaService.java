@@ -12,7 +12,8 @@ public interface MangaService {
     List<Manga> findAllMangas(Integer pageNumber,
                               List<Long> genresIds,
                               List<Long> types,
-                              String order
+                              String order,
+                              Integer pageSize
     );
 
     Manga findMangaById(String id);
