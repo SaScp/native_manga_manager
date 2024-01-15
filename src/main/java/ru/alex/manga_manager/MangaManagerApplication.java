@@ -15,10 +15,6 @@ public class MangaManagerApplication {
         SpringApplication.run(MangaManagerApplication.class, args);
     }
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
 
 
 }
