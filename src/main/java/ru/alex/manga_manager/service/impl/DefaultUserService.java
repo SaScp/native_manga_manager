@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.alex.manga_manager.model.data.Role;
@@ -28,6 +29,7 @@ import ru.alex.manga_manager.util.exception.UserNotFoundException;
 import java.security.Principal;
 import java.text.ParseException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -57,29 +59,28 @@ public class DefaultUserService implements UserService {
         if (this.userRepository.findById(id).isPresent())
             id = UUID.randomUUID().toString();
 
-        role.add(user);
 
-        user.setId(id);
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Set.of(role));
         user.setRegistrationDate(Date.from(Instant.now()));
         user.setDateOfBirth(Date.from(Instant.now()));
+        user.setMangas(new ArrayList<>());
+        user.setRoles(Set.of(role));
+        user.setId(id);
 
+        role.add(user);
         user = this.userRepository.save(user);
         this.roleRepository.save(role);
         return user;
     }
 
     @Override
-    public User findUserByPrincipal(Principal principal) {
-        return this.userRepository.findByEmail(principal.getName()).orElseThrow(() ->
-                new UserNotFoundException("User" + principal.getName() + "not found"));
+    public User findUserByAuthentication(Authentication authentication) {
+        return this.userRepository.findByEmail(authentication.getName()).orElseThrow(() ->
+                new UserNotFoundException("User" + authentication.getName() + "not found"));
     }
-
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("user with email:" + email + "not found"));
     }
-
 
 }

@@ -36,6 +36,6 @@ public class UserDto implements Serializable {
     /*@NotNull*/
     private Date dateOfBirth;
 
-    private List<MangaDto> mangaDtos;
+    private List<MangaDto> mangas;
 
 }
