@@ -64,7 +64,8 @@ public class DefaultAuthenticationService implements AuthenticationService {
     public DefaultAuthenticationService(UserService userService,
                                         UserValidator userValidator,
                                         @Value("${jwt.secret.access}") String access,
-                                        @Value("${jwt.secret.refresh}") String refresh, AuthenticationProvider authenticationProvider) throws ParseException, KeyLengthException {
+                                        @Value("${jwt.secret.refresh}") String refresh,
+                                        AuthenticationProvider authenticationProvider) throws ParseException, KeyLengthException {
         this.userService = userService;
         this.userValidator = userValidator;
         this.accessTokenJwsStringSerializer = new DefaultAccessTokenJwsStringSerializer(

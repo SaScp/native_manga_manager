@@ -1,7 +1,14 @@
 package ru.alex.manga_manager.service.impl;
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.KeyLengthException;
+import com.nimbusds.jose.crypto.DirectDecrypter;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jose.jwk.OctetSequenceKey;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.alex.manga_manager.model.data.Role;
@@ -9,12 +16,17 @@ import ru.alex.manga_manager.model.data.User;
 import ru.alex.manga_manager.model.dto.UserDto;
 import ru.alex.manga_manager.repository.RoleRepository;
 import ru.alex.manga_manager.repository.UserRepository;
+import ru.alex.manga_manager.security.jwt.deserializer.AccessTokenJwsStringDeserializer;
+import ru.alex.manga_manager.security.jwt.deserializer.DefaultAccessTokenJwsStringDeserializer;
+import ru.alex.manga_manager.security.jwt.deserializer.DefaultRefreshTokenJwsStringDeserializer;
+import ru.alex.manga_manager.security.jwt.deserializer.RefreshTokenJwsStringDeserializer;
 import ru.alex.manga_manager.service.UserService;
 import ru.alex.manga_manager.util.converter.UserConverter;
 import ru.alex.manga_manager.util.exception.RoleNotFoundException;
 import ru.alex.manga_manager.util.exception.UserNotFoundException;
 
 import java.security.Principal;
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
@@ -33,6 +45,8 @@ public class DefaultUserService implements UserService {
 
     @Qualifier("passwordEncoder")
     private final PasswordEncoder passwordEncoder;
+
+
 
     public User save(UserDto userDto) {
 
@@ -64,7 +78,7 @@ public class DefaultUserService implements UserService {
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("user with email:" + email+ "not found"));
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("user with email:" + email + "not found"));
     }
 
 
