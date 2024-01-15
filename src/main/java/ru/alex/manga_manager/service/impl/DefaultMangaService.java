@@ -9,6 +9,7 @@ import ru.alex.manga_manager.model.data.Manga;
 import ru.alex.manga_manager.model.dto.MangaDto;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.service.MangaService;
+import ru.alex.manga_manager.util.exception.MangaNotFoundException;
 
 
 import java.util.*;
@@ -50,6 +51,12 @@ public class DefaultMangaService implements MangaService {
         this.pageRequest = order != null ? PageRequest.of(pageNumber, 20, sort) : PageRequest.of(pageNumber, 20);
         checkAllParams(order, types, genreIds);
         return mangas;
+    }
+
+    @Override
+    public Manga findMangaById(String id) {
+        return this.mangaRepository.findById(id)
+                .orElseThrow(() -> new MangaNotFoundException("Manga with id: " + id + " Not Found"));
     }
 
     private void checkAllParams(String order,

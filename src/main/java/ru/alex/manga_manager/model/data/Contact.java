@@ -6,6 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+import java.util.Date;
+
 @Entity
 @Data
 @Table(name = "t_contact")
@@ -18,4 +20,7 @@ public class Contact {
 
     @Column(name = "description", nullable = false)
     private String description;
+
+    @Column(name = "create_at", nullable = false)
+    private Date createAt;
 }

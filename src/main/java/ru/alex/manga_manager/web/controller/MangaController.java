@@ -43,4 +43,9 @@ public class MangaController {
         return mangaService.search(title, page).stream().map(mangaConverter::convert).toList();
     }
 
+    @GetMapping("/title/{id}")
+    public MangaDto findMangaById(@PathVariable("id") String id) {
+        return mangaConverter.convert(mangaService.findMangaById(id));
+    }
+
 }
