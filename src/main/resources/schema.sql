@@ -44,7 +44,8 @@ CREATE TABLE IF NOT EXISTS t_contact
 (
     id           VARCHAR(255) primary key,
     number_phone VARCHAR(255) NOT NULL,
-    description  TEXT         NOT NULL
+    description  TEXT         NOT NULL,
+    create_at    TIMESTAMP    NOT NULL
 );
 CREATE TABLE IF NOT EXISTS t_user_t_role
 (

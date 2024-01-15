@@ -10,6 +10,8 @@ import ru.alex.manga_manager.service.ContactService;
 import ru.alex.manga_manager.util.converter.ContactConverter;
 
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -25,7 +27,7 @@ public class DefaultContactService implements ContactService {
     public Contact save(ContactDto contactDto) {
         Contact contact = this.converter.convert(contactDto);
         contact.setId(UUID.randomUUID().toString());
-
+        contact.setCreateAt(Date.from(Instant.now()));
         return this.contactRepository.save(contact);
     }
 }

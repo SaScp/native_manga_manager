@@ -26,9 +26,9 @@ public class ContactController {
 
     private final RoleRepository repository;
 
-    @PostMapping("/send")
+    @PostMapping("/")
     public ResponseEntity<Contact> sendContactInfo(@RequestBody ContactDto contactDto) throws URISyntaxException {
-        return ResponseEntity.created(new URI("/v1/contact/send"))
+        return ResponseEntity.created(new URI("/v1/contact/"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(contactService.save(contactDto));
     }

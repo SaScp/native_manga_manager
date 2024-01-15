@@ -14,4 +14,6 @@ public interface MangaService {
                               List<Long> types,
                               String order
     );
+
+    Manga findMangaById(String id);
 }

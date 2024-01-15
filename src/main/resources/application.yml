@@ -1,8 +1,15 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   sql:
     init:
       mode: always
+  jpa:
+    show-sql: true
 jwt:
   secret:
-    access: '{"kty" : "oct", "k" : "hi7S5RX5ZRZooHA0RKGctZ-KtR9FoESgCnH-3BNg5XI"}'
-    refresh: '{"kty" : "oct", "k" : "956PBFst1FguLr5irJD-aQ"}'
+    access: ${ACCESS_TOKEN}
+    refresh: ${REFRESH_TOKEN}
+logging:
+  level:
+    org.springframework.security: trace

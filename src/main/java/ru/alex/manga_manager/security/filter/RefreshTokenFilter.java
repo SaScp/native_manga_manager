@@ -20,11 +20,15 @@ import ru.alex.manga_manager.model.response.Tokens;
 import ru.alex.manga_manager.security.authntication.TokenUser;
 import ru.alex.manga_manager.security.jwt.factory.AccessFactory;
 import ru.alex.manga_manager.security.jwt.factory.DefaultAccessFactory;
+import ru.alex.manga_manager.security.jwt.factory.DefaultRefreshFactory;
+import ru.alex.manga_manager.security.jwt.factory.RefreshFactory;
 import ru.alex.manga_manager.security.jwt.serializer.AccessTokenJwsStringSerializer;
+import ru.alex.manga_manager.security.jwt.serializer.RefreshTokenJweStringSerializer;
 
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.util.Objects;
 
 public class RefreshTokenFilter extends OncePerRequestFilter {
 
@@ -34,9 +38,12 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 
     private AccessFactory accessFactory = new DefaultAccessFactory();
 
+    private RefreshFactory refreshFactory = new DefaultRefreshFactory();
     private AccessTokenJwsStringSerializer accessTokenJwsStringSerializer = Object::toString;
 
     private ObjectMapper objectMapper = new ObjectMapper();
+
+    private RefreshTokenJweStringSerializer refreshTokenJweStringSerializer = Objects::toString;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException,
@@ -48,12 +55,16 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
                         context.getAuthentication().getPrincipal() instanceof TokenUser user &&
                         context.getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("JWT_REFRESH"))) {
                     Token accessToken = this.accessFactory.apply(user.getToken());
+                    Token refreshToken = this.refreshFactory.apply(context.getAuthentication());
 
                     response.setStatus(HttpStatus.OK.value());
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
                     this.objectMapper.writeValue(response.getWriter(),
                             new Tokens(this.accessTokenJwsStringSerializer.apply(accessToken),
-                                    accessToken.expireAt().toString(), null, null));
+                                    accessToken.expireAt().toString(),
+                                    this.refreshTokenJweStringSerializer.apply(refreshToken),
+                                    refreshToken.expireAt().toString()));
                     return;
                 }
             }
@@ -81,5 +92,13 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 
     public void setObjectMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
+    }
+
+    public void setRefreshFactory(RefreshFactory refreshFactory) {
+        this.refreshFactory = refreshFactory;
+    }
+
+    public void setRefreshTokenJweStringSerializer(RefreshTokenJweStringSerializer refreshTokenJweStringSerializer) {
+        this.refreshTokenJweStringSerializer = refreshTokenJweStringSerializer;
     }
 }

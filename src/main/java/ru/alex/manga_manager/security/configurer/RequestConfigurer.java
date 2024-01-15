@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.AuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.session.DisableEncodeUrlFilter;
@@ -23,6 +24,7 @@ import ru.alex.manga_manager.security.jwt.deserializer.AccessTokenJwsStringDeser
 import ru.alex.manga_manager.security.jwt.deserializer.RefreshTokenJwsStringDeserializer;
 import ru.alex.manga_manager.security.jwt.serializer.AccessTokenJwsStringSerializer;
 import ru.alex.manga_manager.security.jwt.serializer.RefreshTokenJweStringSerializer;
+
 
 @Component
 @RequiredArgsConstructor
@@ -63,6 +65,7 @@ public class RequestConfigurer extends AbstractHttpConfigurer<RequestConfigurer,
 
         RefreshTokenFilter refreshTokenFilter = new RefreshTokenFilter();
         refreshTokenFilter.setAccessTokenJwsStringSerializer(accessTokenJwsStringSerializer);
+        refreshTokenFilter.setRefreshTokenJweStringSerializer(refreshTokenJweStringSerializer);
 
         JwtLogoutFilter jwtLogoutFilter =  new JwtLogoutFilter(this.jdbcTemplate);
 
