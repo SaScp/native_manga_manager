@@ -43,15 +43,6 @@ public class MangaController {
         return mangaService.search(search.getTitle(), search.getPage()).stream().map(mangaConverter::convert).toList();
     }
 
-    @RestController
-    @RequestMapping("/title")
-    public class Title {
-        @GetMapping("/{id}")
-        public MangaDto findMangaById(@PathVariable("id") String id) {
-            return mangaConverter.convert(mangaService.findMangaById(id));
-        }
-
-    }
 
 
 }
