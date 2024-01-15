@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import ru.alex.manga_manager.model.data.Comment;
 import ru.alex.manga_manager.model.data.Genre;
 import ru.alex.manga_manager.model.data.Manga;
 
@@ -31,6 +32,10 @@ public interface MangaRepository extends JpaRepository<Manga, String> {
 
     @Query(value = "select manga from Manga manga where manga.type.id in :types")
     List<Manga> findAllByTypesIn(@Param("types") Collection<Long> types, PageRequest pageRequest);
+
+
+    @Query("select manga from Manga manga inner join manga.comments comment where comment.parent = NULL")
+    List<Manga> findRootComments();
 
     @Query(value = "select manga from Manga manga where upper(manga.mainName) like concat('%', upper(:title), '%') or upper(manga.secondaryName) like concat('%', upper(:title), '%')")
     List<Manga> findByMainNameStartingWithOrSecondaryNameStartingWith(@Param("title") String title, Pageable pageable);

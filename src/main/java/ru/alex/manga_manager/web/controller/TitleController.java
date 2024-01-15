@@ -28,20 +28,11 @@ public class TitleController {
     @Qualifier("defaultMangaDtoConverter")
     private final MangaConverter<MangaDto, Manga> mangaConverter;
 
-    @Qualifier("defaultCommentConverter")
-    private final CommentConverter<CommentDto, Comment> commentConverter;
-
-    private final CommentRepository commentRepository;
     @GetMapping("/")
     public MangaDto findMangaById(@PathVariable("id") String id) {
         return mangaConverter.convert(mangaService.findMangaById(id));
     }
 
-    @GetMapping("/comments")
-    public List<CommentDto> commentDtos(@PathVariable String id) {
-        List<Comment> commentDtos = commentRepository.findRootComments();
-        return commentDtos.stream().map(commentConverter::convert).toList();
-    }
 
     @GetMapping("/chapters")
     public List<String> findChaptersByMangaId(@PathVariable("id") String id) {

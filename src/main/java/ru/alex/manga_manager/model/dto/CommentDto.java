@@ -13,9 +13,9 @@ import java.util.List;
  */
 @Data
 public class CommentDto implements Serializable {
-    String id;
-    String text;
-    ZonedDateTime createAt;
-    ZonedDateTime updateAt;
-    List<CommentDto> comments;
+    private String id;
+    private String text;
+    private ZonedDateTime createAt;
+    private ZonedDateTime updateAt;
+    private List<CommentDto> comments;
 }
