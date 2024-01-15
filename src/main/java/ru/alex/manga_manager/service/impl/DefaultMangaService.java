@@ -24,6 +24,9 @@ public class DefaultMangaService implements MangaService {
 
     private List<Manga> mangas;
 
+    private String order;
+
+    private boolean orderFlag = true;
     @Override
     public Manga save(MangaDto mangaDto) {
         return null;
@@ -42,28 +45,37 @@ public class DefaultMangaService implements MangaService {
             List<Long> types,
             String order
     ) {
-        this.pageRequest = PageRequest.of(pageNumber, 20);
+        checkOrderOnStartsWithPlus(order);
+        Sort sort = orderFlag? Sort.by(this.order).ascending() : Sort.by(this.order).descending();
+        this.pageRequest = order != null? PageRequest.of(pageNumber, 20, sort) : PageRequest.of(pageNumber, 20);
         checkAllParams(order, types, genreIds);
         return mangas;
     }
 
     private void checkAllParams(String order,
-                                List<Long> genreIds,
-                                List<Long> types
+                                List<Long> types,
+                                List<Long> genreIds
     ) {
-        if (genreIds != null && types != null && order != null && order.startsWith("-")) {
-            mangas = this.mangaRepository.findByTypeInAndGenresAndGroupByOrderDescendingOrderIn(types,
-                    genreIds,
-                    order.substring(1),
-                    pageRequest
-            );
-        } else if (genreIds != null && types != null && order != null && order.startsWith("+")){
-            pageRequest.withSort(Sort.by(order.substring(1)));
-            mangas = this.mangaRepository.findAllByTypeInAndGenresIn(types, genreIds, this.pageRequest);
+        if (genreIds != null && types != null && order != null) {
+            mangas = this.mangaRepository.findAllByTypeInAndGenresIn(types, genreIds, pageRequest);
+        } else {
+            checkGenresOrTypeOrder(order, genreIds, types);
+        }
+    }
+
+    private void checkGenresOrTypeOrder(String order,
+                       List<Long> genreIds,
+                       List<Long> types
+    ) {
+        if (genreIds != null && order != null) {
+            mangas = this.mangaRepository.findAllByGenresIn(genreIds, pageRequest);
+        } else if (types != null && order != null) {
+            mangas = this.mangaRepository.findAllByTypesIn(types, pageRequest);
         } else {
             checkOrderIsEmpty(order, genreIds, types);
         }
     }
+
     private void checkOrderIsEmpty(
             String order,
             List<Long> types,
@@ -73,8 +85,7 @@ public class DefaultMangaService implements MangaService {
             mangas = this.mangaRepository.findAllByTypeInAndGenresIn(types, genreIds, this.pageRequest);
         } else {
             if (order != null) {
-                Sort.sort(Manga.class);
-                mangas = this.mangaRepository.findAll(Sort.by(order.substring(1)));
+                mangas = this.mangaRepository.findAll(pageRequest).toList();
             } else {
                 checkTypesAndGenresIds(order, types, genreIds);
             }
@@ -91,13 +102,19 @@ public class DefaultMangaService implements MangaService {
             mangas = this.mangaRepository.findAllByTypesIn(types, this.pageRequest);
         } else {
             if (genreIds != null) {
-                mangas = this.mangaRepository.findByGenresIn(genreIds, this.pageRequest);
+                mangas = this.mangaRepository.findAllByGenresIn(genreIds, this.pageRequest);
             } else {
                 mangas = this.mangaRepository.findAll(this.pageRequest).toList();
             }
         }
     }
 
+    private void checkOrderOnStartsWithPlus(String order) {
+        if (order != null) {
+            this.orderFlag = order.startsWith("+");
+            this.order = order.substring(1);
+        }
+    }
 
 
 }
