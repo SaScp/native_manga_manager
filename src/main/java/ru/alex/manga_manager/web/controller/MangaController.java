@@ -30,15 +30,15 @@ public class MangaController {
     @GetMapping(value = "/catalog")
     public List<MangaDto> findAllMangas(@FilterParam FilterEntity filterEntity) {
         return mangaService.findAllMangas(filterEntity.getPageNumber(),
-                        filterEntity.getGenres(),
-                        filterEntity.getTypes(),
-                        filterEntity.getOrder(),
-                        filterEntity.getPageSize())
+                filterEntity.getGenres(),
+                filterEntity.getTypes(),
+                filterEntity.getOrder(),
+                filterEntity.getPageSize())
                 .stream().map(mangaConverter::convert).toList();
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping(value = "/search")
+    @GetMapping(value = "/search")
     public List<MangaDto> searchMangaAboutTitle(@SearchParam SearchEntity search) {
         return mangaService.search(search.getTitle(), search.getPage()).stream().map(mangaConverter::convert).toList();
     }

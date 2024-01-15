@@ -18,7 +18,7 @@ public class SearchParamResolver extends RequestParamMethodArgumentResolver {
 
     @Override
     protected Object resolveName(String name, MethodParameter parameter, NativeWebRequest request) throws Exception {
-        return new SearchEntity(request.getParameter("title"), request.getParameter("page"));
+        return new SearchEntity(request.getParameter("query"), request.getParameter("page"));
     }
 
 
