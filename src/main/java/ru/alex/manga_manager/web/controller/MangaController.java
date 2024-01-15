@@ -9,8 +9,8 @@ import ru.alex.manga_manager.model.data.Manga;
 import ru.alex.manga_manager.model.data.SearchEntity;
 import ru.alex.manga_manager.model.dto.MangaDto;
 import ru.alex.manga_manager.service.MangaService;
-import ru.alex.manga_manager.util.FilterParam;
-import ru.alex.manga_manager.util.SearchParam;
+import ru.alex.manga_manager.util.annotation.FilterParam;
+import ru.alex.manga_manager.util.annotation.SearchParam;
 import ru.alex.manga_manager.util.converter.MangaConverter;
 
 import java.util.List;

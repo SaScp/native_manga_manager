@@ -4,7 +4,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.annotation.RequestParamMethodArgumentResolver;
 import ru.alex.manga_manager.model.data.SearchEntity;
-import ru.alex.manga_manager.util.SearchParam;
+import ru.alex.manga_manager.util.annotation.SearchParam;
 
 public class SearchParamResolver extends RequestParamMethodArgumentResolver {
     public SearchParamResolver(boolean useDefaultResolution) {

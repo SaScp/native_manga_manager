@@ -4,7 +4,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.annotation.RequestParamMethodArgumentResolver;
 import ru.alex.manga_manager.model.data.FilterEntity;
-import ru.alex.manga_manager.util.FilterParam;
+import ru.alex.manga_manager.util.annotation.FilterParam;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +27,6 @@ public class FilterParamResolver extends RequestParamMethodArgumentResolver {
                 Arrays.stream(Objects.requireNonNull(request.getParameterValues("types"))).toList() : null;
         List<String> genres = request.getParameterValues("genres") != null?
                 Arrays.stream(Objects.requireNonNull(request.getParameterValues("genres"))).toList() : null;
-
         return new FilterEntity(types,
                 request.getParameter("pageNumber"),
                 genres,
