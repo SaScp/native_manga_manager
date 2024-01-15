@@ -32,7 +32,7 @@ public interface MangaRepository extends JpaRepository<Manga, String> {
     @Query(value = "select manga from Manga manga where manga.type.id in :types")
     List<Manga> findAllByTypesIn(@Param("types") Collection<Long> types, PageRequest pageRequest);
 
-    @Query(value = "select manga from Manga manga where manga.mainName like :title or manga.secondaryName like :title")
+    @Query(value = "select manga from Manga manga where upper(manga.mainName) like concat('%', upper(:title), '%') or upper(manga.secondaryName) like concat('%', upper(:title), '%')")
     List<Manga> findByMainNameStartingWithOrSecondaryNameStartingWith(@Param("title") String title, Pageable pageable);
 
 }

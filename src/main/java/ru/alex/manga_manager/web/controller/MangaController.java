@@ -37,7 +37,7 @@ public class MangaController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping(value = "search")
+    @PostMapping(value = "/search")
     public List<MangaDto> searchMangaAboutTitle(@RequestParam("query") String title,
                                                 @RequestParam(value = "page", required = false, defaultValue = "0") Integer page) {
         return mangaService.search(title, page).stream().map(mangaConverter::convert).toList();
