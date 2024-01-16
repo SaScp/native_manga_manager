@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import ru.alex.manga_manager.model.data.Role;
@@ -79,6 +80,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
     }
 
     @Override
+    @Transactional
     public Tokens registration(UserDto userDto, BindingResult bindingResult) {
 
         List<Validator> validators = List.of(this.userValidator, new MailValidator(), new PasswordValidator());
@@ -92,7 +94,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
         User user = this.userService.save(userDto);
 
         Authentication authentication =
-                new PreAuthenticatedAuthenticationToken(user.getEmail(), user.getPassword(), user.getRoles().stream()
+                new PreAuthenticatedAuthenticationToken(user.getId(), user.getPassword(), user.getRoles().stream()
                         .map((Role role) -> new SimpleGrantedAuthority(role.getRole())).toList());
 
 
@@ -106,6 +108,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Tokens login(LoginUserDto userDto, BindingResult bindingResult) {
         User user = userService.findByEmail(userDto.getEmail());
 

@@ -2,13 +2,18 @@ package ru.alex.manga_manager.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.alex.manga_manager.model.data.FilterEntity;
 import ru.alex.manga_manager.model.data.Manga;
+import ru.alex.manga_manager.model.data.SearchEntity;
 import ru.alex.manga_manager.model.dto.MangaDto;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.service.MangaService;
+import ru.alex.manga_manager.util.converter.MangaConverter;
 import ru.alex.manga_manager.util.exception.MangaNotFoundException;
 
 
@@ -21,6 +26,8 @@ public class DefaultMangaService implements MangaService {
     private final MangaRepository mangaRepository;
 
 
+    private final MangaConverter<Manga, MangaDto> mangaConverter;
+
     private PageRequest pageRequest;
 
     private List<Manga> mangas;
@@ -29,36 +36,41 @@ public class DefaultMangaService implements MangaService {
 
     private boolean orderFlag = true;
 
+
+
     @Override
     public Manga save(MangaDto mangaDto) {
-        return null;
+        Manga manga = mangaConverter.convert(mangaDto);
+        mangaDto.setId(UUID.randomUUID().toString());
+        mangaRepository.save(manga);
+        return manga;
     }
-
 
     @Override
-    public List<Manga> search(String title, Integer page) {
-        this.pageRequest = PageRequest.of(page, 20);
-        return mangaRepository.findByMainNameStartingWithOrSecondaryNameStartingWith(title, this.pageRequest);
+    @Cacheable(value = "MangaService::search", key = "#search")
+    public List<Manga> search(SearchEntity search) {
+        this.pageRequest = PageRequest.of(search.getPage(), 20);
+        return mangaRepository.findByMainNameStartingWithOrSecondaryNameStartingWith(search.getTitle(), this.pageRequest);
     }
 
-    public List<Manga> findAllMangas(Integer pageNumber,
-                                     List<Long> genreIds,
-                                     List<Long> types,
-                                     String order,
-                                     Integer pageSize
-    ) {
+    @Override
+    @Transactional
+    @Cacheable(value = "MangaService::findAllMangas", key = "#filterEntity")
+    public List<Manga> findAllMangas(FilterEntity filterEntity) {
         checkOrderOnStartsWithPlus(order);
         if (order != null) {
             Sort sort = orderFlag ? Sort.by(this.order).descending() : Sort.by(this.order).ascending();
-            this.pageRequest = PageRequest.of(pageNumber, pageSize, sort);
+            this.pageRequest = PageRequest.of(filterEntity.getPageNumber(),filterEntity.getPageSize(), sort);
         } else {
-            this.pageRequest = PageRequest.of(pageNumber, pageSize);
+            this.pageRequest = PageRequest.of(filterEntity.getPageNumber(),filterEntity.getPageSize());
         }
-        checkAllParams(order, types, genreIds);
+        checkAllParams(order, filterEntity.getTypes(), filterEntity.getGenres());
         return mangas;
     }
 
     @Override
+    @Transactional(readOnly = true)
+    @Cacheable(value = "MangaService::findMangaById", key = "#id")
     public Manga findMangaById(String id) {
         return this.mangaRepository.findById(id)
                 .orElseThrow(() -> new MangaNotFoundException("Manga with id: " + id + " Not Found"));

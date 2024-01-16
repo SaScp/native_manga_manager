@@ -24,6 +24,7 @@ public class CommentController {
     @Qualifier("defaultCommentService")
     private final CommentService commentService;
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
     public List<CommentDto> findCommentByMangaId(@PathVariable String id) {
         List<Comment> commentDtos = commentService.findAllByMangaId(id);
@@ -37,5 +38,11 @@ public class CommentController {
         commentDto.setMangaId(id);
         commentDto.setAuthentication(authentication);
         return  commentService.add(commentDto)? HttpStatus.OK : HttpStatus.FAILED_DEPENDENCY;
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public HttpStatus deleteComment(@PathVariable("id") String id, Authentication authentication) {
+        commentService.deleteComment(id, authentication);
+        return HttpStatus.OK;
     }
 }
