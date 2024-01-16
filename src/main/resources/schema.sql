@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS t_comment
     text      text                                 NOT NULL,
     create_at TIMESTAMP                            NOT NULL,
     update_at TIMESTAMP                            NOT NULL,
-    parent_id VARCHAR(255) REFERENCES t_comment (id)
+    parent_id VARCHAR(255) REFERENCES t_comment(id)
     );
 CREATE TABLE IF NOT EXISTS t_contact
 (

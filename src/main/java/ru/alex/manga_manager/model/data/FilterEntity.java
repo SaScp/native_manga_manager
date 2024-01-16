@@ -7,15 +7,15 @@ import java.util.List;
 @Data
 
 public class FilterEntity {
-    List<Long> types;
+    private List<Long> types;
 
-    Integer pageNumber;
+    private Integer pageNumber;
 
-    List<Long> genres;
+    private List<Long> genres;
 
-    String order;
+    private String order;
 
-    Integer pageSize;
+    private Integer pageSize;
 
     public FilterEntity(List<String> types, String pageNumber, List<String> genres, String order, String pageSize) {
         this.types = types != null? types.stream().map(Long::parseLong).toList() : null;
