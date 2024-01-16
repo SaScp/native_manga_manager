@@ -1,10 +1,38 @@
+volumes:
+  cache:
+    driver: local
+  db_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
+
 services:
+  app:
+    build:
+      context: .
+    container_name: manga_app
+    networks:
+      - app-network
+    depends_on:
+      - db_pg
+    env_file:
+      - .env
+    ports:
+      - 8080
+
   db_pg:
     image: postgres:15
     container_name: postgres
+    networks:
+      - app-network
     environment:
-      POSTGRES_DB: tempDb
-      POSTGRES_USER: temp_user
-      POSTGRES_PASSWORD: tem_password
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./src/main/resources:/docker-entrypoint-initdb.d
     ports:
-      - 5432
+      - 5433:5432
+

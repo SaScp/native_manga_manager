@@ -29,18 +29,14 @@ public class MangaController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/catalog")
     public List<MangaDto> findAllMangas(@FilterParam FilterEntity filterEntity) {
-        return mangaService.findAllMangas(filterEntity.getPageNumber(),
-                filterEntity.getGenres(),
-                filterEntity.getTypes(),
-                filterEntity.getOrder(),
-                filterEntity.getPageSize())
+        return mangaService.findAllMangas(filterEntity)
                 .stream().map(mangaConverter::convert).toList();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/search")
     public List<MangaDto> searchMangaAboutTitle(@SearchParam SearchEntity search) {
-        return mangaService.search(search.getTitle(), search.getPage()).stream().map(mangaConverter::convert).toList();
+        return mangaService.search(search).stream().map(mangaConverter::convert).toList();
     }
 
 

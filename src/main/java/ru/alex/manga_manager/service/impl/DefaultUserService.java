@@ -9,9 +9,13 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.alex.manga_manager.model.data.Role;
 import ru.alex.manga_manager.model.data.User;
 import ru.alex.manga_manager.model.dto.UserDto;
@@ -48,8 +52,8 @@ public class DefaultUserService implements UserService {
     @Qualifier("passwordEncoder")
     private final PasswordEncoder passwordEncoder;
 
-
-
+    @Override
+    @Transactional
     public User save(UserDto userDto) {
 
         User user = this.userConverter.convert(userDto);
@@ -74,13 +78,21 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User findUserByAuthentication(Authentication authentication) {
-        return this.userRepository.findByEmail(authentication.getName()).orElseThrow(() ->
+        return this.userRepository.findById(authentication.getName()).orElseThrow(() ->
                 new UserNotFoundException("User" + authentication.getName() + "not found"));
     }
+
     @Override
+    @Transactional(readOnly = true)
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("user with email:" + email + "not found"));
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public User findById(String id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user with id:" + id + "not found"));
+    }
 }

@@ -14,6 +14,8 @@ import java.util.List;
 @Data
 public class UserDto implements Serializable {
 
+    private String id;
+
     @NotNull
     @Email
     private String email;

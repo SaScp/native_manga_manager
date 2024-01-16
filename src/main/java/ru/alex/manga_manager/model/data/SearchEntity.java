@@ -2,8 +2,10 @@ package ru.alex.manga_manager.model.data;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class SearchEntity {
+public class SearchEntity  implements Serializable {
     String title;
     Integer page;
 

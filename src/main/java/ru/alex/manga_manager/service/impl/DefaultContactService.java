@@ -3,6 +3,7 @@ package ru.alex.manga_manager.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.alex.manga_manager.model.data.Contact;
 import ru.alex.manga_manager.model.dto.ContactDto;
 import ru.alex.manga_manager.repository.ContactRepository;
@@ -24,6 +25,7 @@ public class DefaultContactService implements ContactService {
     private final ContactRepository contactRepository;
 
     @Override
+    @Transactional
     public Contact save(ContactDto contactDto) {
         Contact contact = this.converter.convert(contactDto);
         contact.setId(UUID.randomUUID().toString());

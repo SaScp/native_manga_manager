@@ -12,6 +12,8 @@ import ru.alex.manga_manager.service.CommentService;
 import ru.alex.manga_manager.util.converter.CommentConverter;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,18 +26,29 @@ public class CommentController {
     @Qualifier("defaultCommentService")
     private final CommentService commentService;
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
     public List<CommentDto> findCommentByMangaId(@PathVariable String id) {
-        List<Comment> commentDtos = commentService.findAllByMangaId(id);
-        return commentDtos.stream().map(commentConverter::convert).toList();
+        return commentService.findAllByMangaId(id).stream().map(commentConverter::convert).toList();
     }
 
-    @PostMapping("/write")
+    @PostMapping("/add")
     public HttpStatus writeComment(@PathVariable("id") String id,
                                    Authentication authentication,
                                    @RequestBody RegistrationNewCommentDto commentDto) {
         commentDto.setMangaId(id);
         commentDto.setAuthentication(authentication);
         return  commentService.add(commentDto)? HttpStatus.OK : HttpStatus.FAILED_DEPENDENCY;
+    }
+
+    @DeleteMapping("/delete/{comment-id}")
+    public HttpStatus deleteComment(@PathVariable("comment-id") String id, Authentication authentication) {
+        commentService.deleteComment(id, authentication);
+        return HttpStatus.OK;
+    }
+
+    @PatchMapping("/updateComment/{comment-id}")
+    public HttpStatus updateComment(@PathVariable("comment-id") String id, Authentication authentication, @RequestBody Optional<String> text) {
+        return commentService.update(id, Objects.requireNonNull(text.get()), authentication)? HttpStatus.OK : HttpStatus.FAILED_DEPENDENCY;
     }
 }

@@ -6,12 +6,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Data
 @Table(name = "t_contact")
-public class Contact {
+public class Contact  implements Serializable {
     @Id
     private String id;
 
