@@ -44,11 +44,16 @@ public class DefaultMangaService implements MangaService {
     public List<Manga> findAllMangas(Integer pageNumber,
                                      List<Long> genreIds,
                                      List<Long> types,
-                                     String order
+                                     String order,
+                                     Integer pageSize
     ) {
         checkOrderOnStartsWithPlus(order);
-        Sort sort = orderFlag ? Sort.by(this.order).descending() : Sort.by(this.order).ascending();
-        this.pageRequest = order != null ? PageRequest.of(pageNumber, 20, sort) : PageRequest.of(pageNumber, 20);
+        if (order != null) {
+            Sort sort = orderFlag ? Sort.by(this.order).descending() : Sort.by(this.order).ascending();
+            this.pageRequest = PageRequest.of(pageNumber, pageSize, sort);
+        } else {
+            this.pageRequest = PageRequest.of(pageNumber, pageSize);
+        }
         checkAllParams(order, types, genreIds);
         return mangas;
     }

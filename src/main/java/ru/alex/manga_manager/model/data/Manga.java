@@ -1,5 +1,6 @@
 package ru.alex.manga_manager.model.data;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +9,7 @@ import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Getter
@@ -18,6 +18,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Table(name = "t_manga")
 public class Manga implements Serializable {
+
     @Id
     @Column(name = "id", nullable = false)
     private String id;
@@ -67,6 +68,16 @@ public class Manga implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "manga_id"))
     @ToString.Exclude
     private List<User> users;
+
+    @OneToMany(mappedBy = "manga")
+    private Set<Comment> comments;
+
+    public boolean addComment(Comment comment) {
+        if (comments == null) {
+            comments = new HashSet<>();
+        }
+        return comments.add(comment);
+    }
     @Override
     public final boolean equals(Object object) {
         if (this == object) return true;

@@ -7,10 +7,7 @@ import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -53,6 +50,17 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "manga_id"))
     @ToString.Exclude
     private List<Manga> mangas;
+
+    @OneToMany(mappedBy = "author")
+    private List<Comment> comments;
+
+    public boolean addComment(Comment comment) {
+        if (comments == null) {
+            comments = new ArrayList<>();
+        }
+        comments.add(comment);
+        return true;
+    }
 
     @Override
     public final boolean equals(Object object) {

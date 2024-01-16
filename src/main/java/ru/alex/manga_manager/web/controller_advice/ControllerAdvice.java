@@ -15,14 +15,14 @@ import java.util.HashMap;
 @RestControllerAdvice
 public class ControllerAdvice {
 
-    private HashMap<Class<? extends RuntimeException>, ExceptionHandlerStrategy> runtimeExceptionHashMap;
+    private final HashMap<Class<? extends RuntimeException>, ExceptionHandlerStrategy> handler;
 
     public ControllerAdvice() {
-        this.runtimeExceptionHashMap = new HashMap<>();
-        this.runtimeExceptionHashMap.put(RegistrationException.class, new RegistrationExceptionHandler());
-        this.runtimeExceptionHashMap.put(RoleNotFoundException.class, new RoleNotFoundExceptionHandler());
-        this.runtimeExceptionHashMap.put(UserNotFoundException.class, new UserNotFoundExceptionHandler());
-        this.runtimeExceptionHashMap.put(ResourceNotFoundException.class, new ResourceNotFoundExceptionHandler());
+        this.handler = new HashMap<>();
+        this.handler.put(RegistrationException.class, new RegistrationExceptionHandler());
+        this.handler.put(RoleNotFoundException.class, new RoleNotFoundExceptionHandler());
+        this.handler.put(UserNotFoundException.class, new UserNotFoundExceptionHandler());
+        this.handler.put(ResourceNotFoundException.class, new ResourceNotFoundExceptionHandler());
     }
 
     @ExceptionHandler({RegistrationException.class,
@@ -31,7 +31,7 @@ public class ControllerAdvice {
             ResourceNotFoundException.class
     })
     public ErrorResponse exHandler(RuntimeException e) {
-        ExceptionHandlerStrategy exceptionHandlerStrategy = runtimeExceptionHashMap.get(e.getClass());
+        ExceptionHandlerStrategy exceptionHandlerStrategy = handler.get(e.getClass());
         return exceptionHandlerStrategy.handleException(e);
     }
 }

@@ -24,8 +24,6 @@ public class ContactController {
     @Qualifier("defaultContactService")
     private final ContactService contactService;
 
-    private final RoleRepository repository;
-
     @PostMapping("/")
     public ResponseEntity<Contact> sendContactInfo(@RequestBody ContactDto contactDto) throws URISyntaxException {
         return ResponseEntity.created(new URI("/v1/contact/"))
