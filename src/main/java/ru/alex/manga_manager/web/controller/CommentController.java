@@ -47,8 +47,8 @@ public class CommentController {
         return HttpStatus.OK;
     }
 
-    @PatchMapping("/updateComment")
-    public HttpStatus updateComment(@PathVariable String id, Authentication authentication, @RequestBody Optional<String> text) {
+    @PatchMapping("/updateComment/{comment-id}")
+    public HttpStatus updateComment(@PathVariable("comment-id") String id, Authentication authentication, @RequestBody Optional<String> text) {
         return commentService.update(id, Objects.requireNonNull(text.get()), authentication)? HttpStatus.OK : HttpStatus.FAILED_DEPENDENCY;
     }
 }
