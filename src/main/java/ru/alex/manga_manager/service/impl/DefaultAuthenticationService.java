@@ -80,7 +80,6 @@ public class DefaultAuthenticationService implements AuthenticationService {
     }
 
     @Override
-    @Transactional
     public Tokens registration(UserDto userDto, BindingResult bindingResult) {
 
         List<Validator> validators = List.of(this.userValidator, new MailValidator(), new PasswordValidator());

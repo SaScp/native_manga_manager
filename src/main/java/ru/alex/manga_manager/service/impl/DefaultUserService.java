@@ -54,10 +54,6 @@ public class DefaultUserService implements UserService {
 
     @Override
     @Transactional
-    @Caching(put = {
-            @CachePut(value = "UserService::findByEmail", key = "#userDto.email"),
-            @CachePut(value = "UserService::findById", key = "#userDto.id")}
-    )
     public User save(UserDto userDto) {
 
         User user = this.userConverter.convert(userDto);
@@ -83,7 +79,6 @@ public class DefaultUserService implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "UserService::findUserByAuthentication", key = "#authentication")
     public User findUserByAuthentication(Authentication authentication) {
         return this.userRepository.findById(authentication.getName()).orElseThrow(() ->
                 new UserNotFoundException("User" + authentication.getName() + "not found"));
@@ -91,14 +86,12 @@ public class DefaultUserService implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "UserService::findByEmail", key = "#email")
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("user with email:" + email + "not found"));
     }
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "UserService::findById", key = "#id")
     public User findById(String id) {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user with id:" + id + "not found"));
     }

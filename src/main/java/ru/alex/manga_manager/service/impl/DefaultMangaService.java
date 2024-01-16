@@ -47,7 +47,6 @@ public class DefaultMangaService implements MangaService {
     }
 
     @Override
-    @Cacheable(value = "MangaService::search", key = "#search")
     public List<Manga> search(SearchEntity search) {
         this.pageRequest = PageRequest.of(search.getPage(), 20);
         return mangaRepository.findByMainNameStartingWithOrSecondaryNameStartingWith(search.getTitle(), this.pageRequest);
@@ -55,7 +54,6 @@ public class DefaultMangaService implements MangaService {
 
     @Override
     @Transactional
-    @Cacheable(value = "MangaService::findAllMangas", key = "#filterEntity")
     public List<Manga> findAllMangas(FilterEntity filterEntity) {
         checkOrderOnStartsWithPlus(order);
         if (order != null) {
@@ -70,7 +68,6 @@ public class DefaultMangaService implements MangaService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "MangaService::findMangaById", key = "#id")
     public Manga findMangaById(String id) {
         return this.mangaRepository.findById(id)
                 .orElseThrow(() -> new MangaNotFoundException("Manga with id: " + id + " Not Found"));

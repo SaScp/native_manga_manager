@@ -1,19 +1,11 @@
 spring:
   config:
     import: optional:file:.env
-  cache:
-    type: redis
-    cache-names: redis-cache
   sql:
     init:
       mode: always
   jpa:
     show-sql: true
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: 6379
-      password: ${REDIS_PASSWORD}
   datasource:
     url: jdbc:postgresql://${HOST}:5432/${POSTGRES_DATABASE}
     username: ${POSTGRES_USERNAME}

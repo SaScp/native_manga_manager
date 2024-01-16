@@ -93,19 +93,16 @@ public class DefaultCommentService implements CommentService {
     }
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "CommentService::findById", key = "#id")
     public List<Comment> findAllByMangaId(String id) {
         return commentRepository.findAllByManga_IdAndParent_IdIsNull(id);
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "CommentService::findById", key = "#id")
     public Comment findById(String id) {
         return commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
     }
 
     @Transactional
-    @CacheEvict(value = "CommentService::findById", key = "#id")
     public void deleteComment(String id, Authentication authentication) {
         if (!authentication.getName().equals(findById(id).getId())) {
             commentRepository.deleteById(id);
