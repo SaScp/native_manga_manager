@@ -12,6 +12,8 @@ import ru.alex.manga_manager.service.CommentService;
 import ru.alex.manga_manager.util.converter.CommentConverter;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,8 +29,7 @@ public class CommentController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
     public List<CommentDto> findCommentByMangaId(@PathVariable String id) {
-        List<Comment> commentDtos = commentService.findAllByMangaId(id);
-        return commentDtos.stream().map(commentConverter::convert).toList();
+        return commentService.findAllByMangaId(id).stream().map(commentConverter::convert).toList();
     }
 
     @PostMapping("/write")
@@ -44,5 +45,10 @@ public class CommentController {
     public HttpStatus deleteComment(@PathVariable("id") String id, Authentication authentication) {
         commentService.deleteComment(id, authentication);
         return HttpStatus.OK;
+    }
+
+    @PatchMapping("/updateComment")
+    public HttpStatus updateComment(@PathVariable String id, Authentication authentication, @RequestBody Optional<String> text) {
+        return commentService.update(id, Objects.requireNonNull(text.get()), authentication)? HttpStatus.OK : HttpStatus.FAILED_DEPENDENCY;
     }
 }

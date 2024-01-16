@@ -14,4 +14,6 @@ public interface CommentService {
     List<Comment> findAllByMangaId(String id);
 
     void deleteComment(String id, Authentication authentication);
+
+    boolean update(String id, String newText, Authentication authentication);
 }

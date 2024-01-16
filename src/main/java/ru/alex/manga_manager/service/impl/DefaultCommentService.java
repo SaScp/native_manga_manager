@@ -40,7 +40,6 @@ public class DefaultCommentService implements CommentService {
 
     private final MangaRepository mangaRepository;
 
-
     @Override
     @Transactional
     public boolean add(RegistrationNewCommentDto commentDto) {
