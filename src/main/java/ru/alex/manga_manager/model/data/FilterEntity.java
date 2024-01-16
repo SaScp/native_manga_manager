@@ -2,11 +2,12 @@ package ru.alex.manga_manager.model.data;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 
-public class FilterEntity {
+public class FilterEntity  implements Serializable {
     private List<Long> types;
 
     private Integer pageNumber;
