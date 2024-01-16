@@ -50,7 +50,7 @@ public class DefaultCommentService implements CommentService {
                 new UserNotFoundException("User: " + id + " Not Found"));
         Manga manga = mangaRepository.findById(commentDto.getMangaId()).orElseThrow(() ->
                 new MangaNotFoundException("Manga with id " + commentDto.getMangaId() + " Not Found"));
-        Comment parentComment = commentDto.getParentId() == null ? null : findById(id);
+        Comment parentComment = commentDto.getParentId() == null ? null : findById(commentDto.getParentId());
 
         comment.setId(UUID.randomUUID().toString());
         comment.setCreateAt(ZonedDateTime.now());

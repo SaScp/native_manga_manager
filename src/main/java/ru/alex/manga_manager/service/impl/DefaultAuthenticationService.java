@@ -116,7 +116,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
 
         authenticationProvider.authenticate(authentication);
 
-        Token refresh = refreshFactory.apply(authentication);
+        Token refresh = refreshFactory.apply(new PreAuthenticatedAuthenticationToken(user.getId(), user.getPassword(), user.getRoles().stream().map(r -> new SimpleGrantedAuthority(r.getRole())).toList()));
         Token access = accessFactory.apply(refresh);
 
         return new Tokens(this.accessTokenJwsStringSerializer.apply(access),
