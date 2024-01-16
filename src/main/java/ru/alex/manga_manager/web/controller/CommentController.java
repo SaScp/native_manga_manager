@@ -41,8 +41,8 @@ public class CommentController {
         return  commentService.add(commentDto)? HttpStatus.OK : HttpStatus.FAILED_DEPENDENCY;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public HttpStatus deleteComment(@PathVariable("id") String id, Authentication authentication) {
+    @DeleteMapping("/delete/{comment-id}")
+    public HttpStatus deleteComment(@PathVariable("comment-id") String id, Authentication authentication) {
         commentService.deleteComment(id, authentication);
         return HttpStatus.OK;
     }
