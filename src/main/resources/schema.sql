@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS t_manga
     rus_name       VARCHAR(255)                   NOT NULL,
     en_name        VARCHAR(255)                   NOT NULL,
     count_chapters INTEGER                        NOT NULL
-    );
+);
 
 CREATE TABLE IF NOT EXISTS t_comment
 (
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS t_comment
     create_at TIMESTAMP                            NOT NULL,
     update_at TIMESTAMP                            NOT NULL,
     parent_id VARCHAR(255) REFERENCES t_comment(id)
-    );
+);
 CREATE TABLE IF NOT EXISTS t_contact
 (
     id           VARCHAR(255) primary key,
@@ -80,4 +80,4 @@ CREATE TABLE IF NOT EXISTS t_logout
 (
     id           VARCHAR(255) PRIMARY KEY,
     c_keep_until timestamp not null check ( c_keep_until > now() )
-    );
+);
