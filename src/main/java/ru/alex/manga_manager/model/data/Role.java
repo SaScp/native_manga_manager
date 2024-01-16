@@ -18,10 +18,6 @@ import java.util.Objects;
 @Table(name = "t_role")
 public class Role {
 
-    @PostConstruct
-    public void load() {
-        users = new ArrayList<>();
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -36,6 +32,9 @@ public class Role {
     private List<User> users;
 
     public void add(User user) {
+        if (users == null) {
+            users = new ArrayList<>();
+        }
         users.add(user);
     }
 

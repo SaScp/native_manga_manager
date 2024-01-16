@@ -2,12 +2,13 @@ package ru.alex.manga_manager.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.alex.manga_manager.model.data.Comment;
 import ru.alex.manga_manager.model.dto.CommentDto;
 import ru.alex.manga_manager.model.dto.RegistrationNewCommentDto;
-import ru.alex.manga_manager.repository.CommentRepository;
+import ru.alex.manga_manager.service.CommentService;
 import ru.alex.manga_manager.util.converter.CommentConverter;
 
 import java.util.List;
@@ -20,18 +21,21 @@ public class CommentController {
     @Qualifier("defaultCommentConverter")
     private final CommentConverter<CommentDto, Comment> commentConverter;
 
-    private final CommentRepository commentRepository;
+    @Qualifier("defaultCommentService")
+    private final CommentService commentService;
 
     @GetMapping("/")
     public List<CommentDto> findCommentByMangaId(@PathVariable String id) {
-        List<Comment> commentDtos = commentRepository.findAllByManga_IdAndParent_IdIsNull(id);
+        List<Comment> commentDtos = commentService.findAllByMangaId(id);
         return commentDtos.stream().map(commentConverter::convert).toList();
     }
 
     @PostMapping("/write")
-    public List<CommentDto> writeComment(@PathVariable("id") String id,
-                                         Authentication authentication,
-                                         @RequestBody RegistrationNewCommentDto commentDto) {
-        return null;
+    public HttpStatus writeComment(@PathVariable("id") String id,
+                                   Authentication authentication,
+                                   @RequestBody RegistrationNewCommentDto commentDto) {
+        commentDto.setMangaId(id);
+        commentDto.setAuthentication(authentication);
+        return  commentService.add(commentDto)? HttpStatus.OK : HttpStatus.FAILED_DEPENDENCY;
     }
 }

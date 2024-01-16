@@ -202,7 +202,7 @@ INSERT INTO t_manga_t_genre(manga_id, genre_id) VALUES ('7e8532b9-84d4-4fe5-80ce
 
 INSERT INTO t_manga_t_genre(manga_id, genre_id) VALUES ('6a32e8b1-c397-4c72-ba97-bb50f30c6e4e', 12);
 
-INSERT INTO t_user(id, email, password, username, full_name, date_of_birth, registration_date) VALUES ('e214c0db-196d-4653-8601-7784178fb6d5', '3048453@gmail.com', '11111', 'alex', 'Alexander', now(), now()),
+/*INSERT INTO t_user(id, email, password, username, full_name, date_of_birth, registration_date) VALUES ('e214c0db-196d-4653-8601-7784178fb6d5', '3048453@gmail.com', '11111', 'alex', 'Alexander', now(), now()),
                                                                                                       ('2c11cf89-0e4a-4f67-aa54-2d104d4eb6a8', '2048453@gmail.com', '11111', 'gleb', 'gleb', now(), now());
 
     INSERT INTO t_comment(id, manga_id, user_id, text, create_at, update_at, parent_id)
@@ -211,4 +211,4 @@ VALUES ('971e13b1-5fc2-48ec-8d53-1a57ef63e875', '73e27398-6e3c-42a3-ba21-9c4bcb2
     ('7e0a2d2d-4a8f-4919-8b8e-62da63d3275d', '73e27398-6e3c-42a3-ba21-9c4bcb29e13f', 'e214c0db-196d-4653-8601-7784178fb6d5', 'poshel nahui', now(), now(), '971e13b1-5fc2-48ec-8d53-1a57ef63e875'),
     ('5f20f5d7-5769-4a12-8e8a-09f1ef8a785d', '73e27398-6e3c-42a3-ba21-9c4bcb29e13f','e214c0db-196d-4653-8601-7784178fb6d5', 'and i want sayt that you are gay', now(), now(),'971e13b1-5fc2-48ec-8d53-1a57ef63e875'),
     ('87ec4a4c-3d85-4b1c-8b5e-b5c37a5d17a2', '73e27398-6e3c-42a3-ba21-9c4bcb29e13f', '2c11cf89-0e4a-4f67-aa54-2d104d4eb6a8', 'fuck you', now(), now(), '971e13b1-5fc2-48ec-8d53-1a57ef63e875'),
-    ('a4cc0e37-2d75-4cc1-8469-ae5b235df7d6', '73e27398-6e3c-42a3-ba21-9c4bcb29e13f', 'e214c0db-196d-4653-8601-7784178fb6d5', 'fuck you', now(), now(), '971e13b1-5fc2-48ec-8d53-1a57ef63e875')
+    ('a4cc0e37-2d75-4cc1-8469-ae5b235df7d6', '73e27398-6e3c-42a3-ba21-9c4bcb29e13f', 'e214c0db-196d-4653-8601-7784178fb6d5', 'fuck you', now(), now(), '971e13b1-5fc2-48ec-8d53-1a57ef63e875')*/
