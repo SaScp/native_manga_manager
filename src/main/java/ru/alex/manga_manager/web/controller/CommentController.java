@@ -32,7 +32,7 @@ public class CommentController {
         return commentService.findAllByMangaId(id).stream().map(commentConverter::convert).toList();
     }
 
-    @PostMapping("/write")
+    @PostMapping("/add")
     public HttpStatus writeComment(@PathVariable("id") String id,
                                    Authentication authentication,
                                    @RequestBody RegistrationNewCommentDto commentDto) {
