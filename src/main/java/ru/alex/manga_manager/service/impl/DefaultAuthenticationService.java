@@ -19,6 +19,7 @@ import ru.alex.manga_manager.model.data.Role;
 import ru.alex.manga_manager.model.data.Token;
 import ru.alex.manga_manager.model.data.User;
 import ru.alex.manga_manager.model.dto.LoginUserDto;
+import ru.alex.manga_manager.model.dto.RegistrationUserDto;
 import ru.alex.manga_manager.model.dto.UserDto;
 import ru.alex.manga_manager.model.response.Tokens;
 import ru.alex.manga_manager.security.jwt.factory.AccessFactory;
@@ -80,7 +81,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
     }
 
     @Override
-    public Tokens registration(UserDto userDto, BindingResult bindingResult) {
+    public Tokens registration(RegistrationUserDto userDto, BindingResult bindingResult) {
 
         List<Validator> validators = List.of(this.userValidator, new MailValidator(), new PasswordValidator());
 
