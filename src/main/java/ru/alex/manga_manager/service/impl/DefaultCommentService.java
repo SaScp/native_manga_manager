@@ -44,6 +44,9 @@ public class DefaultCommentService implements CommentService {
     @Transactional
     public boolean add(RegistrationNewCommentDto commentDto) {
         Comment comment = new Comment();
+        if (commentDto.getAuthentication() == null) {
+            throw new ForbiddenException("Forbidden");
+        }
 
         String id = commentDto.getAuthentication().getName();
         User user = userRepository.findById(id).orElseThrow(() ->
@@ -82,7 +85,7 @@ public class DefaultCommentService implements CommentService {
                 new UpdateTextComment().execute(newText, comment);
                 commentRepository.save(comment);
             } else {
-                throw new ForbiddenException();
+                throw new ForbiddenException("Forbidden");
             }
             return true;
         } catch (Exception e) {
@@ -107,7 +110,7 @@ public class DefaultCommentService implements CommentService {
         if (!authentication.getName().equals(findById(id).getId())) {
             commentRepository.deleteById(id);
         } else {
-            throw new ForbiddenException();
+            throw new ForbiddenException("Forbidden");
         }
     }
 }
