@@ -55,5 +55,4 @@ public class MangaDto implements Serializable {
 
     private TypeDto type;
 
-    private List<CommentDto> comment;
 }

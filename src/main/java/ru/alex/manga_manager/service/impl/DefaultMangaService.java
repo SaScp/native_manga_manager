@@ -55,8 +55,8 @@ public class DefaultMangaService implements MangaService {
     @Override
     @Transactional
     public List<Manga> findAllMangas(FilterEntity filterEntity) {
-        checkOrderOnStartsWithPlus(order);
-        if (order != null) {
+        checkOrderOnStartsWithPlus(filterEntity.getOrder());
+        if (filterEntity.getOrder() != null) {
             Sort sort = orderFlag ? Sort.by(this.order).descending() : Sort.by(this.order).ascending();
             this.pageRequest = PageRequest.of(filterEntity.getPageNumber(),filterEntity.getPageSize(), sort);
         } else {

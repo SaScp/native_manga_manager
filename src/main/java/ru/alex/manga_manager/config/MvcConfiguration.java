@@ -11,7 +11,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
-public class MvcConfig implements WebMvcConfigurer {
+public class MvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         WebMvcConfigurer.super.addArgumentResolvers(resolvers);

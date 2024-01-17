@@ -23,10 +23,11 @@ public class FilterParamResolver extends RequestParamMethodArgumentResolver {
 
     @Override
     protected Object resolveName(String name, MethodParameter parameter, NativeWebRequest request) throws Exception {
-        List<String> types = request.getParameterValues("types") != null?
-                Arrays.stream(Objects.requireNonNull(request.getParameterValues("types"))).toList() : null;
-        List<String> genres = request.getParameterValues("genres") != null?
-                Arrays.stream(Objects.requireNonNull(request.getParameterValues("genres"))).toList() : null;
+        List<String> types = request.getParameterValues("type") != null ?
+                Arrays.stream(Objects.requireNonNull(request.getParameterValues("type"))).toList() : null;
+        List<String> genres = request.getParameterValues("genre") != null ?
+                Arrays.stream(Objects.requireNonNull(request.getParameterValues("genre"))).toList() : null;
+
         return new FilterEntity(types,
                 request.getParameter("pageNumber"),
                 genres,

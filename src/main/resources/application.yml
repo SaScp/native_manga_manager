@@ -1,6 +1,6 @@
 spring:
   config:
-    import: optional:file:.env
+    import: optional:file:.properties[.env]
   sql:
     init:
       mode: always

@@ -10,7 +10,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-
 public class MangaManagerApplication {
 
     public static void main(String[] args) {
