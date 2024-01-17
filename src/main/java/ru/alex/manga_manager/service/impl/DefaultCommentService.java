@@ -86,7 +86,7 @@ public class DefaultCommentService implements CommentService {
                 new UpdateTextComment().execute(newText, comment);
                 commentRepository.save(comment);
             } else {
-                throw new ForbiddenException();
+                throw new ForbiddenException("Forbidden");
             }
             return true;
         } catch (Exception e) {
@@ -111,7 +111,7 @@ public class DefaultCommentService implements CommentService {
         if (!authentication.getName().equals(findById(id).getId())) {
             commentRepository.deleteById(id);
         } else {
-            throw new ForbiddenException();
+            throw new ForbiddenException("Forbidden");
         }
     }
 }
