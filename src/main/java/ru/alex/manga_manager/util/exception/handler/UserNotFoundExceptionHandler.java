@@ -9,7 +9,7 @@ public class UserNotFoundExceptionHandler implements ExceptionHandlerStrategy {
     public ErrorResponse handleException(RuntimeException e) {
         return ErrorResponse.builder()
                 .code("404")
-                .error(e.getClass().toString())
+                .error(e.getClass().getName())
                 .message(e.getLocalizedMessage())
                 .timestamp(ZonedDateTime.now()).build();
     }

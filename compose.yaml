@@ -19,7 +19,7 @@ services:
       - db_pg
     env_file:
       - .env
-    ports:
+    expose:
       - 8080
 
   db_pg:

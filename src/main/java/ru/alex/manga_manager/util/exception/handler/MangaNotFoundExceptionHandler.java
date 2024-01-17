@@ -9,7 +9,7 @@ public class MangaNotFoundExceptionHandler implements ExceptionHandlerStrategy{
     public ErrorResponse handleException(RuntimeException e) {
         return ErrorResponse.builder()
                 .code("404")
-                .error(e.getClass().toString())
+                .error(e.getClass().getName())
                 .timestamp(ZonedDateTime.now())
                 .message(e.getMessage()).build();
     }

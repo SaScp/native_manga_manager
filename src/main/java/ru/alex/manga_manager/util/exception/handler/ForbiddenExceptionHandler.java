@@ -9,7 +9,7 @@ public class ForbiddenExceptionHandler implements ExceptionHandlerStrategy{
     public ErrorResponse handleException(RuntimeException e) {
         return ErrorResponse.builder()
                 .code("403")
-                .error(e.getClass().toString())
+                .error(e.getClass().getName())
                 .message("Forbidden")
                 .timestamp(ZonedDateTime.now())
                 .build();

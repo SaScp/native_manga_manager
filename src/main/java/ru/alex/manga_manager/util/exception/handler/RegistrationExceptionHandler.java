@@ -12,7 +12,7 @@ public class RegistrationExceptionHandler implements ExceptionHandlerStrategy {
     public ErrorResponse handleException(RuntimeException e) {
         return ErrorResponse.builder()
                 .code("401")
-                .error(e.getClass().toString())
+                .error(e.getClass().getName())
                 .message(e.getLocalizedMessage())
                 .timestamp(ZonedDateTime.now()).build();
     }
