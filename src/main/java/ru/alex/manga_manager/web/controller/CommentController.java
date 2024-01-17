@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.alex.manga_manager.model.data.Comment;
 import ru.alex.manga_manager.model.dto.CommentDto;
 import ru.alex.manga_manager.model.dto.RegistrationNewCommentDto;
+import ru.alex.manga_manager.model.dto.UpdateCommentDto;
 import ru.alex.manga_manager.service.CommentService;
 import ru.alex.manga_manager.util.converter.CommentConverter;
 
@@ -48,7 +49,7 @@ public class CommentController {
     }
 
     @PatchMapping("/updateComment/{comment-id}")
-    public HttpStatus updateComment(@PathVariable("comment-id") String id, Authentication authentication, @RequestBody Optional<String> text) {
-        return commentService.update(id, Objects.requireNonNull(text.get()), authentication)? HttpStatus.OK : HttpStatus.FAILED_DEPENDENCY;
+    public HttpStatus updateComment(@PathVariable("comment-id") String id, Authentication authentication, @RequestBody UpdateCommentDto updateCommentDto) {
+        return commentService.update(id, updateCommentDto.getValue(), authentication)? HttpStatus.OK : HttpStatus.FAILED_DEPENDENCY;
     }
 }

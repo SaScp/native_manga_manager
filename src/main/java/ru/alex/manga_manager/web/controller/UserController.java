@@ -2,14 +2,15 @@ package ru.alex.manga_manager.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.alex.manga_manager.model.data.User;
 import ru.alex.manga_manager.model.dto.UserDto;
 import ru.alex.manga_manager.service.UserService;
 import ru.alex.manga_manager.util.converter.UserConverter;
+
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,4 +27,10 @@ public class UserController {
         return userDtoConverter.convert(userService.findUserByAuthentication(authentication));
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/updatePassword")
+    public HttpStatus update(@RequestBody Optional<String> password,
+                             Authentication authentication) {
+        return null;
+    }
 }
