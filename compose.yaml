@@ -21,7 +21,6 @@ services:
       - .env
     expose:
       - 8080
-
   db_pg:
     image: postgres:15
     container_name: postgres
