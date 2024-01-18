@@ -34,8 +34,7 @@ public class ControllerAdvice {
             ForbiddenException.class,
             MangaNotFoundException.class,
             CommentAddException.class,
-            CommentNotFoundException.class
-            MangaNotFoundException.class
+            CommentNotFoundException.class,
     })
     public ErrorResponse exHandler(RuntimeException e) {
         ExceptionHandlerStrategy exceptionHandlerStrategy = handler.get(e.getClass());

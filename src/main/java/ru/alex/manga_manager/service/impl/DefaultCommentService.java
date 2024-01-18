@@ -81,7 +81,7 @@ public class DefaultCommentService implements CommentService {
     public boolean update(String id, String newText, Authentication authentication) {
         try {
             Comment comment = findById(id);
-            if (authentication.getName().equals(comment.getAuthor().getId())) {
+            if (authentication != null && authentication.getName().equals(comment.getAuthor().getId())) {
                 new UpdateTextComment().execute(newText, comment);
                 commentRepository.save(comment);
             } else {
@@ -107,7 +107,7 @@ public class DefaultCommentService implements CommentService {
 
     @Transactional
     public boolean deleteComment(String id, Authentication authentication) {
-        if (!authentication.getName().equals(findById(id).getId())) {
+        if (authentication != null && authentication.getName().equals(findById(id).getId())) {
             commentRepository.deleteById(id);
             return true;
         } else {
