@@ -2,10 +2,6 @@ package ru.alex.manga_manager.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +13,6 @@ import ru.alex.manga_manager.repository.CommentRepository;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.repository.UserRepository;
 import ru.alex.manga_manager.service.CommentService;
-import ru.alex.manga_manager.service.update.CommentUpdateComponent;
 import ru.alex.manga_manager.service.update.UpdateTextComment;
 import ru.alex.manga_manager.util.exception.CommentNotFoundException;
 import ru.alex.manga_manager.util.exception.ForbiddenException;
@@ -106,11 +101,12 @@ public class DefaultCommentService implements CommentService {
     }
 
     @Transactional
-    public void deleteComment(String id, Authentication authentication) {
+    public boolean deleteComment(String id, Authentication authentication) {
         if (!authentication.getName().equals(findById(id).getId())) {
             commentRepository.deleteById(id);
+            return true;
         } else {
-            throw new ForbiddenException("Forbidden");
+            return false;
         }
     }
 }

@@ -22,6 +22,7 @@ public class ControllerAdvice {
         this.handler.put(ResourceNotFoundException.class, new ResourceNotFoundExceptionHandler());
         this.handler.put(ForbiddenException.class, new ForbiddenExceptionHandler());
         this.handler.put(MangaNotFoundException.class, new MangaNotFoundExceptionHandler());
+        this.handler.put(CommentAddException.class, new CommentAddExceptionHandler());
     }
 
     @ExceptionHandler({RegistrationException.class,
@@ -29,7 +30,8 @@ public class ControllerAdvice {
             UserNotFoundException.class,
             ResourceNotFoundException.class,
             ForbiddenException.class,
-            MangaNotFoundException.class
+            MangaNotFoundException.class,
+            CommentAddException.class
     })
     public ErrorResponse exHandler(RuntimeException e) {
         ExceptionHandlerStrategy exceptionHandlerStrategy = handler.get(e.getClass());

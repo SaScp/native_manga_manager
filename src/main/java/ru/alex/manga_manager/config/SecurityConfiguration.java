@@ -71,6 +71,7 @@ public class SecurityConfiguration {
                         .permitAll()
         );
 
+
         http.sessionManagement(httpSecuritySessionManagementConfigurer ->
                 httpSecuritySessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
