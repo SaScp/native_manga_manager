@@ -49,16 +49,20 @@ public class CommentController {
     }
 
     @DeleteMapping("/delete/{comment-id}")
-    public RedirectView deleteComment(@PathVariable("comment-id") String id, Authentication authentication) {
-        if (commentService.deleteComment(id, authentication)) {
+    public RedirectView deleteComment(@PathVariable("comment-id") String commentId, Authentication authentication, @PathVariable String id) {
+        if (commentService.deleteComment(commentId, authentication)) {
             return new RedirectView("/v1/" + id + "/comment/");
         } else {
             throw new ForbiddenException("Forbidden");
         }
     }
 
-    @PatchMapping("/updateComment/{comment-id}")
-    public HttpStatus updateComment(@PathVariable("comment-id") String id, Authentication authentication, @RequestBody Optional<String> text) {
-        return commentService.update(id, Objects.requireNonNull(text.get()), authentication) ? HttpStatus.OK : HttpStatus.FAILED_DEPENDENCY;
+    @PatchMapping("/update/{comment-id}")
+    public RedirectView updateComment(@PathVariable("comment-id") String commentId, Authentication authentication, @RequestBody Optional<String> text, @PathVariable String id) {
+        if (commentService.update(commentId, Objects.requireNonNull(text.get()), authentication)) {
+            return new RedirectView("/v1/" + id + "/comment/");
+        } else {
+            throw new ForbiddenException("Forbidden");
+        }
     }
 }

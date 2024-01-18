@@ -9,19 +9,6 @@ networks:
     driver: bridge
 
 services:
-  nginx:
-    container_name: some-nginx
-    image: nginx:1.13
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-    depends_on:
-      - app
-    networks:
-      - app-network
   app:
     build:
       context: .
@@ -46,5 +33,5 @@ services:
     volumes:
       - ./src/main/resources:/docker-entrypoint-initdb.d
     ports:
-      - 5432:5432
+      - 5433:5432
 

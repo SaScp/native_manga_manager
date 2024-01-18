@@ -62,6 +62,7 @@ public class DefaultCommentService implements CommentService {
         manga.addComment(comment);
         user.addComment(comment);
         try {
+
             commentRepository.save(comment);
             userRepository.save(user);
             mangaRepository.save(manga);

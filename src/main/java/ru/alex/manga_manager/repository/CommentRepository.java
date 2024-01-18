@@ -10,4 +10,5 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
 
 
     List<Comment> findAllByManga_IdAndParent_IdIsNull(String manga_id);
+
 }
