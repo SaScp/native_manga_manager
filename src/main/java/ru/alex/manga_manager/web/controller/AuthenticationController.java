@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.alex.manga_manager.model.dto.LoginUserDto;
+import ru.alex.manga_manager.model.dto.RegistrationUserDto;
 import ru.alex.manga_manager.model.dto.UserDto;
 import ru.alex.manga_manager.model.response.Tokens;
 import ru.alex.manga_manager.service.AuthenticationService;
@@ -27,7 +28,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/registration")
-    public ResponseEntity<Tokens> registration(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) throws URISyntaxException {
+    public ResponseEntity<Tokens> registration(@Valid @RequestBody RegistrationUserDto userDto, BindingResult bindingResult) throws URISyntaxException {
         return ResponseEntity
                 .created(new URI("v1/auth/registration"))
                 .contentType(MediaType.APPLICATION_JSON)

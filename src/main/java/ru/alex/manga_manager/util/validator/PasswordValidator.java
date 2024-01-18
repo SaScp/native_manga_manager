@@ -2,6 +2,7 @@ package ru.alex.manga_manager.util.validator;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import ru.alex.manga_manager.model.dto.RegistrationUserDto;
 import ru.alex.manga_manager.model.dto.UserDto;
 
 public class PasswordValidator implements Validator {
@@ -15,7 +16,7 @@ public class PasswordValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        final var user = (UserDto) target;
+        final var user = (RegistrationUserDto) target;
 
         if (!user.getPassword().matches(passwordRegex)) {
             errors.rejectValue("password", "500", "password is invalid");

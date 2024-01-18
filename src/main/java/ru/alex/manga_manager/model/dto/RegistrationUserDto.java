@@ -6,25 +6,25 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-
 @Data
-public class UserDto implements  Serializable {
-
-    private String id;
+public class RegistrationUserDto {
 
     @NotNull
     @Email
     private String email;
 
+    @NotNull
+    @NotEmpty
+    @NotBlank
+    private String password;
 
     @NotNull
     @NotEmpty
     @NotBlank
-   private String username;
+    private String username;
 
     @NotNull
     @NotEmpty
@@ -33,7 +33,5 @@ public class UserDto implements  Serializable {
 
     /*@NotNull*/
     private Date dateOfBirth;
-
-    private List<MangaDto> mangas;
 
 }

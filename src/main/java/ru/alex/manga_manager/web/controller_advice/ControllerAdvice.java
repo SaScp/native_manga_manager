@@ -24,6 +24,7 @@ public class ControllerAdvice {
         this.handler.put(MangaNotFoundException.class, new MangaNotFoundExceptionHandler());
         this.handler.put(CommentAddException.class, new CommentAddExceptionHandler());
         this.handler.put(CommentNotFoundException.class, new CommentNotFoundExceptionHandler());
+
     }
 
     @ExceptionHandler({RegistrationException.class,
@@ -34,6 +35,7 @@ public class ControllerAdvice {
             MangaNotFoundException.class,
             CommentAddException.class,
             CommentNotFoundException.class
+            MangaNotFoundException.class
     })
     public ErrorResponse exHandler(RuntimeException e) {
         ExceptionHandlerStrategy exceptionHandlerStrategy = handler.get(e.getClass());

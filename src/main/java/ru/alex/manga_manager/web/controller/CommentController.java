@@ -9,6 +9,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import ru.alex.manga_manager.model.data.Comment;
 import ru.alex.manga_manager.model.dto.CommentDto;
 import ru.alex.manga_manager.model.dto.RegistrationNewCommentDto;
+import ru.alex.manga_manager.model.dto.UpdateCommentDto;
 import ru.alex.manga_manager.service.CommentService;
 import ru.alex.manga_manager.util.converter.CommentConverter;
 import ru.alex.manga_manager.util.exception.CommentAddException;
@@ -57,12 +58,8 @@ public class CommentController {
         }
     }
 
-    @PatchMapping("/update/{comment-id}")
-    public RedirectView updateComment(@PathVariable("comment-id") String commentId, Authentication authentication, @RequestBody Optional<String> text, @PathVariable String id) {
-        if (commentService.update(commentId, Objects.requireNonNull(text.get()), authentication)) {
-            return new RedirectView("/v1/" + id + "/comment/");
-        } else {
-            throw new ForbiddenException("Forbidden");
-        }
+    @PatchMapping("/updateComment/{comment-id}")
+    public HttpStatus updateComment(@PathVariable("comment-id") String id, Authentication authentication, @RequestBody UpdateCommentDto updateCommentDto) {
+        return commentService.update(id, updateCommentDto.getValue(), authentication)? HttpStatus.OK : HttpStatus.FAILED_DEPENDENCY;
     }
 }

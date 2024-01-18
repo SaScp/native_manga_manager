@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alex.manga_manager.model.data.Role;
 import ru.alex.manga_manager.model.data.User;
+import ru.alex.manga_manager.model.dto.RegistrationUserDto;
 import ru.alex.manga_manager.model.dto.UserDto;
 import ru.alex.manga_manager.repository.RoleRepository;
 import ru.alex.manga_manager.repository.UserRepository;
@@ -46,15 +47,15 @@ public class DefaultUserService implements UserService {
 
     private final RoleRepository roleRepository;
 
-    @Qualifier("defaultUserConverter")
-    private final UserConverter<User, UserDto> userConverter;
+    @Qualifier("defaultRegistrationUserDtoConverter")
+    private final UserConverter<User, RegistrationUserDto> userConverter;
 
     @Qualifier("passwordEncoder")
     private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
-    public User save(UserDto userDto) {
+    public User save(RegistrationUserDto userDto) {
 
         User user = this.userConverter.convert(userDto);
         Role role = this.roleRepository.findById(1L).orElseThrow(() -> new RoleNotFoundException("Role Not Found"));
