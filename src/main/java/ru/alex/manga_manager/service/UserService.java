@@ -17,4 +17,6 @@ public interface UserService {
     User findByEmail(String email);
 
     User findById(String id);
+
+    boolean add(String id, Authentication authentication);
 }

@@ -33,4 +33,9 @@ public class UserController {
                              Authentication authentication) {
         return null;
     }
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/add/{id}")
+    public HttpStatus add(@PathVariable String id, Authentication authentication) {
+        return userService.add(id, authentication) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+    }
 }

@@ -52,16 +52,21 @@ public class User implements Serializable {
     private List<Manga> mangas;
 
     @OneToMany(mappedBy = "author")
-    private List<Comment> comments;
+    private Set<Comment> comments;
 
     public boolean addComment(Comment comment) {
         if (comments == null) {
-            comments = new ArrayList<>();
+            comments = new HashSet<>();
         }
-        comments.add(comment);
-        return true;
+       return comments.add(comment);
     }
 
+    public void addManga(Manga manga) {
+        if (mangas == null) {
+            mangas = new ArrayList<>();
+        }
+        mangas.add(manga);
+    }
     @Override
     public final boolean equals(Object object) {
         if (this == object) return true;

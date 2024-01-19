@@ -1,6 +1,5 @@
 package ru.alex.manga_manager.model.data;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +76,12 @@ public class Manga implements Serializable {
             comments = new HashSet<>();
         }
         return comments.add(comment);
+    }
+    public void addUser(User user) {
+        if (users == null) {
+            users = new ArrayList<>();
+        }
+        users.add(user);
     }
     @Override
     public final boolean equals(Object object) {

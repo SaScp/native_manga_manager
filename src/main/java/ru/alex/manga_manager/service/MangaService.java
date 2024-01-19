@@ -14,4 +14,6 @@ public interface MangaService {
     List<Manga> findAllMangas(FilterEntity filterEntity);
 
     Manga findMangaById(String id);
+
+
 }
