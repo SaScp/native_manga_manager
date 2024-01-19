@@ -1,8 +1,7 @@
-package ru.alex.manga_manager.model.dto;
+package ru.alex.manga_manager.model.dto.comment;
 
 import lombok.Data;
-import lombok.Value;
-import ru.alex.manga_manager.model.data.Comment;
+import ru.alex.manga_manager.model.data.comment.Comment;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;

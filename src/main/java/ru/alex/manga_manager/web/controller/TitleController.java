@@ -2,17 +2,14 @@ package ru.alex.manga_manager.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.alex.manga_manager.model.data.Comment;
-import ru.alex.manga_manager.model.data.Manga;
-import ru.alex.manga_manager.model.dto.CommentDto;
-import ru.alex.manga_manager.model.dto.MangaDto;
-import ru.alex.manga_manager.repository.CommentRepository;
+import ru.alex.manga_manager.model.data.manga.Manga;
+import ru.alex.manga_manager.model.dto.manga.MangaDto;
 import ru.alex.manga_manager.service.MangaService;
-import ru.alex.manga_manager.util.converter.CommentConverter;
 import ru.alex.manga_manager.util.converter.MangaConverter;
 
 import java.util.List;
@@ -28,13 +25,13 @@ public class TitleController {
     @Qualifier("defaultMangaDtoConverter")
     private final MangaConverter<MangaDto, Manga> mangaConverter;
 
-    @GetMapping("/")
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public MangaDto findMangaById(@PathVariable("id") String id) {
         return mangaConverter.convert(mangaService.findMangaById(id));
     }
 
 
-    @GetMapping("/chapters")
+    @GetMapping(value = "/chapters", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<String> findChaptersByMangaId(@PathVariable("id") String id) {
         //TODO in the progress.....
         return null;

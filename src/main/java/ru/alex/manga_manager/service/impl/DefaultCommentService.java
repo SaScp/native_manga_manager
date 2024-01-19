@@ -5,15 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.alex.manga_manager.model.data.Comment;
-import ru.alex.manga_manager.model.data.Manga;
-import ru.alex.manga_manager.model.data.User;
-import ru.alex.manga_manager.model.dto.RegistrationNewCommentDto;
+import ru.alex.manga_manager.model.data.comment.Comment;
+import ru.alex.manga_manager.model.data.manga.Manga;
+import ru.alex.manga_manager.model.data.user.User;
+import ru.alex.manga_manager.model.dto.comment.RegistrationNewCommentDto;
+import ru.alex.manga_manager.model.dto.comment.UpdateCommentDto;
 import ru.alex.manga_manager.repository.CommentRepository;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.repository.UserRepository;
 import ru.alex.manga_manager.service.CommentService;
-import ru.alex.manga_manager.service.update.UpdateTextComment;
+import ru.alex.manga_manager.service.update.comment.UpdateTextComment;
 import ru.alex.manga_manager.util.exception.*;
 
 import java.time.ZonedDateTime;
@@ -72,18 +73,18 @@ public class DefaultCommentService implements CommentService {
     }
 
     @Transactional
-    public boolean update(String id, String newText, Authentication authentication) {
+    public boolean update(String id, UpdateCommentDto updateCommentDto, Authentication authentication) {
         try {
             Comment comment = findById(id);
-            if (authentication != null && authentication.getName().equals(comment.getAuthor().getId())) {
-                new UpdateTextComment().execute(newText, comment);
+            if (authentication.getName().equals(comment.getAuthor().getId())) {
+                new UpdateTextComment().execute(updateCommentDto, comment);
                 commentRepository.save(comment);
             } else {
                 throw new ForbiddenException("Forbidden");
             }
             return true;
         } catch (Exception e) {
-            log.error(e.getLocalizedMessage(), e);
+            log.error(e.getMessage(), e);
             return false;
         }
 

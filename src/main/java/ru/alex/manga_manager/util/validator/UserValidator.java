@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.alex.manga_manager.model.dto.RegistrationUserDto;
-import ru.alex.manga_manager.model.dto.UserDto;
+import ru.alex.manga_manager.model.dto.user.RegistrationUserDto;
 import ru.alex.manga_manager.repository.UserRepository;
 
 @Component
@@ -16,7 +15,7 @@ public class UserValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return UserDto.class.equals(clazz);
+        return RegistrationUserDto.class.equals(clazz);
     }
 
     @Override

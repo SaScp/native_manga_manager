@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import ru.alex.manga_manager.model.data.Manga;
-import ru.alex.manga_manager.model.dto.MangaDto;
+import ru.alex.manga_manager.model.data.manga.Manga;
+import ru.alex.manga_manager.model.dto.manga.MangaDto;
 import ru.alex.manga_manager.util.exception.MangaConverterException;
 
 

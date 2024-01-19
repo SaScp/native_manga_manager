@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.alex.manga_manager.model.data.User;
-import ru.alex.manga_manager.model.dto.UserDto;
+import ru.alex.manga_manager.model.data.user.User;
+import ru.alex.manga_manager.model.dto.user.UpdateUserDto;
+import ru.alex.manga_manager.model.dto.user.UserDto;
 import ru.alex.manga_manager.service.UserService;
 import ru.alex.manga_manager.util.converter.UserConverter;
+import ru.alex.manga_manager.util.exception.ForbiddenException;
 
 import java.util.Optional;
 
@@ -22,20 +24,28 @@ public class UserController {
 
     private final UserConverter<UserDto, User> userDtoConverter;
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
-    public UserDto findUserByAuthentication(Authentication authentication) {
-        return userDtoConverter.convert(userService.findUserByAuthentication(authentication));
+    public UserDto findUserByAuthentication(Optional<Authentication> authentication) {
+        return userDtoConverter.convert(userService.findUserByAuthentication( authentication.orElseThrow(()
+                -> new ForbiddenException("forbidden"))));
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/updatePassword")
-    public HttpStatus update(@RequestBody Optional<String> password,
-                             Authentication authentication) {
-        return null;
+    @PostMapping("/update-password")
+    public HttpStatus update(@RequestBody UpdateUserDto userDto,
+                             Optional<Authentication> authentication) {
+        if (authentication.isPresent() &&
+                userService.updatePassword(userDto.getOldPassword(), userDto.getNewPassword(), authentication.get())) {
+            return HttpStatus.OK;
+        } else {
+            return HttpStatus.BAD_REQUEST;
+        }
     }
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/add/{id}")
-    public HttpStatus add(@PathVariable String id, Authentication authentication) {
-        return userService.add(id, authentication) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+    public HttpStatus add(@PathVariable String id, Optional<Authentication> authentication) {
+        return userService.add(id, authentication.orElseThrow(()
+                -> new ForbiddenException("forbidden"))) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
     }
 }

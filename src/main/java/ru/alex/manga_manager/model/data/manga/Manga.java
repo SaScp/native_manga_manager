@@ -1,4 +1,4 @@
-package ru.alex.manga_manager.model.data;
+package ru.alex.manga_manager.model.data.manga;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
+import ru.alex.manga_manager.model.data.comment.Comment;
+import ru.alex.manga_manager.model.data.user.User;
 
 import java.io.Serializable;
 import java.util.*;

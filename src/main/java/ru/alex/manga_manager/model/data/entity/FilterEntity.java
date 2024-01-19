@@ -1,4 +1,4 @@
-package ru.alex.manga_manager.model.data;
+package ru.alex.manga_manager.model.data.entity;
 
 import lombok.Data;
 

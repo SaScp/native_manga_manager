@@ -1,9 +1,9 @@
 package ru.alex.manga_manager.service;
 
-import ru.alex.manga_manager.model.data.FilterEntity;
-import ru.alex.manga_manager.model.data.Manga;
-import ru.alex.manga_manager.model.data.SearchEntity;
-import ru.alex.manga_manager.model.dto.MangaDto;
+import ru.alex.manga_manager.model.data.entity.FilterEntity;
+import ru.alex.manga_manager.model.data.manga.Manga;
+import ru.alex.manga_manager.model.data.entity.SearchEntity;
+import ru.alex.manga_manager.model.dto.manga.MangaDto;
 
 import java.util.List;
 

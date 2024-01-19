@@ -6,17 +6,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
-import ru.alex.manga_manager.model.data.Comment;
-import ru.alex.manga_manager.model.dto.CommentDto;
-import ru.alex.manga_manager.model.dto.RegistrationNewCommentDto;
-import ru.alex.manga_manager.model.dto.UpdateCommentDto;
+import ru.alex.manga_manager.model.data.comment.Comment;
+import ru.alex.manga_manager.model.dto.comment.CommentDto;
+import ru.alex.manga_manager.model.dto.comment.RegistrationNewCommentDto;
+import ru.alex.manga_manager.model.dto.comment.UpdateCommentDto;
 import ru.alex.manga_manager.service.CommentService;
 import ru.alex.manga_manager.util.converter.CommentConverter;
 import ru.alex.manga_manager.util.exception.CommentAddException;
 import ru.alex.manga_manager.util.exception.ForbiddenException;
 
+import java.lang.module.ResolutionException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -36,6 +36,7 @@ public class CommentController {
         return commentService.findAllByMangaId(id).stream().map(commentConverter::convert).toList();
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/add")
     public RedirectView writeComment(@PathVariable("id") String id,
                                      Authentication authentication,
@@ -49,8 +50,11 @@ public class CommentController {
         }
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/delete/{comment-id}")
-    public RedirectView deleteComment(@PathVariable("comment-id") String commentId, Authentication authentication, @PathVariable String id) {
+    public RedirectView deleteComment(@PathVariable("comment-id") String commentId,
+                                      Authentication authentication,
+                                      @PathVariable String id) {
         if (commentService.deleteComment(commentId, authentication)) {
             return new RedirectView("/v1/" + id + "/comment/");
         } else {
@@ -58,8 +62,17 @@ public class CommentController {
         }
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/updateComment/{comment-id}")
-    public HttpStatus updateComment(@PathVariable("comment-id") String id, Authentication authentication, @RequestBody UpdateCommentDto updateCommentDto) {
-        return commentService.update(id, updateCommentDto.getValue(), authentication)? HttpStatus.OK : HttpStatus.FAILED_DEPENDENCY;
+    public RedirectView updateComment(@PathVariable("comment-id") String commentId,
+                                      Optional<Authentication> authentication,
+                                      @RequestBody UpdateCommentDto updateCommentDto,
+                                      @PathVariable String id) {
+        if (authentication.isPresent() &&
+                commentService.update(commentId, updateCommentDto, authentication.get())) {
+            return new RedirectView("/v1/" + id + "/comment/");
+        } else {
+            throw new ResolutionException("resource not found");
+        }
     }
 }

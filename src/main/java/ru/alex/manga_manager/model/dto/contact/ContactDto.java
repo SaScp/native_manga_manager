@@ -1,4 +1,4 @@
-package ru.alex.manga_manager.model.dto;
+package ru.alex.manga_manager.model.dto.contact;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

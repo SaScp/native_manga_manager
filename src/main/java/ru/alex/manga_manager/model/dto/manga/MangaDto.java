@@ -1,4 +1,4 @@
-package ru.alex.manga_manager.model.dto;
+package ru.alex.manga_manager.model.dto.manga;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

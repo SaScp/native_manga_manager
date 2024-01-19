@@ -2,21 +2,18 @@ package ru.alex.manga_manager.repository;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ru.alex.manga_manager.model.data.Comment;
-import ru.alex.manga_manager.model.data.Genre;
-import ru.alex.manga_manager.model.data.Manga;
+import ru.alex.manga_manager.model.data.manga.Manga;
 
 import java.util.Collection;
 import java.util.List;
 
 
 /**
- * Repository for {@link ru.alex.manga_manager.model.data.Manga}
+ * Repository for {@link Manga}
  */
 @Repository
 public interface MangaRepository extends JpaRepository<Manga, String> {

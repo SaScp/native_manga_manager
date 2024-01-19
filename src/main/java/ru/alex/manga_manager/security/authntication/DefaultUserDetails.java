@@ -4,7 +4,7 @@ import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.alex.manga_manager.model.data.User;
+import ru.alex.manga_manager.model.data.user.User;
 
 
 import java.util.Collection;

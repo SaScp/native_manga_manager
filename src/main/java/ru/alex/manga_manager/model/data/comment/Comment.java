@@ -1,35 +1,50 @@
-package ru.alex.manga_manager.model.data;
+package ru.alex.manga_manager.model.data.comment;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
+import ru.alex.manga_manager.model.data.manga.Manga;
+import ru.alex.manga_manager.model.data.user.User;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Table(name = "t_genre")
-public class Genre  implements Serializable {
+@Entity
+@Table(name = "t_comment")
+public class Comment implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private String id;
 
-    @Column(name = "genre", nullable = false)
-    private String genre;
+    @Column(name = "text")
+    private String text;
 
-    @ManyToMany(mappedBy = "genres")
-    @ToString.Exclude
-    private List<Manga> mangas;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User author;
 
+    @ManyToOne
+    @JoinColumn(name = "manga_id", referencedColumnName = "id")
+    private Manga manga;
+
+    @Column(name = "create_at", nullable = false)
+    private ZonedDateTime createAt;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Comment> comments;
+
+    @Column(name = "update_at", nullable = false)
+    private ZonedDateTime updateAt;
     @Override
     public final boolean equals(Object object) {
         if (this == object) return true;
@@ -37,8 +52,8 @@ public class Genre  implements Serializable {
         Class<?> oEffectiveClass = object instanceof HibernateProxy ? ((HibernateProxy) object).getHibernateLazyInitializer().getPersistentClass() : object.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Genre genre = (Genre) object;
-        return getId() != null && Objects.equals(getId(), genre.getId());
+        Comment comment = (Comment) object;
+        return getId() != null && Objects.equals(getId(), comment.getId());
     }
 
     @Override

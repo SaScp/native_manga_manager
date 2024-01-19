@@ -1,4 +1,4 @@
-package ru.alex.manga_manager.model.data;
+package ru.alex.manga_manager.model.data.manga;
 
 import jakarta.persistence.*;
 import lombok.Getter;

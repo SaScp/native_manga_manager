@@ -1,16 +1,14 @@
 package ru.alex.manga_manager.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.alex.manga_manager.model.data.FilterEntity;
-import ru.alex.manga_manager.model.data.Manga;
-import ru.alex.manga_manager.model.data.SearchEntity;
-import ru.alex.manga_manager.model.dto.MangaDto;
+import ru.alex.manga_manager.model.data.entity.FilterEntity;
+import ru.alex.manga_manager.model.data.manga.Manga;
+import ru.alex.manga_manager.model.data.entity.SearchEntity;
+import ru.alex.manga_manager.model.dto.manga.MangaDto;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.service.MangaService;
 import ru.alex.manga_manager.util.converter.MangaConverter;

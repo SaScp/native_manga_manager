@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.alex.manga_manager.model.data.FilterEntity;
-import ru.alex.manga_manager.model.data.Manga;
-import ru.alex.manga_manager.model.data.SearchEntity;
-import ru.alex.manga_manager.model.dto.MangaDto;
+import ru.alex.manga_manager.model.data.entity.FilterEntity;
+import ru.alex.manga_manager.model.data.manga.Manga;
+import ru.alex.manga_manager.model.data.entity.SearchEntity;
+import ru.alex.manga_manager.model.dto.manga.MangaDto;
 import ru.alex.manga_manager.service.MangaService;
 import ru.alex.manga_manager.util.annotation.FilterParam;
 import ru.alex.manga_manager.util.annotation.SearchParam;
@@ -27,7 +27,7 @@ public class MangaController {
     private final MangaConverter<MangaDto, Manga> mangaConverter;
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/catalog")
+    @GetMapping(value = "/titles")
     public List<MangaDto> findAllMangas(@FilterParam FilterEntity filterEntity) {
         return mangaService.findAllMangas(filterEntity)
                 .stream().map(mangaConverter::convert).toList();

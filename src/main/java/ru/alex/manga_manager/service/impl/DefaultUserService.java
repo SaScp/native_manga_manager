@@ -8,19 +8,21 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.alex.manga_manager.model.data.Manga;
-import ru.alex.manga_manager.model.data.Role;
-import ru.alex.manga_manager.model.data.User;
-import ru.alex.manga_manager.model.dto.RegistrationUserDto;
+import ru.alex.manga_manager.model.data.manga.Manga;
+import ru.alex.manga_manager.model.data.user.Role;
+import ru.alex.manga_manager.model.data.user.User;
+import ru.alex.manga_manager.model.dto.user.RegistrationUserDto;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.repository.RoleRepository;
 import ru.alex.manga_manager.repository.UserRepository;
 import ru.alex.manga_manager.service.UserService;
+import ru.alex.manga_manager.service.update.user.UpdatePasswordComponent;
 import ru.alex.manga_manager.util.converter.UserConverter;
 import ru.alex.manga_manager.util.exception.ForbiddenException;
 import ru.alex.manga_manager.util.exception.MangaNotFoundException;
 import ru.alex.manga_manager.util.exception.RoleNotFoundException;
 import ru.alex.manga_manager.util.exception.UserNotFoundException;
+import ru.alex.manga_manager.util.validator.PasswordValidator;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -110,4 +112,23 @@ public class DefaultUserService implements UserService {
             throw new ForbiddenException("Forbidden");
         }
     }
+
+    @Override
+    @Transactional
+    public boolean updatePassword(String oldPassword, String newPassword, Authentication authentication) {
+        User userByAuthentication = findUserByAuthentication(authentication);
+        if (passwordEncoder.matches(userByAuthentication.getPassword(), oldPassword)) {
+            try {
+                UpdatePasswordComponent update = new UpdatePasswordComponent(passwordEncoder);
+                update.execute(newPassword, userByAuthentication);
+                userRepository.save(userByAuthentication);
+                return true;
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                return false;
+            }
+        }
+        return false;
+    }
+
 }

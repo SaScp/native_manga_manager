@@ -1,6 +1,5 @@
-package ru.alex.manga_manager.model.data;
+package ru.alex.manga_manager.model.data.user;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

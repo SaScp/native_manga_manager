@@ -1,10 +1,11 @@
-package ru.alex.manga_manager.model.dto;
+package ru.alex.manga_manager.model.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import ru.alex.manga_manager.model.dto.manga.MangaDto;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package ru.alex.manga_manager.model.data;
+package ru.alex.manga_manager.model.data.contact;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
