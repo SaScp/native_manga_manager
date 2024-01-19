@@ -14,10 +14,7 @@ import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.repository.UserRepository;
 import ru.alex.manga_manager.service.CommentService;
 import ru.alex.manga_manager.service.update.UpdateTextComment;
-import ru.alex.manga_manager.util.exception.CommentNotFoundException;
-import ru.alex.manga_manager.util.exception.ForbiddenException;
-import ru.alex.manga_manager.util.exception.MangaNotFoundException;
-import ru.alex.manga_manager.util.exception.UserNotFoundException;
+import ru.alex.manga_manager.util.exception.*;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -46,7 +43,7 @@ public class DefaultCommentService implements CommentService {
 
         String id = commentDto.getAuthentication().getName();
         User user = userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException("User: " + id + " Not Found"));
+                new ResourceNotFoundException("User: " + id + " Not Found"));
         Manga manga = mangaRepository.findById(commentDto.getMangaId()).orElseThrow(() ->
                 new MangaNotFoundException("Manga with id " + commentDto.getMangaId() + " Not Found"));
         Comment parentComment = commentDto.getParentId() == null ? null : findById(commentDto.getParentId());
@@ -99,7 +96,7 @@ public class DefaultCommentService implements CommentService {
 
     @Transactional(readOnly = true)
     public Comment findById(String id) {
-        return commentRepository.findById(id).orElseThrow(CommentNotFoundException::new);
+        return commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("comment not found"));
     }
 
     @Transactional

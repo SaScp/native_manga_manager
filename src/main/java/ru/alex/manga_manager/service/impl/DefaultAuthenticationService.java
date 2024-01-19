@@ -4,6 +4,7 @@ import com.nimbusds.jose.KeyLengthException;
 import com.nimbusds.jose.crypto.DirectEncrypter;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -43,7 +44,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-
+@Slf4j
 @Service
 public class DefaultAuthenticationService implements AuthenticationService {
 
@@ -113,11 +114,18 @@ public class DefaultAuthenticationService implements AuthenticationService {
         User user = userService.findByEmail(userDto.getEmail());
 
         Authentication authentication =
-                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), user.getRoles().stream().map(r -> new SimpleGrantedAuthority(r.getRole())).toList());
+                new UsernamePasswordAuthenticationToken(user.getEmail(),
+                        user.getPassword(),
+                        user.getRoles().stream().map(r ->
+                                new SimpleGrantedAuthority(r.getRole())).toList());
 
         authenticationProvider.authenticate(authentication);
 
-        Token refresh = refreshFactory.apply(new PreAuthenticatedAuthenticationToken(user.getId(), user.getPassword(), user.getRoles().stream().map(r -> new SimpleGrantedAuthority(r.getRole())).toList()));
+        Token refresh = refreshFactory.apply(new PreAuthenticatedAuthenticationToken(user.getId(),
+                user.getPassword(),
+                user.getRoles().stream().map(r ->
+                        new SimpleGrantedAuthority(r.getRole())).toList()));
+
         Token access = accessFactory.apply(refresh);
 
         return new Tokens(this.accessTokenJwsStringSerializer.apply(access),
