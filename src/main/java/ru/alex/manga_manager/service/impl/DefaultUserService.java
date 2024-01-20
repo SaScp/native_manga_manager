@@ -82,13 +82,15 @@ public class DefaultUserService implements UserService {
     @Override
     @Transactional(readOnly = true)
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("user with email:" + email + "not found"));
+        return userRepository.findByEmail(email).orElseThrow(() ->
+                new UserNotFoundException("user with email:" + email + "not found"));
     }
 
     @Override
     @Transactional(readOnly = true)
     public User findById(String id) {
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("user with id:" + id + "not found"));
+        return userRepository.findById(id).orElseThrow(() ->
+                new UserNotFoundException("user with id:" + id + "not found"));
     }
 
     @Transactional

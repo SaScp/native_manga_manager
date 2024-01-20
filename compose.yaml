@@ -45,6 +45,5 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./src/main/resources:/docker-entrypoint-initdb.d
-    ports:
-      - 5433:5432
-
+    expose:
+      - 5432

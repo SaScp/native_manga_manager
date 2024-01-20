@@ -27,7 +27,8 @@ public class DefaultUserDetailsService implements UserDetailsService {
         return DefaultUserDetails
                 .builder()
                 .user(user)
-                .authorities(user.getRoles().stream().map(r-> new SimpleGrantedAuthority(r.getRole())).toList())
+                .authorities(user.getRoles().stream().map(r->
+                        new SimpleGrantedAuthority(r.getRole())).toList())
                 .build();
     }
 }

@@ -45,7 +45,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/add/{id}")
     public HttpStatus add(@PathVariable String id, Optional<Authentication> authentication) {
-        return userService.add(id, authentication.orElseThrow(()
-                -> new ForbiddenException("forbidden"))) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return userService.add(id, authentication.orElseThrow(() ->
+                new ForbiddenException("forbidden"))) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
     }
 }

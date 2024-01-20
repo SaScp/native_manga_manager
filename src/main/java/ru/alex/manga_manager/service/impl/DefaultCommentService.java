@@ -97,7 +97,8 @@ public class DefaultCommentService implements CommentService {
 
     @Transactional(readOnly = true)
     public Comment findById(String id) {
-        return commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("comment not found"));
+        return commentRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("comment not found"));
     }
 
     @Transactional
