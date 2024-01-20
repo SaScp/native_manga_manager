@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/update-password")
+    @PatchMapping("/update-password")
     public HttpStatus update(@RequestBody UpdateUserDto userDto,
                              Optional<Authentication> authentication) {
         if (authentication.isPresent() &&

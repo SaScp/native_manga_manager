@@ -36,7 +36,7 @@ public class CommentController {
         return commentService.findAllByMangaId(id).stream().map(commentConverter::convert).toList();
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.PERMANENT_REDIRECT)
     @PostMapping("/add")
     public RedirectView writeComment(@PathVariable("id") String id,
                                      Authentication authentication,
@@ -50,7 +50,7 @@ public class CommentController {
         }
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.PERMANENT_REDIRECT)
     @DeleteMapping("/delete/{comment-id}")
     public RedirectView deleteComment(@PathVariable("comment-id") String commentId,
                                       Optional<Authentication> authentication,
@@ -63,7 +63,7 @@ public class CommentController {
         }
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.PERMANENT_REDIRECT)
     @PatchMapping("/update/{comment-id}")
     public RedirectView updateComment(@PathVariable("comment-id") String commentId,
                                       Optional<Authentication> authentication,
