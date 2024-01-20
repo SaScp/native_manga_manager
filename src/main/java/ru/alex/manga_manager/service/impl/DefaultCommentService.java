@@ -103,7 +103,7 @@ public class DefaultCommentService implements CommentService {
 
     @Transactional
     public boolean deleteComment(String id, Authentication authentication) {
-        if (authentication != null && authentication.getName().equals(findById(id).getId())) {
+        if (authentication.getName().equals(findById(id).getId())) {
             commentRepository.deleteById(id);
             return true;
         } else {

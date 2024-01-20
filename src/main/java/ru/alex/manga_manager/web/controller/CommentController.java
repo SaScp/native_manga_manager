@@ -53,9 +53,10 @@ public class CommentController {
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/delete/{comment-id}")
     public RedirectView deleteComment(@PathVariable("comment-id") String commentId,
-                                      Authentication authentication,
+                                      Optional<Authentication> authentication,
                                       @PathVariable String id) {
-        if (commentService.deleteComment(commentId, authentication)) {
+        if (commentService.deleteComment(commentId, authentication.orElseThrow(() ->
+                new ForbiddenException("Forbidden")))) {
             return new RedirectView("/v1/" + id + "/comment/");
         } else {
             throw new ForbiddenException("Forbidden");
@@ -63,7 +64,7 @@ public class CommentController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/updateComment/{comment-id}")
+    @PatchMapping("/update/{comment-id}")
     public RedirectView updateComment(@PathVariable("comment-id") String commentId,
                                       Optional<Authentication> authentication,
                                       @RequestBody UpdateCommentDto updateCommentDto,
