@@ -95,24 +95,19 @@ public class DefaultUserService implements UserService {
 
     @Transactional
     public boolean add(String id, Authentication authentication) {
-
-        if (authentication != null) {
             Manga manga = mangaRepository.findById(id).orElseThrow(() ->
                     new MangaNotFoundException("Manga " + id + " Not Found"));
             User user = findUserByAuthentication(authentication);
             user.addManga(manga);
             manga.addUser(user);
             try {
-                mangaRepository.save(manga);
                 userRepository.save(user);
+                mangaRepository.save(manga);
                 return true;
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 return false;
             }
-        } else {
-            throw new ForbiddenException("Forbidden");
-        }
     }
 
     @Override

@@ -41,7 +41,6 @@ public class DefaultCommentService implements CommentService {
             throw new ForbiddenException("Forbidden");
         }
 
-
         String id = commentDto.getAuthentication().getName();
         User user = userRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("User: " + id + " Not Found"));

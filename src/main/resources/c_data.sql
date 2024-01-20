@@ -3,45 +3,21 @@ INSERT INTO t_role values (1, 'ROLE_USER');
 INSERT INTO t_role values (2, 'ROLE_ADMIN');
 INSERT INTO t_role values (3, 'ROLE_BLOCK');
 INSERT INTO t_role values (4, 'ROLE_MUTE');
-
-INSERT INTO t_genre(id, genre) VALUES (1, 'Боевые искусства');
-INSERT INTO t_genre(id, genre) VALUES (2, 'Гарем');
-INSERT INTO t_genre(id, genre) VALUES (3, 'Гендерная интрига');
-INSERT INTO t_genre(id, genre) VALUES (4, 'Героический фэнтези');
-INSERT INTO t_genre(id, genre) VALUES (5, 'Детектив');
-INSERT INTO t_genre(id, genre) VALUES (6, 'Дзёсэй');
-INSERT INTO t_genre(id, genre) VALUES (7, 'Додзинси');
-INSERT INTO t_genre(id, genre) VALUES (8, 'Драма');
-INSERT INTO t_genre(id, genre) VALUES (9, 'История');
-INSERT INTO t_genre(id, genre) VALUES (10, 'Киберпанк');
-INSERT INTO t_genre(id, genre) VALUES (11, 'Кодомо');
-INSERT INTO t_genre(id, genre) VALUES (12, 'Комедия');
-INSERT INTO t_genre(id, genre) VALUES (13, 'Махо-сёдзё');
-INSERT INTO t_genre(id, genre) VALUES (14, 'Меха');
-INSERT INTO t_genre(id, genre) VALUES (15, 'Мистика');
-INSERT INTO t_genre(id, genre) VALUES (16, 'Научная фантастика');
-INSERT INTO t_genre(id, genre) VALUES (17, 'Повседневность');
-INSERT INTO t_genre(id, genre) VALUES (18, 'Постапокалиптика');
-INSERT INTO t_genre(id, genre) VALUES (19, 'Приключения');
-INSERT INTO t_genre(id, genre) VALUES (20, 'Психология');
-INSERT INTO t_genre(id, genre) VALUES (21, 'Романтика');
-INSERT INTO t_genre(id, genre) VALUES (22, 'Сёдзё');
-INSERT INTO t_genre(id, genre) VALUES (23, 'Сёдзё-ай');
-INSERT INTO t_genre(id, genre) VALUES (24, 'Сёнэн');
-INSERT INTO t_genre(id, genre) VALUES (25, 'Спорт');
-INSERT INTO t_genre(id, genre) VALUES (26, 'Сэйнэн');
-INSERT INTO t_genre(id, genre) VALUES (27, 'Трагедия');
-INSERT INTO t_genre(id, genre) VALUES (28, 'Триллер');
-INSERT INTO t_genre(id, genre) VALUES (29, 'Ужасы');
-INSERT INTO t_genre(id, genre) VALUES (30, 'Фантастика');
-INSERT INTO t_genre(id, genre) VALUES (31, 'Фэнтези');
-INSERT INTO t_genre(id, genre) VALUES (32, 'Школьная жизнь');
-INSERT INTO t_genre(id, genre) VALUES (33, 'Экшен');
-INSERT INTO t_genre(id, genre) VALUES (34, 'Элементы юмора');
-INSERT INTO t_genre(id, genre) VALUES (35, 'Эротика');
-INSERT INTO t_genre(id, genre) VALUES (36, 'Этти');
-INSERT INTO t_genre(id, genre) VALUES (37, 'Юри');
-INSERT INTO t_genre(id, genre) VALUES (38, 'Сверхъестественное');
+DO $$
+ declare
+genre_row record;
+    genre varchar(255);
+BEGIN
+FOR genre_row IN SELECT * FROM (VALUES
+                   ('Боевые искусства'), ('Гарем'), ('Гендерная интрига'), ('Героический фэнтези'), ('Детектив'),
+                   ('Дзёсэй'), ('Додзинси'), ('Драма'), ('История'), ('Киберпанк'), ('Кодомо'), ('Комедия'),
+                   ('Махо-сёдзё'), ('Меха'), ('Мистика'), ('Научная фантастика'), ('Повседневность'),  ('Постапокалиптика'),
+                   ('Приключения'), ('Психология'), ('Романтика'),('Сёдзё'),  ('Сёдзё-ай'), ('Сёнэн'), ('Спорт'), ('Сэйнэн'),
+                   ('Трагедия'), ('Триллер'), ('Ужасы'), ('Фантастика'), ('Фэнтези'), ('Школьная жизнь'), ('Экшен'),
+                   ('Элементы юмора'), ('Эротика'), ('Этти'), ('Юри'), ('Сверхъестественное')) AS t(genre) LOOP
+INSERT INTO t_genre(genre) VALUES (genre_row.genre);
+END LOOP;
+END $$;
 
 
 INSERT INTO t_type(id, c_type) VALUES (1, 'Манга');

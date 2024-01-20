@@ -26,17 +26,16 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
-    public UserDto findUserByAuthentication(Optional<Authentication> authentication) {
-        return userDtoConverter.convert(userService.findUserByAuthentication( authentication.orElseThrow(()
-                -> new ForbiddenException("forbidden"))));
+    public UserDto findUserByAuthentication(Authentication authentication) {
+        return userDtoConverter.convert(userService.findUserByAuthentication(authentication));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/update-password")
     public HttpStatus update(@RequestBody UpdateUserDto userDto,
-                             Optional<Authentication> authentication) {
-        if (authentication.isPresent() &&
-                userService.updatePassword(userDto.getOldPassword(), userDto.getNewPassword(), authentication.get())) {
+                             Authentication authentication) {
+        if (Optional.ofNullable(authentication).isPresent() &&
+                userService.updatePassword(userDto.getOldPassword(), userDto.getNewPassword(), authentication)) {
             return HttpStatus.OK;
         } else {
             return HttpStatus.BAD_REQUEST;
@@ -44,8 +43,8 @@ public class UserController {
     }
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/add/{id}")
-    public HttpStatus add(@PathVariable String id, Optional<Authentication> authentication) {
-        return userService.add(id, authentication.orElseThrow(() ->
+    public HttpStatus add(@PathVariable String id, Authentication authentication) {
+        return userService.add(id, Optional.ofNullable(authentication).orElseThrow(() ->
                 new ForbiddenException("forbidden"))) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
     }
 }

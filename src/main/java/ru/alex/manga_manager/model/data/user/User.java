@@ -46,10 +46,7 @@ public class User implements Serializable {
     @Column(name = "registration_date", nullable = false)
     private Date registrationDate;
 
-    @ManyToMany
-    @JoinTable(name = "t_user_t_manga",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "manga_id"))
+    @ManyToMany(mappedBy = "users")
     @ToString.Exclude
     private List<Manga> mangas;
 
@@ -57,16 +54,10 @@ public class User implements Serializable {
     private Set<Comment> comments;
 
     public boolean addComment(Comment comment) {
-        if (comments == null) {
-            comments = new HashSet<>();
-        }
        return comments.add(comment);
     }
 
     public void addManga(Manga manga) {
-        if (mangas == null) {
-            mangas = new ArrayList<>();
-        }
         mangas.add(manga);
     }
     @Override

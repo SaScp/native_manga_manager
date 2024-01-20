@@ -65,8 +65,8 @@ public class Manga implements Serializable {
 
     @ManyToMany
     @JoinTable(name = "t_user_t_manga",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "manga_id"))
+            joinColumns = @JoinColumn(name = "manga_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     @ToString.Exclude
     private List<User> users;
 
@@ -74,15 +74,9 @@ public class Manga implements Serializable {
     private Set<Comment> comments;
 
     public boolean addComment(Comment comment) {
-        if (comments == null) {
-            comments = new HashSet<>();
-        }
         return comments.add(comment);
     }
     public void addUser(User user) {
-        if (users == null) {
-            users = new ArrayList<>();
-        }
         users.add(user);
     }
     @Override
