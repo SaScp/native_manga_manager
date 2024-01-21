@@ -40,12 +40,6 @@ public class RequestConfigurer extends AbstractHttpConfigurer<RequestConfigurer,
     private AccessTokenJwsStringDeserializer accessTokenJwsStringDeserializer;
 
     private JdbcTemplate jdbcTemplate;
-
-    private AuthenticationEntryPoint authenticationEntryPoint =
-            (request, response, authException) -> {
-                response.addHeader(HttpHeaders.WWW_AUTHENTICATE, "Bearer");
-                response.sendError(HttpStatus.UNAUTHORIZED.value(), "UNAUTHORIZED");
-            };
     @Override
     public void init(HttpSecurity builder) throws Exception {
         super.init(builder);

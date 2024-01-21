@@ -32,10 +32,9 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/update-password")
-    public HttpStatus update(@RequestBody UpdateUserDto userDto,
-                             Authentication authentication) {
+    public HttpStatus update(@RequestBody UpdateUserDto userDto, Authentication authentication) {
         if (Optional.ofNullable(authentication).isPresent() &&
-                userService.updatePassword(userDto.getOldPassword(), userDto.getNewPassword(), authentication)) {
+                userService.updatePassword(userDto, authentication)) {
             return HttpStatus.OK;
         } else {
             return HttpStatus.BAD_REQUEST;

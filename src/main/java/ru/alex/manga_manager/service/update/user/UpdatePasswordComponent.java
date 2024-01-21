@@ -17,9 +17,9 @@ public class UpdatePasswordComponent implements UserUpdateComponent {
     }
 
     @Override
-    public void execute(String component, User updateComponent) {
-        if (Optional.ofNullable(component).isPresent()) {
-            updateComponent.setPassword(passwordEncoder.encode(component));
+    public void execute(UpdateUserDto component, User updateComponent) {
+        if (Optional.ofNullable(component.getNewPassword()).isPresent()) {
+            updateComponent.setPassword(passwordEncoder.encode(component.getNewPassword()));
         }
     }
 }

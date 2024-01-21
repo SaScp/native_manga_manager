@@ -12,6 +12,7 @@ import ru.alex.manga_manager.model.data.manga.Manga;
 import ru.alex.manga_manager.model.data.user.Role;
 import ru.alex.manga_manager.model.data.user.User;
 import ru.alex.manga_manager.model.dto.user.RegistrationUserDto;
+import ru.alex.manga_manager.model.dto.user.UpdateUserDto;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.repository.RoleRepository;
 import ru.alex.manga_manager.repository.UserRepository;
@@ -112,12 +113,12 @@ public class DefaultUserService implements UserService {
 
     @Override
     @Transactional
-    public boolean updatePassword(String oldPassword, String newPassword, Authentication authentication) {
+    public boolean updatePassword(UpdateUserDto userDto, Authentication authentication) {
         User userByAuthentication = findUserByAuthentication(authentication);
-        if (passwordEncoder.matches(userByAuthentication.getPassword(), oldPassword)) {
+        if (passwordEncoder.matches(userByAuthentication.getPassword(), userDto.getOldPassword())) {
             try {
                 UpdatePasswordComponent update = new UpdatePasswordComponent(passwordEncoder);
-                update.execute(newPassword, userByAuthentication);
+                update.execute(userDto, userByAuthentication);
                 userRepository.save(userByAuthentication);
                 return true;
             } catch (Exception e) {

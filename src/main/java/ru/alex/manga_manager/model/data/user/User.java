@@ -1,6 +1,8 @@
 package ru.alex.manga_manager.model.data.user;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,6 +24,7 @@ public class User implements Serializable {
     private String id;
 
     @Column(name = "email", nullable = false)
+    @Email
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -33,7 +36,7 @@ public class User implements Serializable {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "t_user_t_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
