@@ -1,6 +1,8 @@
 spring:
   config:
     import: optional:file:.properties[.env]
+  cache:
+    type: redis
   sql:
     init:
       mode: always
@@ -11,6 +13,11 @@ spring:
     username: ${POSTGRES_USERNAME}
     password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      repositories:
+        enabled: false
 jwt:
   secret:
     access: '{"kty" : "oct", "k" : "hi7S5RX5ZRZooHA0RKGctZ-KtR9FoESgCnH-3BNg5XI"}'

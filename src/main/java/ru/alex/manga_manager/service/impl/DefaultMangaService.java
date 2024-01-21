@@ -1,6 +1,7 @@
 package ru.alex.manga_manager.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,7 @@ public class DefaultMangaService implements MangaService {
         return manga;
     }
 
+    @Cacheable(value = "search", unless = "#result == null", key = "#search")
     @Override
     public List<Manga> search(SearchEntity search) {
         this.pageRequest = PageRequest.of(search.getPage(), 20);
@@ -51,8 +53,9 @@ public class DefaultMangaService implements MangaService {
     }
 
     @Override
+    @Cacheable(value = "findAll", unless = "#result == null", key = "#filterEntity")
     @Transactional
-    public List<Manga> findAllMangas(FilterEntity filterEntity) {
+    public List<Manga> findAll(FilterEntity filterEntity) {
         checkOrderOnStartsWithPlus(filterEntity.getOrder());
         if (filterEntity.getOrder() != null) {
             Sort sort = orderFlag ? Sort.by(this.order).descending() : Sort.by(this.order).ascending();
@@ -65,6 +68,7 @@ public class DefaultMangaService implements MangaService {
     }
 
     @Override
+    @Cacheable(value = "findMangaById", unless = "#result == null", key = "#id")
     @Transactional(readOnly = true)
     public Manga findMangaById(String id) {
         return this.mangaRepository.findById(id)

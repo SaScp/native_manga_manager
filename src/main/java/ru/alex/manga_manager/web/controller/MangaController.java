@@ -29,7 +29,7 @@ public class MangaController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/titles")
     public List<MangaDto> findAllMangas(@FilterParam FilterEntity filterEntity) {
-        return mangaService.findAllMangas(filterEntity)
+        return mangaService.findAll(filterEntity)
                 .stream().map(mangaConverter::convert).toList();
     }
 

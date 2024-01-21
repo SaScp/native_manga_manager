@@ -49,7 +49,7 @@ public class User implements Serializable {
     @Column(name = "registration_date", nullable = false)
     private Date registrationDate;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     @ToString.Exclude
     private List<Manga> mangas;
 

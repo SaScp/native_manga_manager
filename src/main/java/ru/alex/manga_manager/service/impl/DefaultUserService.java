@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -74,6 +75,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    @Cacheable(value = "findUserByAuthentication", key = "#authentication")
     @Transactional(readOnly = true)
     public User findUserByAuthentication(Authentication authentication) {
         return this.userRepository.findById(authentication.getName()).orElseThrow(() ->
@@ -81,6 +83,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    @Cacheable(value = "findByEmail", key = "#email")
     @Transactional(readOnly = true)
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() ->

@@ -36,7 +36,7 @@ public class Manga implements Serializable {
     @Column(name = "avg_rating", nullable = false)
     private Double avgRating;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "c_type", referencedColumnName = "id")
     @ToString.Exclude
     private Type type;
@@ -56,7 +56,7 @@ public class Manga implements Serializable {
     @Column(name = "en_name", nullable = false)
     private String enName;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "t_manga_t_genre",
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))

@@ -26,7 +26,7 @@ public class Type  implements Serializable {
     @Column(name = "c_type", nullable = false)
     private String type;
 
-    @OneToMany(mappedBy = "type", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
     private List<Manga> mangas;
 
     @Override
