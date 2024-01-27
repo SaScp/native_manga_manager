@@ -2,6 +2,7 @@ package ru.alex.manga_manager.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -90,17 +91,16 @@ public class DefaultCommentService implements CommentService {
 
     }
     @Override
-    @Cacheable(value = "findAllByMangaId", key = "#id")
     @Transactional(readOnly = true)
     public List<Comment> findAllByMangaId(String id) {
-        return commentRepository.findAllByManga_IdAndParent_IdIsNull(id);
+        List<Comment> comments = commentRepository.findAllByManga_IdAndParent_IdIsNull(id);
+        return comments;
     }
 
     @Cacheable(value = "findById", key = "#id")
     @Transactional(readOnly = true)
     public Comment findById(String id) {
-        return commentRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("comment not found"));
+        return commentRepository.findById(id).orElse(null);
     }
 
     @Transactional
