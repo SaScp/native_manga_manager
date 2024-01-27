@@ -13,12 +13,6 @@ import java.io.IOException;
 
 public class DeniedRequestFilter extends OncePerRequestFilter {
 
-    private AuthenticationEntryPoint authenticationEntryPoint =
-            (request, response, authException) -> {
-                response.addHeader(HttpHeaders.WWW_AUTHENTICATE, "Bearer");
-                response.sendError(HttpStatus.UNAUTHORIZED.value(), "UNAUTHORIZED");
-            };
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 

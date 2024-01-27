@@ -1,6 +1,7 @@
 package ru.alex.manga_manager.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -37,6 +38,7 @@ public class DefaultMangaService implements MangaService {
 
 
 
+    @CachePut("findAll")
     @Override
     public Manga save(MangaDto mangaDto) {
         Manga manga = mangaConverter.convert(mangaDto);

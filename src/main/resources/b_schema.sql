@@ -70,6 +70,11 @@ CREATE TABLE IF NOT EXISTS t_manga_t_genre
     genre_id INT REFERENCES t_genre (id),
     PRIMARY KEY (manga_id, genre_id)
     );
+
+CREATE TABLE IF NOT EXISTS t_page ();
+
+CREATE TABLE IF NOT EXISTS t_chapter();
+
 CREATE TABLE IF NOT EXISTS t_user_t_manga
 (
     user_id  VARCHAR(255) REFERENCES t_user (id),

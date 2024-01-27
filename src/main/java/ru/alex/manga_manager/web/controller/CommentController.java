@@ -33,7 +33,8 @@ public class CommentController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
     public List<CommentDto> findCommentByMangaId(@PathVariable String id) {
-        return commentService.findAllByMangaId(id).stream().map(commentConverter::convert).toList();
+        List<CommentDto> commentDtos = commentService.findAllByMangaId(id).stream().map(commentConverter::convert).toList();
+        return commentDtos;
     }
 
     @ResponseStatus(HttpStatus.OK)
