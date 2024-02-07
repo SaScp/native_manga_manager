@@ -18,12 +18,12 @@ import java.util.concurrent.Executor;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "Loyalty System Api",
-                description = "Loyalty System", version = "1.0.0",
+                title = "Manga API",
+                description = "Manga", version = "1.0.0",
                 contact = @Contact(
-                        name = "Struchkov Mark",
-                        email = "mark@struchkov.dev",
-                        url = "https://mark.struchkov.dev"
+                        name = "Alex",
+                        email = "3048453@gmail.com",
+                        url = "https://github.com/SaScp"
                 )
         )
 )
