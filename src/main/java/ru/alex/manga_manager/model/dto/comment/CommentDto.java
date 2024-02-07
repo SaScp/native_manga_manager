@@ -12,6 +12,7 @@ import java.util.List;
  */
 @Data
 public class CommentDto implements Serializable {
+
     private String id;
     private String text;
     private ZonedDateTime createAt;

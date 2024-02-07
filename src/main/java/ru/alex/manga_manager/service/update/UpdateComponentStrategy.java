@@ -1,6 +1,6 @@
 package ru.alex.manga_manager.service.update;
 
-public interface UpdateComponent<T, E> {
+public interface UpdateComponentStrategy<T, E> {
 
     void execute(T component, E updateComponent);
 }

@@ -12,19 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.alex.manga_manager.model.data.manga.Manga;
 import ru.alex.manga_manager.model.data.user.Role;
 import ru.alex.manga_manager.model.data.user.User;
-import ru.alex.manga_manager.model.dto.user.RegistrationUserDto;
-import ru.alex.manga_manager.model.dto.user.UpdateUserDto;
+import ru.alex.manga_manager.model.dto.user.UserDto;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.repository.RoleRepository;
 import ru.alex.manga_manager.repository.UserRepository;
 import ru.alex.manga_manager.service.UserService;
-import ru.alex.manga_manager.service.update.user.UpdatePasswordComponent;
 import ru.alex.manga_manager.util.converter.UserConverter;
-import ru.alex.manga_manager.util.exception.ForbiddenException;
+
 import ru.alex.manga_manager.util.exception.MangaNotFoundException;
 import ru.alex.manga_manager.util.exception.RoleNotFoundException;
 import ru.alex.manga_manager.util.exception.UserNotFoundException;
-import ru.alex.manga_manager.util.validator.PasswordValidator;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -43,17 +40,16 @@ public class DefaultUserService implements UserService {
 
     private final MangaRepository mangaRepository;
 
-    @Qualifier("defaultRegistrationUserDtoConverter")
-    private final UserConverter<User, RegistrationUserDto> userConverter;
+    private final UserConverter userConverter;
 
     @Qualifier("passwordEncoder")
     private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
-    public User save(RegistrationUserDto userDto) {
+    public User save(UserDto userDto) {
 
-        User user = this.userConverter.convert(userDto);
+        User user = this.userConverter.convertTo(userDto);
         Role role = this.roleRepository.findById(1L).orElseThrow(() -> new RoleNotFoundException("Role Not Found"));
 
         String id = UUID.randomUUID().toString();
@@ -115,21 +111,9 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    @Transactional
-    public boolean updatePassword(UpdateUserDto userDto, Authentication authentication) {
-        User userByAuthentication = findUserByAuthentication(authentication);
-        if (passwordEncoder.matches(userByAuthentication.getPassword(), userDto.getOldPassword())) {
-            try {
-                UpdatePasswordComponent update = new UpdatePasswordComponent(passwordEncoder);
-                update.execute(userDto, userByAuthentication);
-                userRepository.save(userByAuthentication);
-                return true;
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                return false;
-            }
-        }
-        return false;
+    public void update(UserDto updateEntity, Authentication authentication) {
+
     }
+
 
 }

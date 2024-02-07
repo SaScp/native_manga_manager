@@ -8,7 +8,7 @@ import ru.alex.manga_manager.model.data.contact.Contact;
 import ru.alex.manga_manager.model.dto.contact.ContactDto;
 import ru.alex.manga_manager.repository.ContactRepository;
 import ru.alex.manga_manager.service.ContactService;
-import ru.alex.manga_manager.util.converter.ContactConverter;
+import ru.alex.manga_manager.util.converter.contact.ContactConverter;
 
 
 import java.time.Instant;
@@ -20,7 +20,7 @@ import java.util.UUID;
 public class DefaultContactService implements ContactService {
 
     @Qualifier("defaultContactConverter")
-    private final ContactConverter<Contact, ContactDto> converter;
+    private final ContactC converter;
 
     private final ContactRepository contactRepository;
 

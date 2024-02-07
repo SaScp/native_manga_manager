@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.alex.manga_manager.model.dto.user.RegistrationUserDto;
+import ru.alex.manga_manager.model.dto.user.UserDto;
 import ru.alex.manga_manager.repository.UserRepository;
 
 @Component
@@ -15,12 +15,12 @@ public class UserValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return RegistrationUserDto.class.equals(clazz);
+        return UserDto.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        RegistrationUserDto userDto = (RegistrationUserDto) target;
+        UserDto userDto = (UserDto) target;
 
 
         if (this.userRepository.findByEmail(userDto.getEmail()).isPresent()) {

@@ -9,9 +9,9 @@ import org.springframework.web.servlet.view.RedirectView;
 import ru.alex.manga_manager.model.data.comment.Comment;
 import ru.alex.manga_manager.model.dto.comment.CommentDto;
 import ru.alex.manga_manager.model.dto.comment.RegistrationNewCommentDto;
-import ru.alex.manga_manager.model.dto.comment.UpdateCommentDto;
 import ru.alex.manga_manager.service.CommentService;
 import ru.alex.manga_manager.util.converter.CommentConverter;
+
 import ru.alex.manga_manager.util.exception.CommentAddException;
 import ru.alex.manga_manager.util.exception.ForbiddenException;
 
@@ -24,8 +24,7 @@ import java.util.Optional;
 @RequestMapping("/v1/{id}/comment")
 public class CommentController {
 
-    @Qualifier("defaultCommentConverter")
-    private final CommentConverter<CommentDto, Comment> commentConverter;
+    private final CommentConverter commentConverter;
 
     @Qualifier("defaultCommentService")
     private final CommentService commentService;
@@ -33,7 +32,7 @@ public class CommentController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
     public List<CommentDto> findCommentByMangaId(@PathVariable String id) {
-        List<CommentDto> commentDtos = commentService.findAllByMangaId(id).stream().map(commentConverter::convert).toList();
+        List<CommentDto> commentDtos = commentService.findAllByMangaId(id).stream().map(commentConverter::convertFrom).toList();
         return commentDtos;
     }
 
@@ -68,7 +67,7 @@ public class CommentController {
     @PatchMapping("/update/{comment-id}")
     public RedirectView updateComment(@PathVariable("comment-id") String commentId,
                                       Authentication authentication,
-                                      @RequestBody UpdateCommentDto updateCommentDto,
+                                      @RequestBody CommentDto updateCommentDto,
                                       @PathVariable("id") String id
     ) {
 

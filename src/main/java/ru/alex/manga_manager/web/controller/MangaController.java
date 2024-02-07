@@ -12,6 +12,7 @@ import ru.alex.manga_manager.service.MangaService;
 import ru.alex.manga_manager.util.annotation.FilterParam;
 import ru.alex.manga_manager.util.annotation.SearchParam;
 import ru.alex.manga_manager.util.converter.MangaConverter;
+import ru.alex.manga_manager.util.converter.manga.MangaConverter;
 
 import java.util.List;
 
@@ -24,19 +25,19 @@ public class MangaController {
     private final MangaService mangaService;
 
     @Qualifier("defaultMangaDtoConverter")
-    private final MangaConverter<MangaDto, Manga> mangaConverter;
+    private final MangaConverter mangaConverter;
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/titles")
     public List<MangaDto> findAllMangas(@FilterParam FilterEntity filterEntity) {
         return mangaService.findAll(filterEntity)
-                .stream().map(mangaConverter::convert).toList();
+                .stream().map(mangaConverter::convertFrom).toList();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/search")
     public List<MangaDto> searchMangaAboutTitle(@SearchParam SearchEntity search) {
-        return mangaService.search(search).stream().map(mangaConverter::convert).toList();
+        return mangaService.search(search).stream().map(mangaConverter::convertFrom).toList();
     }
 
 

@@ -24,6 +24,6 @@ public class DefaultRefreshFactory implements RefreshFactory {
                 .forEach(authorities::add);
 
         var now = Instant.now();
-        return new Token(UUID.randomUUID().toString(), authentication.getName(), authorities, now, now.plus(tokenTtl) );
+        return new Token(UUID.randomUUID().toString(), authentication.getName(), authorities, now, now.plus(tokenTtl));
     }
 }

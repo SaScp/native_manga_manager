@@ -1,5 +1,6 @@
 package ru.alex.manga_manager.model.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -21,19 +22,34 @@ public class UserDto implements  Serializable {
     @Email
     private String email;
 
+    @NotNull
+    @NotEmpty
+    @NotBlank
+    @JsonProperty(value = "password", access = JsonProperty.Access.WRITE_ONLY)
+    private String oldPassword;
 
     @NotNull
     @NotEmpty
     @NotBlank
-   private String username;
+    @JsonProperty(value = "new-password", access = JsonProperty.Access.WRITE_ONLY)
+    private String newPassword;
+
+    @NotNull
+    @NotEmpty
+    @NotBlank
+    private String username;
 
     @NotNull
     @NotEmpty
     @NotBlank
     private String fullName;
 
-    /*@NotNull*/
+
+    @NotNull
+    @NotEmpty
+    @NotBlank
     private Date dateOfBirth;
+
 
     private List<MangaDto> mangas;
 

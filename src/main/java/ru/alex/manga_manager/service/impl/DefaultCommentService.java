@@ -2,7 +2,6 @@ package ru.alex.manga_manager.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -10,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.alex.manga_manager.model.data.comment.Comment;
 import ru.alex.manga_manager.model.data.manga.Manga;
 import ru.alex.manga_manager.model.data.user.User;
+import ru.alex.manga_manager.model.dto.comment.CommentDto;
 import ru.alex.manga_manager.model.dto.comment.RegistrationNewCommentDto;
-import ru.alex.manga_manager.model.dto.comment.UpdateCommentDto;
 import ru.alex.manga_manager.repository.CommentRepository;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.repository.UserRepository;
@@ -74,7 +73,7 @@ public class DefaultCommentService implements CommentService {
     }
 
     @Transactional
-    public boolean update(String id, UpdateCommentDto updateCommentDto, Authentication authentication) {
+    public boolean update(String id, CommentDto updateCommentDto, Authentication authentication) {
         try {
             Comment comment = findById(id);
             if (authentication.getName().equals(comment.getAuthor().getId())) {

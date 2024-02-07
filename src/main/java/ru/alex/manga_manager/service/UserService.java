@@ -4,11 +4,10 @@ package ru.alex.manga_manager.service;
 
 import org.springframework.security.core.Authentication;
 import ru.alex.manga_manager.model.data.user.User;
-import ru.alex.manga_manager.model.dto.user.RegistrationUserDto;
-import ru.alex.manga_manager.model.dto.user.UpdateUserDto;
+import ru.alex.manga_manager.model.dto.user.UserDto;
 
 public interface UserService {
-    User save(RegistrationUserDto userDto);
+    User save(UserDto userDto);
 
     User findUserByAuthentication(Authentication authentication);
 
@@ -18,5 +17,5 @@ public interface UserService {
 
     boolean add(String id, Authentication authentication);
 
-    boolean updatePassword(UpdateUserDto userDto, Authentication authentication);
+   void update(UserDto updateEntity, Authentication authentication);
 }

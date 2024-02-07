@@ -2,7 +2,7 @@ package ru.alex.manga_manager.util.validator;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.alex.manga_manager.model.dto.user.RegistrationUserDto;
+import ru.alex.manga_manager.model.dto.user.UserDto;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,13 +15,13 @@ public class MailValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return RegistrationUserDto.class.equals(clazz);
+        return UserDto.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
 
-        RegistrationUserDto user = (RegistrationUserDto) target;
+        UserDto user = (UserDto) target;
         if (isValidEmail(user.getEmail())) {
             errors.rejectValue("email", "500", "email is invalid");
         }
