@@ -8,6 +8,32 @@ networks:
   app-network:
     driver: bridge
 services:
+  nginx:
+    container_name: some-nginx
+    image: nginx:stable
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
+    networks:
+      - app-network
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: manga_app
+    networks:
+      - app-network
+    depends_on:
+      - redis
+      - db_pg
+    env_file:
+      - .env
+    expose:
+      - 8080
   db_pg:
     image: postgres:15
     container_name: postgres
@@ -19,8 +45,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./src/main/resources:/docker-entrypoint-initdb.d
-    ports:
-      - 5433:5432
+    expose:
+      - 5432
   redis:
     image: redis:latest
     container_name: some_redis
@@ -28,5 +54,5 @@ services:
       - db_pg
     networks:
       - app-network
-    ports:
-      - 6379:6379
+    expose:
+      - 6379
