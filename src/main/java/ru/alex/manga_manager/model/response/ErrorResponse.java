@@ -13,7 +13,6 @@ public class ErrorResponse {
 
     public String code;
 
-    public String error;
 
     public String message;
 }

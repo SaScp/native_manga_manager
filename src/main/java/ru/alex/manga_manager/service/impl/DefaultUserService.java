@@ -54,9 +54,6 @@ public class DefaultUserService implements UserService {
         Role role = this.roleRepository.findById(1L).orElseThrow(() -> new RoleNotFoundException("Role Not Found"));
 
         String id = UUID.randomUUID().toString();
-        if (this.userRepository.findById(id).isPresent())
-            id = UUID.randomUUID().toString();
-
 
         user.setPassword(this.passwordEncoder.encode(user.getPassword()));
         user.setRegistrationDate(Date.from(Instant.now()));
@@ -80,7 +77,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    @Cacheable(value = "findByEmail", key = "#email")
+    @Cacheable(value = "findByEmail", key = "#email", unless = "result == null")
     @Transactional(readOnly = true)
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() ->

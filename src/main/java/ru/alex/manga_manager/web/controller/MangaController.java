@@ -1,5 +1,8 @@
 package ru.alex.manga_manager.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/manga")
+@Tag(name = "MangaController", description = "Контроллер для взаимодействия с данными Манг")
 public class MangaController {
 
     @Qualifier("defaultMangaService")
@@ -26,16 +30,24 @@ public class MangaController {
 
     private final MangaConverter mangaConverter;
 
+    @Operation(
+            summary = "Просмотр всех манг",
+            description = "позволяет просматривать каталог всех доступных манг в API"
+    )
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/titles")
-    public List<MangaDto> findAllMangas(@FilterParam FilterEntity filterEntity) {
+    public List<MangaDto> findAllMangas(@FilterParam @Parameter(description = "Параметры для фильтрации") FilterEntity filterEntity) {
         return mangaService.findAll(filterEntity)
                 .stream().map(mangaConverter::convertFrom).toList();
     }
 
+    @Operation(
+            summary = "Поиск манги",
+            description = "позволяет искать мангу доступную в API"
+    )
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/search")
-    public List<MangaDto> searchMangaAboutTitle(@SearchParam SearchEntity search) {
+    public List<MangaDto> searchMangaAboutTitle(@SearchParam @Parameter(description = "Параметры для поиска") SearchEntity search) {
         return mangaService.search(search).stream().map(mangaConverter::convertFrom).toList();
     }
 

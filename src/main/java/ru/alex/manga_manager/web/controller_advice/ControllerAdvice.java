@@ -1,5 +1,8 @@
 package ru.alex.manga_manager.web.controller_advice;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.alex.manga_manager.model.response.ErrorResponse;
@@ -23,6 +26,9 @@ public class ControllerAdvice {
         this.handler.put(ForbiddenException.class, new ForbiddenExceptionHandler());
         this.handler.put(MangaNotFoundException.class, new MangaNotFoundExceptionHandler());
         this.handler.put(CommentAddException.class, new CommentAddExceptionHandler());
+        this.handler.put(BadCredentialsException.class, new BadCredentialsExceptionHandler());
+        this.handler.put(UsernameNotFoundException.class, new UsernameNotFoundExceptionHandler());
+        this.handler.put(LoginException.class, new LoginExceptionHandler());
     }
 
     @ExceptionHandler({RegistrationException.class,
@@ -32,9 +38,12 @@ public class ControllerAdvice {
             ForbiddenException.class,
             MangaNotFoundException.class,
             CommentAddException.class,
+            BadCredentialsException.class,
+            UsernameNotFoundException.class
     })
-    public ErrorResponse exHandler(RuntimeException e) {
+    public ResponseEntity<ErrorResponse> exHandler(RuntimeException e) {
         ExceptionHandlerStrategy exceptionHandlerStrategy = handler.get(e.getClass());
-        return exceptionHandlerStrategy.handleException(e);
+        ErrorResponse errorResponse = exceptionHandlerStrategy.handleException(e);
+        return ResponseEntity.status(Integer.parseInt(errorResponse.code)).body(errorResponse);
     }
 }

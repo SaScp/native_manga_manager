@@ -8,7 +8,6 @@ public class CommentAddExceptionHandler implements ExceptionHandlerStrategy {
     @Override
     public ErrorResponse handleException(RuntimeException e) {
         return ErrorResponse.builder()
-                .error(e.getClass().getName())
                 .code("500")
                 .timestamp(ZonedDateTime.now())
                 .message(e.getMessage()).build();

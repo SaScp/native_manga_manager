@@ -1,5 +1,6 @@
 package ru.alex.manga_manager.web.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("v1/manga/{id}")
+@Tag(name = "TitleController", description = "Контроллер для взаимодействия с данными глав")
 public class TitleController {
 
     @Qualifier("defaultMangaService")

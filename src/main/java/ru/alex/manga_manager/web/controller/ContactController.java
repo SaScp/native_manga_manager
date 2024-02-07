@@ -1,5 +1,7 @@
 package ru.alex.manga_manager.web.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -16,11 +18,15 @@ import java.net.URISyntaxException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/contact")
+@Tag(name = "ContactController", description = "Контроллер для взаимодействия с Контактами пользователя")
 public class ContactController {
 
     @Qualifier("defaultContactService")
     private final ContactService contactService;
 
+    @Operation(
+            summary = "Оставить свои контакты"
+    )
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public Contact sendContactInfo(@RequestBody ContactDto contactDto) throws URISyntaxException {

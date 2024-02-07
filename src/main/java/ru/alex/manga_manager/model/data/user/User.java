@@ -11,6 +11,7 @@ import ru.alex.manga_manager.model.data.comment.Comment;
 import ru.alex.manga_manager.model.data.manga.Manga;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 @Getter
@@ -62,6 +63,48 @@ public class User implements Serializable {
 
     public void addManga(Manga manga) {
         mangas.add(manga);
+    }
+    public static Builder builder() {
+        return new User().new Builder();
+    }
+
+    public class Builder {
+
+        public String id;
+        public Builder id(String id) {
+            User.this.setId(id);
+            return this;
+        }
+
+        public Builder email(String email) {
+            User.this.setEmail(email);
+            return this;
+        }
+        public Builder username(String username) {
+            User.this.setUsername(username);
+            return this;
+        }
+        public Builder password(String password) {
+            User.this.setPassword(password);
+            return this;
+        }
+        public Builder registrationDate(Date registrationDate) {
+            User.this.setRegistrationDate(registrationDate);
+            return this;
+        }
+        public Builder dateOfBirth(Date dateOfBirth) {
+            User.this.dateOfBirth = dateOfBirth;
+            return this;
+        }
+
+        public Builder fullName(String fullName) {
+            User.this.setFullName(fullName);
+            return this;
+        }
+
+        public User build() {
+            return User.this;
+        }
     }
     @Override
     public final boolean equals(Object object) {

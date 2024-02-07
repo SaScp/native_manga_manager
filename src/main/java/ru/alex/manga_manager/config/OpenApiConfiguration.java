@@ -1,5 +1,8 @@
 package ru.alex.manga_manager.config;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.task.ThreadPoolTaskExecutorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -13,8 +16,17 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 
-@Configuration
-@EnableAsync
-public class AsyncConfiguration {
+@OpenAPIDefinition(
+        info = @Info(
+                title = "Loyalty System Api",
+                description = "Loyalty System", version = "1.0.0",
+                contact = @Contact(
+                        name = "Struchkov Mark",
+                        email = "mark@struchkov.dev",
+                        url = "https://mark.struchkov.dev"
+                )
+        )
+)
+public class OpenApiConfiguration {
 
 }

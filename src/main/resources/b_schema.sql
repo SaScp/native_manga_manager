@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS t_manga_t_genre
     PRIMARY KEY (manga_id, genre_id)
     );
 
-CREATE TABLE IF NOT EXISTS t_page ();
+CREATE TABLE IF NOT EXISTS t_page();
 
 CREATE TABLE IF NOT EXISTS t_chapter();
 

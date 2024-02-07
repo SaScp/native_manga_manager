@@ -9,11 +9,11 @@ import ru.alex.manga_manager.service.update.UpdateComponentStrategy;
 import java.util.Optional;
 
 
-public class UpdatePasswordComponent implements UpdateUserComponent {
+public class PasswordUpdateComponent implements UpdateUserComponent {
 
     private final PasswordEncoder passwordEncoder;
 
-    public UpdatePasswordComponent(PasswordEncoder passwordEncoder) {
+    public PasswordUpdateComponent(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
