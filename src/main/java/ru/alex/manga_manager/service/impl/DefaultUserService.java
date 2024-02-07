@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -91,7 +92,9 @@ public class DefaultUserService implements UserService {
                 new UserNotFoundException("user with id:" + id + "not found"));
     }
 
+    // TODO add update caching user for findUserByAuthentication
     @Transactional
+    @CachePut()
     public boolean add(String id, Authentication authentication) {
             Manga manga = mangaRepository.findById(id).orElseThrow(() ->
                     new MangaNotFoundException("Manga " + id + " Not Found"));

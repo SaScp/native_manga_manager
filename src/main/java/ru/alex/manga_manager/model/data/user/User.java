@@ -64,6 +64,7 @@ public class User implements Serializable {
     public void addManga(Manga manga) {
         mangas.add(manga);
     }
+
     public static Builder builder() {
         return new User().new Builder();
     }
