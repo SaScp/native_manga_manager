@@ -5,7 +5,7 @@ import ru.alex.manga_manager.model.data.comment.Comment;
 import ru.alex.manga_manager.model.dto.comment.CommentDto;
 
 @Component
-public class CommentConverter implements ConverterStrategy<Comment, CommentDto>{
+public class CommentConverter implements Converter<Comment, CommentDto> {
     @Override
     public Comment convertTo(CommentDto convertEntity) {
         return null;

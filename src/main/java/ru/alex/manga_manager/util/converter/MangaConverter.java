@@ -5,7 +5,7 @@ import ru.alex.manga_manager.model.data.manga.Manga;
 import ru.alex.manga_manager.model.dto.manga.MangaDto;
 
 @Component
-public class MangaConverter implements ConverterStrategy<Manga, MangaDto>{
+public class MangaConverter implements Converter<Manga, MangaDto> {
     @Override
     public Manga convertTo(MangaDto convertEntity) {
         return null;

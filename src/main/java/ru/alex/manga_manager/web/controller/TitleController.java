@@ -11,7 +11,7 @@ import ru.alex.manga_manager.model.data.manga.Manga;
 import ru.alex.manga_manager.model.dto.manga.MangaDto;
 import ru.alex.manga_manager.service.MangaService;
 import ru.alex.manga_manager.util.converter.MangaConverter;
-import ru.alex.manga_manager.util.converter.manga.MangaConverter;
+
 
 import java.util.List;
 

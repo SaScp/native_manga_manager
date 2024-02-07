@@ -13,7 +13,8 @@ import ru.alex.manga_manager.model.data.entity.SearchEntity;
 import ru.alex.manga_manager.model.dto.manga.MangaDto;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.service.MangaService;
-import ru.alex.manga_manager.util.converter.manga.MangaConverter;
+
+import ru.alex.manga_manager.util.converter.MangaConverter;
 import ru.alex.manga_manager.util.exception.MangaNotFoundException;
 
 
@@ -26,7 +27,7 @@ public class DefaultMangaService implements MangaService {
     private final MangaRepository mangaRepository;
 
 
-    private final MangaConverter<Manga, MangaDto> mangaConverter;
+    private final MangaConverter mangaConverter;
 
     private PageRequest pageRequest;
 
@@ -41,7 +42,7 @@ public class DefaultMangaService implements MangaService {
     @CachePut("findAll")
     @Override
     public Manga save(MangaDto mangaDto) {
-        Manga manga = mangaConverter.convert(mangaDto);
+        Manga manga = mangaConverter.convertTo(mangaDto);
         mangaDto.setId(UUID.randomUUID().toString());
         mangaRepository.save(manga);
         return manga;

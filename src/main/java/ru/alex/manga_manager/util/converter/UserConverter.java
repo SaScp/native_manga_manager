@@ -5,7 +5,7 @@ import ru.alex.manga_manager.model.data.user.User;
 import ru.alex.manga_manager.model.dto.user.UserDto;
 
 @Component
-public class UserConverter implements ConverterStrategy<User, UserDto>{
+public class UserConverter implements Converter<User, UserDto> {
 
     @Override
     public User convertTo(UserDto convertEntity) {

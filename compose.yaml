@@ -7,7 +7,6 @@ volumes:
 networks:
   app-network:
     driver: bridge
-
 services:
   db_pg:
     image: postgres:15

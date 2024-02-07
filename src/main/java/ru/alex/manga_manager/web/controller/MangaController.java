@@ -24,7 +24,6 @@ public class MangaController {
     @Qualifier("defaultMangaService")
     private final MangaService mangaService;
 
-    @Qualifier("defaultMangaDtoConverter")
     private final MangaConverter mangaConverter;
 
     @ResponseStatus(HttpStatus.OK)
