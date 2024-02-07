@@ -40,18 +40,14 @@ public class DefaultRegistrationService implements RegistrationService {
 
     private final JwtService jwtService;
 
-    @Qualifier("defaultAuthenticationProvider")
-    private final AuthenticationProvider authenticationProvider;
 
     public DefaultRegistrationService(UserService userService,
                                       UserValidator userValidator,
                                       @Value("${jwt.secret.access}") String access,
-                                      @Value("${jwt.secret.refresh}") String refresh, JwtService jwtService,
-                                      AuthenticationProvider authenticationProvider) throws ParseException, KeyLengthException {
+                                      @Value("${jwt.secret.refresh}") String refresh, JwtService jwtService) throws ParseException, KeyLengthException {
         this.userService = userService;
         this.userValidator = userValidator;
         this.jwtService = jwtService;
-        this.authenticationProvider = authenticationProvider;
     }
 
     @Override

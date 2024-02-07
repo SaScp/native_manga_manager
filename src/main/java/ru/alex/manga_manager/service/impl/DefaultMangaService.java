@@ -29,7 +29,6 @@ public class DefaultMangaService implements MangaService {
 
     private final MangaRepository mangaRepository;
 
-
     private final MangaConverter mangaConverter;
 
     private PageRequest pageRequest;
@@ -39,7 +38,6 @@ public class DefaultMangaService implements MangaService {
     private String order;
 
     private boolean orderFlag = true;
-
 
 
     @CachePut("findAll")
