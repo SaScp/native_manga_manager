@@ -11,7 +11,7 @@ import ru.alex.manga_manager.util.exception.handler.*;
 
 
 import java.util.HashMap;
-
+// TODO create new class for "AuthenticationException"
 @RestControllerAdvice
 public class ControllerAdvice {
 
