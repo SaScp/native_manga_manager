@@ -10,10 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.alex.manga_manager.model.data.entity.FilterEntity;
 import ru.alex.manga_manager.model.data.manga.Manga;
 import ru.alex.manga_manager.model.data.entity.SearchEntity;
+import ru.alex.manga_manager.model.data.user.User;
 import ru.alex.manga_manager.model.dto.manga.MangaDto;
+import ru.alex.manga_manager.model.dto.user.UserDto;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.service.MangaService;
 
+import ru.alex.manga_manager.util.converter.Converter;
 import ru.alex.manga_manager.util.converter.MangaConverter;
 import ru.alex.manga_manager.util.exception.MangaNotFoundException;
 

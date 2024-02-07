@@ -17,6 +17,7 @@ import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.repository.RoleRepository;
 import ru.alex.manga_manager.repository.UserRepository;
 import ru.alex.manga_manager.service.UserService;
+import ru.alex.manga_manager.util.converter.Converter;
 import ru.alex.manga_manager.util.converter.UserConverter;
 
 import ru.alex.manga_manager.util.exception.MangaNotFoundException;

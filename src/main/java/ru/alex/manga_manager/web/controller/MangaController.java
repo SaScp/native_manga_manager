@@ -12,7 +12,7 @@ import ru.alex.manga_manager.service.MangaService;
 import ru.alex.manga_manager.util.annotation.FilterParam;
 import ru.alex.manga_manager.util.annotation.SearchParam;
 import ru.alex.manga_manager.util.converter.MangaConverter;
-import ru.alex.manga_manager.util.converter.manga.MangaConverter;
+
 
 import java.util.List;
 

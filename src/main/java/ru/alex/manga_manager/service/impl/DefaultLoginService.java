@@ -16,6 +16,8 @@ import ru.alex.manga_manager.model.response.Tokens;
 import ru.alex.manga_manager.service.JwtService;
 import ru.alex.manga_manager.service.LoginService;
 import ru.alex.manga_manager.service.UserService;
+import ru.alex.manga_manager.util.exception.LoginException;
+
 
 import java.text.ParseException;
 
@@ -44,6 +46,9 @@ public class DefaultLoginService implements LoginService {
     @Override
     @Transactional(readOnly = true)
     public Tokens login(UserDto userDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new LoginException(bindingResult.getFieldError().getDefaultMessage());
+        }
         User user = userService.findByEmail(userDto.getEmail());
 
         Authentication authentication =

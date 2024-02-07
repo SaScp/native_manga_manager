@@ -4,7 +4,7 @@ import ru.alex.manga_manager.model.response.ErrorResponse;
 
 import java.time.ZonedDateTime;
 
-public class MangaNotFoundExceptionHandler implements ExceptionHandlerStrategy{
+public class MangaNotFoundExceptionHandler implements ExceptionHandlerStrategy {
     @Override
     public ErrorResponse handleException(RuntimeException e) {
         return ErrorResponse.builder()

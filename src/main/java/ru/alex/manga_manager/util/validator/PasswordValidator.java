@@ -17,7 +17,7 @@ public class PasswordValidator implements Validator {
     public void validate(Object target, Errors errors) {
         final var user = (UserDto) target;
 
-        if (!user.getOldPassword().matches(passwordRegex)) {
+        if (!user.getPassword().matches(passwordRegex)) {
             errors.rejectValue("password", "500", "password is invalid");
         }
     }
