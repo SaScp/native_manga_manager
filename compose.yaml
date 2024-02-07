@@ -3,7 +3,6 @@ volumes:
     driver: local
   db_data:
     driver: local
-
 networks:
   app-network:
     driver: bridge
