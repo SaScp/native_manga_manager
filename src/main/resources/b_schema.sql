@@ -51,13 +51,6 @@ CREATE TABLE IF NOT EXISTS t_comment
     update_at TIMESTAMP                            NOT NULL,
     parent_id VARCHAR(255) REFERENCES t_comment(id)
 );
-CREATE TABLE IF NOT EXISTS t_contact
-(
-    id           VARCHAR(255) primary key,
-    number_phone VARCHAR(255) NOT NULL,
-    description  TEXT         NOT NULL,
-    create_at    TIMESTAMP    NOT NULL
-    );
 CREATE TABLE IF NOT EXISTS t_user_t_role
 (
     user_id VARCHAR(255) REFERENCES t_user (id),
@@ -81,8 +74,3 @@ CREATE TABLE IF NOT EXISTS t_user_t_manga
     manga_id VARCHAR(255) REFERENCES t_manga (id),
     PRIMARY KEY (user_id, manga_id)
     );
-CREATE TABLE IF NOT EXISTS t_logout
-(
-    id           VARCHAR(255) PRIMARY KEY,
-    c_keep_until timestamp not null check ( c_keep_until > now() )
-);

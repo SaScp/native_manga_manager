@@ -7,6 +7,8 @@ import ru.alex.manga_manager.model.data.Token;
 
 
 import java.util.Collection;
+
+
 public class TokenUser extends User {
 
     private final Token token;

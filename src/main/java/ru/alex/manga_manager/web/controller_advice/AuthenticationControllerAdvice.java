@@ -9,27 +9,28 @@ import ru.alex.manga_manager.model.response.ErrorResponse;
 import ru.alex.manga_manager.util.exception.*;
 import ru.alex.manga_manager.util.exception.handler.*;
 
-
 import java.util.HashMap;
+
 @RestControllerAdvice
-public class ControllerAdvice {
+public class AuthenticationControllerAdvice {
 
     private final HashMap<Class<? extends RuntimeException>, ExceptionHandlerStrategy> handler;
 
-    public ControllerAdvice() {
+    public AuthenticationControllerAdvice() {
         this.handler = new HashMap<>();
-        this.handler.put(RoleNotFoundException.class, new RoleNotFoundExceptionHandler());
-        this.handler.put(UserNotFoundException.class, new UserNotFoundExceptionHandler());
-        this.handler.put(ResourceNotFoundException.class, new ResourceNotFoundExceptionHandler());
-        this.handler.put(MangaNotFoundException.class, new MangaNotFoundExceptionHandler());
-        this.handler.put(CommentAddException.class, new CommentAddExceptionHandler());
+
+        this.handler.put(ForbiddenException.class, new ForbiddenExceptionHandler());
+        this.handler.put(BadCredentialsException.class, new BadCredentialsExceptionHandler());
+        this.handler.put(UsernameNotFoundException.class, new UsernameNotFoundExceptionHandler());
+        this.handler.put(LoginException.class, new LoginExceptionHandler());
+        this.handler.put(RegistrationException.class, new RegistrationExceptionHandler());
     }
 
-    @ExceptionHandler({RoleNotFoundException.class,
-            UserNotFoundException.class,
-            ResourceNotFoundException.class,
-            MangaNotFoundException.class,
-            CommentAddException.class,
+    @ExceptionHandler({RegistrationException.class,
+            ForbiddenException.class,
+            BadCredentialsException.class,
+            UsernameNotFoundException.class,
+            LoginException.class
     })
     public ResponseEntity<ErrorResponse> exHandler(RuntimeException e) {
         ExceptionHandlerStrategy exceptionHandlerStrategy = handler.get(e.getClass());
