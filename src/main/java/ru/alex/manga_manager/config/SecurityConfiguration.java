@@ -68,7 +68,7 @@ public class SecurityConfiguration {
         http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(configurationSource()));
         http.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                 authorizationManagerRequestMatcherRegistry
-                        .requestMatchers("/v1/admin/**").
+                        .requestMatchers("/v1/admin/**", "v1/contact/all").
                         hasRole("ADMIN")
                         .requestMatchers("/v1/user/**",
                                 "v1/{id}/comment/add",
