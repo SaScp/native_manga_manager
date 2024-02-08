@@ -49,7 +49,7 @@ public class DefaultMangaService implements MangaService {
         return manga;
     }
 
-    @Cacheable(value = "search", unless = "#result == null", key = "#search")
+    @Cacheable(value = "search", unless = "#result == null", key = "#search.title")
     @Override
     public List<Manga> search(SearchEntity search) {
         this.pageRequest = PageRequest.of(search.getPage(), 20);
@@ -57,7 +57,6 @@ public class DefaultMangaService implements MangaService {
     }
 
     @Override
-    @Cacheable(value = "findAll", unless = "#result == null", key = "#filterEntity")
     @Transactional
     public List<Manga> findAll(FilterEntity filterEntity) {
         checkOrderOnStartsWithPlus(filterEntity.getOrder());
