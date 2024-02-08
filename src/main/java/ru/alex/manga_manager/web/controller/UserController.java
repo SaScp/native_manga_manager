@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.alex.manga_manager.model.dto.user.UserDto;
@@ -39,7 +40,7 @@ public class UserController {
             description = "позволяет обновить пароль пользователя"
     )
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/update-password")
+    @PatchMapping("/update")
     public HttpStatus update(@RequestBody UserDto userDto, Authentication authentication) {
         if (Optional.ofNullable(authentication).isPresent()) {
             userService.update(userDto, authentication);
@@ -55,8 +56,9 @@ public class UserController {
     )
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/add/{id}")
-    public HttpStatus add(@PathVariable @Parameter(description = "ID пользователя") String id, Authentication authentication) {
-        return userService.add(id, Optional.ofNullable(authentication).orElseThrow(() ->
-                new ForbiddenException("forbidden"))) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+    public ResponseEntity<Void> add(@PathVariable @Parameter(description = "ID пользователя") String id, Authentication authentication) {
+        userService.add(id, Optional.ofNullable(authentication).orElseThrow(() ->
+                new ForbiddenException("forbidden")));
+        return ResponseEntity.ok().build();
     }
 }

@@ -14,6 +14,8 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.alex.manga_manager.model.data.entity.Logout;
+import ru.alex.manga_manager.repository.LogoutRepository;
 import ru.alex.manga_manager.security.authntication.TokenUser;
 
 
@@ -27,11 +29,13 @@ public class JwtLogoutFilter extends OncePerRequestFilter {
 
     private final SecurityContextRepository securityContextRepository = new RequestAttributeSecurityContextRepository();
 
-    private final JdbcTemplate jdbcTemplate;
 
-    public JwtLogoutFilter(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    private final LogoutRepository logoutRepository;
+
+    public JwtLogoutFilter(LogoutRepository logoutRepository) {
+        this.logoutRepository = logoutRepository;
     }
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -41,8 +45,7 @@ public class JwtLogoutFilter extends OncePerRequestFilter {
                 if (context != null && context.getAuthentication() instanceof PreAuthenticatedAuthenticationToken &&
                         context.getAuthentication().getPrincipal() instanceof TokenUser user &&
                         context.getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("JWT_LOGOUT"))) {
-                    this.jdbcTemplate.update("insert into t_logout(id,  c_keep_until) values (?, ?)",
-                            user.getToken().id(), Date.from(user.getToken().expireAt()));
+                    logoutRepository.save(new Logout(user.getToken().id(), Date.from(user.getToken().expireAt())));
 
                     response.setStatus(HttpStatus.NO_CONTENT.value());
 

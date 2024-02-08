@@ -1,20 +1,17 @@
 package ru.alex.manga_manager.security.configurer;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.AuthenticationFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.session.DisableEncodeUrlFilter;
 import org.springframework.stereotype.Component;
+import ru.alex.manga_manager.repository.LogoutRepository;
 import ru.alex.manga_manager.security.authntication.JwtAuthenticationConverter;
 import ru.alex.manga_manager.security.authntication.TokenAuthUserDetailsService;
 import ru.alex.manga_manager.security.filter.DeniedRequestFilter;
@@ -39,7 +36,7 @@ public class RequestConfigurer extends AbstractHttpConfigurer<RequestConfigurer,
 
     private AccessTokenJwsStringDeserializer accessTokenJwsStringDeserializer;
 
-    private JdbcTemplate jdbcTemplate;
+    private LogoutRepository logoutRepository;
     @Override
     public void init(HttpSecurity builder) throws Exception {
         super.init(builder);
@@ -55,13 +52,13 @@ public class RequestConfigurer extends AbstractHttpConfigurer<RequestConfigurer,
         authenticationFilter.setSuccessHandler((request, response, authentication) -> CsrfFilter.skipRequest(request));
         authenticationFilter.setFailureHandler((request, response, exception) -> response.sendError(HttpStatus.FORBIDDEN.value()));
         PreAuthenticatedAuthenticationProvider authenticationProvider = new PreAuthenticatedAuthenticationProvider();
-        authenticationProvider.setPreAuthenticatedUserDetailsService(new TokenAuthUserDetailsService(this.jdbcTemplate));
+        authenticationProvider.setPreAuthenticatedUserDetailsService(new TokenAuthUserDetailsService(this.logoutRepository));
 
         RefreshTokenFilter refreshTokenFilter = new RefreshTokenFilter();
         refreshTokenFilter.setAccessTokenJwsStringSerializer(accessTokenJwsStringSerializer);
         refreshTokenFilter.setRefreshTokenJweStringSerializer(refreshTokenJweStringSerializer);
 
-        JwtLogoutFilter jwtLogoutFilter =  new JwtLogoutFilter(this.jdbcTemplate);
+        JwtLogoutFilter jwtLogoutFilter =  new JwtLogoutFilter(this.logoutRepository);
 
         DeniedRequestFilter deniedRequestFilter = new DeniedRequestFilter();
 
@@ -93,8 +90,8 @@ public class RequestConfigurer extends AbstractHttpConfigurer<RequestConfigurer,
         return this;
     }
 
-    public RequestConfigurer jdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public RequestConfigurer logoutRepository(LogoutRepository logoutRepository) {
+        this.logoutRepository = logoutRepository;
         return this;
     }
 }

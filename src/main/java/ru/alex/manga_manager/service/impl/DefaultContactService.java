@@ -13,6 +13,7 @@ import ru.alex.manga_manager.util.converter.ContactConverter;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,5 +31,9 @@ public class DefaultContactService implements ContactService {
         contact.setId(UUID.randomUUID().toString());
         contact.setCreateAt(Date.from(Instant.now()));
         return this.contactRepository.save(contact);
+    }
+
+    public List<Contact> findAll() {
+        return contactRepository.findAll();
     }
 }

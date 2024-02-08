@@ -4,24 +4,27 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
+
 @Data
-@Table(name = "t_contact")
+@Document
 public class Contact  implements Serializable {
-    @Id
+
+    @NotNull
     private String id;
 
-    @Column(name = "number_phone", nullable = false)
+    @NotNull
     private String numberPhone;
 
-    @Column(name = "description", nullable = false)
+    @NotNull
     private String description;
 
-    @Column(name = "create_at", nullable = false)
+    @NotNull
     private Date createAt;
 }

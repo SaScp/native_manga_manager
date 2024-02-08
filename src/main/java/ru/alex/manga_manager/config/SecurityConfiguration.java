@@ -6,7 +6,6 @@ import com.nimbusds.jose.crypto.DirectEncrypter;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import ru.alex.manga_manager.repository.LogoutRepository;
 import ru.alex.manga_manager.security.configurer.RequestConfigurer;
 import ru.alex.manga_manager.security.jwt.deserializer.DefaultAccessTokenJwsStringDeserializer;
 import ru.alex.manga_manager.security.jwt.deserializer.DefaultRefreshTokenJwsStringDeserializer;
@@ -30,8 +30,6 @@ import ru.alex.manga_manager.security.jwt.serializer.DefaultAccessTokenJwsString
 import ru.alex.manga_manager.security.jwt.serializer.DefaultRefreshTokenJweStringSerializer;
 
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -42,7 +40,7 @@ public class SecurityConfiguration {
     @Bean
     public RequestConfigurer requestConfigurer(@Value("${jwt.secret.access}") String accessToken,
                                                @Value("${jwt.secret.refresh}") String refreshToken,
-                                               JdbcTemplate jdbcTemplate) throws JOSEException, ParseException {
+                                               LogoutRepository logoutRepository) throws JOSEException, ParseException {
         return new RequestConfigurer().accessTokenJwsStringSerializer(
                 new DefaultAccessTokenJwsStringSerializer(
                         new MACSigner(OctetSequenceKey.parse(accessToken)))
@@ -59,7 +57,7 @@ public class SecurityConfiguration {
                         new DefaultRefreshTokenJwsStringDeserializer(
                                 new DirectDecrypter(OctetSequenceKey.parse(refreshToken)))
                 )
-                .jdbcTemplate(jdbcTemplate);
+                .logoutRepository(logoutRepository);
     }
 
     @Bean
@@ -70,7 +68,7 @@ public class SecurityConfiguration {
         http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(configurationSource()));
         http.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                 authorizationManagerRequestMatcherRegistry
-                        .requestMatchers("/v1/admin/**").
+                        .requestMatchers("/v1/admin/**", "v1/contact/all").
                         hasRole("ADMIN")
                         .requestMatchers("/v1/user/**",
                                 "v1/{id}/comment/add",
