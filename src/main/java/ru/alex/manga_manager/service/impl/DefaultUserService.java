@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,10 @@ import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.repository.RoleRepository;
 import ru.alex.manga_manager.repository.UserRepository;
 import ru.alex.manga_manager.service.UserService;
+import ru.alex.manga_manager.service.update.user.FullNameUpdateComponent;
+import ru.alex.manga_manager.service.update.user.PasswordUpdateComponent;
+import ru.alex.manga_manager.service.update.user.UpdateUserComponent;
+import ru.alex.manga_manager.service.update.user.UsernameUpdateComponent;
 import ru.alex.manga_manager.util.converter.Converter;
 import ru.alex.manga_manager.util.converter.UserConverter;
 
@@ -26,10 +31,7 @@ import ru.alex.manga_manager.util.exception.RoleNotFoundException;
 import ru.alex.manga_manager.util.exception.UserNotFoundException;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -86,15 +88,19 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    @Cacheable(value = "findById", key = "#id")
     @Transactional(readOnly = true)
     public User findById(String id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("user with id:" + id + "not found"));
     }
 
-    // TODO add update caching user for findUserByAuthentication
     @Transactional
-    @CachePut()
+    @Caching(put = {
+            @CachePut(value = "findUserByAuthentication", key = "#authentication"),
+            @CachePut(value = "findByEmail", key = "#email", unless = "result == null"),
+            @CachePut(value = "findById", key = "#id")
+    })
     public boolean add(String id, Authentication authentication) {
             Manga manga = mangaRepository.findById(id).orElseThrow(() ->
                     new MangaNotFoundException("Manga " + id + " Not Found"));
@@ -112,8 +118,21 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    @Caching(put = {
+            @CachePut(value = "findUserByAuthentication", key = "#authentication"),
+            @CachePut(value = "findByEmail", key = "#email", unless = "result == null"),
+            @CachePut(value = "findById", key = "#id")
+    })
+    @Transactional
     public void update(UserDto updateEntity, Authentication authentication) {
+        User user = findUserByAuthentication(authentication);
+        List<UpdateUserComponent> components = List.of(new FullNameUpdateComponent(),
+                new PasswordUpdateComponent(passwordEncoder), new UsernameUpdateComponent());
 
+        for (var i : components) {
+            i.execute(updateEntity, user);
+        }
+        userRepository.save(user);
     }
 
 
