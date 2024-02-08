@@ -18,6 +18,11 @@ spring:
       host: ${REDIS_HOST}
       repositories:
         enabled: false
+    mongodb:
+      database: ${MONGO_DATABASE}
+      password: ${MONGO_PASSWORD}
+      username: ${MONGO_USERNAME}
+      uri: mongodb://${MONGO_DATABASE}:${MONGO_HOST}
 jwt:
   secret:
     access: '{"kty" : "oct", "k" : "hi7S5RX5ZRZooHA0RKGctZ-KtR9FoESgCnH-3BNg5XI"}'

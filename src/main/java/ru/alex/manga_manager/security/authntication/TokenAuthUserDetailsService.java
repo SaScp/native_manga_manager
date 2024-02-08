@@ -8,26 +8,25 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 import ru.alex.manga_manager.model.data.Token;
+import ru.alex.manga_manager.repository.LogoutRepository;
 
 import java.time.Instant;
 
 @Component
 public class TokenAuthUserDetailsService implements AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final LogoutRepository logoutRepository;
 
-    public TokenAuthUserDetailsService(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public TokenAuthUserDetailsService(LogoutRepository logoutRepository) {
+        this.logoutRepository = logoutRepository;
     }
 
     @Override
     public UserDetails loadUserDetails(PreAuthenticatedAuthenticationToken authenticationToken) throws UsernameNotFoundException {
-        if (authenticationToken.getPrincipal() instanceof Token token ) {
+        if (authenticationToken.getPrincipal() instanceof Token token) {
 
             TokenUser tokenUser = new TokenUser(token.subject(), "nopassword", true, true,
-                    !this.jdbcTemplate.queryForObject("""
-                            select exists(select id from t_logout where id = ?)
-                            """, Boolean.class, token.id()) &&
+                    logoutRepository.findById(token.id()).isEmpty() &&
                             token.expireAt().isAfter(Instant.now()), true,
                     token.authorities().stream().map(SimpleGrantedAuthority::new)
                             .toList(), token);

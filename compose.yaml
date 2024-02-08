@@ -29,6 +29,7 @@ services:
     depends_on:
       - redis
       - db_pg
+      - mongodb
     env_file:
       - .env
     expose:
@@ -55,3 +56,14 @@ services:
       - app-network
     expose:
       - 6379
+  mongodb:
+    image: mongo:latest
+    container_name: mongo_db
+    networks:
+      - app-network
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+    expose:
+      - 27017

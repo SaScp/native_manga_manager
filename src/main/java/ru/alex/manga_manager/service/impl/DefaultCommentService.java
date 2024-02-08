@@ -2,7 +2,9 @@ package ru.alex.manga_manager.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,6 +75,7 @@ public class DefaultCommentService implements CommentService {
     }
 
     @Transactional
+    @Caching(put = {@CachePut(value = "findById", key = "#id")})
     public boolean update(String id, CommentDto updateCommentDto, Authentication authentication) {
         try {
             Comment comment = findById(id);
