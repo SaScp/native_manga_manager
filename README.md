@@ -1,9 +1,15 @@
 # Manga API 
 API для сервиса чтения манги.
+<br>
+<br>
+Это приложение может производить операции над мангой
+<br>
+Вы можете получить доступ к Swagger и просмотреть все доступные конечные точки, посетивhttp://localhost:8080/swagger-ui/index.html
 
 ## Схема компонентов
 ![image](https://github.com/SaScp/native_manga_manager/assets/96395954/2180d464-eb1b-4e2d-b068-01d472e9a343)
 
+Клиент взаимодействует с основным приложеним посредством обрщения к web - серверу(в нашем случае Nginx), который взаимодействует с Основным приложением.Основное приложние взаимодействует с кешем (мы используем Redis), базами данных (мы используем Postgresql и MongoDB).
 ## Схема базы данных (PostgreSQL)
 ![image](https://github.com/SaScp/native_manga_manager/assets/96395954/c6101647-c2cf-4639-9a46-810f7063b221)
 
@@ -29,10 +35,15 @@ API для сервиса чтения манги.
 <code>POSTGRES_DATABASE</code>- имя базы данных Postgresql
 <br>
 <code>REDIS_HOST</code>— хост экземпляра Redis
+<br>
 <code>MONGO_DATABASE</code> - имя базы данны MongoDB
+<br>
 <code>MONGO_PASSWORD</code> - пароль для базы данных MongoDB
+<br>
 <code>MONGO_USERNAME</code> - имя пользователя для базы данных MongoDB 
+<br>
 <code>MONGO_HOST</code> - имя хоста для базы данных MongoDB
+
 ## Docker
 После создания <code>.env</code> файла нужно запустить Docker compose в консоли в основном каталоге данного API с помощью команды: <code>docker-compose up</code>
 <br>
