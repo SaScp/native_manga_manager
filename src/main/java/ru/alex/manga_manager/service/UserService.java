@@ -15,7 +15,7 @@ public interface UserService {
 
     User findById(String id);
 
-    boolean add(String id, Authentication authentication);
+    User add(String id, Authentication authentication);
 
-   void update(UserDto updateEntity, Authentication authentication);
+    User update(UserDto updateEntity, Authentication authentication);
 }

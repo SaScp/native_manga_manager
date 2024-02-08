@@ -72,15 +72,14 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    @Cacheable(value = "findUserByAuthentication", key = "#authentication")
+    @Cacheable(value = "DefaultUserService::findUserByAuthentication", key = "#authentication.name")
     @Transactional(readOnly = true)
     public User findUserByAuthentication(Authentication authentication) {
         return this.userRepository.findById(authentication.getName()).orElseThrow(() ->
-                new UserNotFoundException("User" + authentication.getName() + "not found"));
+                new UserNotFoundException("User " + authentication.getName() + " not found"));
     }
 
     @Override
-    @Cacheable(value = "findByEmail", key = "#email", unless = "result == null")
     @Transactional(readOnly = true)
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() ->
@@ -88,7 +87,6 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    @Cacheable(value = "findById", key = "#id")
     @Transactional(readOnly = true)
     public User findById(String id) {
         return userRepository.findById(id).orElseThrow(() ->
@@ -96,35 +94,24 @@ public class DefaultUserService implements UserService {
     }
 
     @Transactional
-    @Caching(put = {
-            @CachePut(value = "findUserByAuthentication", key = "#authentication"),
-            @CachePut(value = "findByEmail", key = "#email", unless = "result == null"),
-            @CachePut(value = "findById", key = "#id")
-    })
-    public boolean add(String id, Authentication authentication) {
-            Manga manga = mangaRepository.findById(id).orElseThrow(() ->
-                    new MangaNotFoundException("Manga " + id + " Not Found"));
-            User user = findUserByAuthentication(authentication);
-            user.addManga(manga);
-            manga.addUser(user);
-            try {
-                userRepository.save(user);
-                mangaRepository.save(manga);
-                return true;
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-                return false;
-            }
+    @CachePut(value = "DefaultUserService::findUserByAuthentication", key = "#authentication.name")
+    public User add(String id, Authentication authentication) {
+        Manga manga = mangaRepository.findById(id).orElseThrow(() ->
+                new MangaNotFoundException("Manga " + id + " Not Found"));
+        User user = findUserByAuthentication(authentication);
+        user.addManga(manga);
+        manga.addUser(user);
+
+        userRepository.save(user);
+        mangaRepository.save(manga);
+        return user;
     }
 
     @Override
-    @Caching(put = {
-            @CachePut(value = "findUserByAuthentication", key = "#authentication"),
-            @CachePut(value = "findByEmail", key = "#email", unless = "result == null"),
-            @CachePut(value = "findById", key = "#id")
-    })
+
+    @CachePut(value = "DefaultUserService::findUserByAuthentication", key = "#authentication.name")
     @Transactional
-    public void update(UserDto updateEntity, Authentication authentication) {
+    public User update(UserDto updateEntity, Authentication authentication) {
         User user = findUserByAuthentication(authentication);
         List<UpdateUserComponent> components = List.of(new FullNameUpdateComponent(),
                 new PasswordUpdateComponent(passwordEncoder), new UsernameUpdateComponent());
@@ -132,7 +119,7 @@ public class DefaultUserService implements UserService {
         for (var i : components) {
             i.execute(updateEntity, user);
         }
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
 

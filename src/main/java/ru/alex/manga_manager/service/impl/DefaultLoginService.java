@@ -52,7 +52,7 @@ public class DefaultLoginService implements LoginService {
         User user = userService.findByEmail(userDto.getEmail());
 
         Authentication authentication =
-                new UsernamePasswordAuthenticationToken(user.getEmail(),
+                new UsernamePasswordAuthenticationToken(user.getId(),
                         user.getPassword(),
                         user.getRoles().stream().map(r ->
                                 new SimpleGrantedAuthority(r.getRole())).toList());

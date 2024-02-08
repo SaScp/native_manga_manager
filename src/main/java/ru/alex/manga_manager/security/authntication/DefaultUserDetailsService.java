@@ -17,9 +17,9 @@ public class DefaultUserDetailsService implements UserDetailsService {
     private final UserService userService;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 
-        final var user = userService.findByEmail(email);
+        final var user = userService.findById(id);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
