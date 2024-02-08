@@ -75,7 +75,6 @@ public class DefaultCommentService implements CommentService {
     }
 
     @Transactional
-    @Caching(put = {@CachePut(value = "findById", key = "#id")})
     public boolean update(String id, CommentDto updateCommentDto, Authentication authentication) {
         try {
             Comment comment = findById(id);
@@ -99,7 +98,6 @@ public class DefaultCommentService implements CommentService {
         return comments;
     }
 
-    @Cacheable(value = "findById", key = "#id")
     @Transactional(readOnly = true)
     public Comment findById(String id) {
         return commentRepository.findById(id).orElse(null);
