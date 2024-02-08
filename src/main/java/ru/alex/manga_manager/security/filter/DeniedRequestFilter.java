@@ -18,6 +18,7 @@ public class DeniedRequestFilter extends OncePerRequestFilter {
 
         if (request.getHeader(HttpHeaders.USER_AGENT).equals("curl")) {
             response.sendError(HttpStatus.FORBIDDEN.value(), "curl - user agent is illegal");
+            return;
         }
 
         filterChain.doFilter(request, response);
