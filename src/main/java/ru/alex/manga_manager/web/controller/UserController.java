@@ -40,7 +40,7 @@ public class UserController {
             description = "позволяет обновить пароль пользователя"
     )
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/update-password")
+    @PatchMapping("/update")
     public HttpStatus update(@RequestBody UserDto userDto, Authentication authentication) {
         if (Optional.ofNullable(authentication).isPresent()) {
             userService.update(userDto, authentication);
