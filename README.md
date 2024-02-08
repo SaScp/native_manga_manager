@@ -4,7 +4,7 @@ API для сервиса чтения манги.
 <br>
 Это приложение может производить операции над мангой
 <br>
-Вы можете получить доступ к Swagger и просмотреть все доступные конечные точки, посетивhttp://localhost:8080/swagger-ui/index.html
+Вы можете получить доступ к Swagger и просмотреть все доступные конечные точки, посетивhttp://localhost/swagger-ui/index.html
 
 ## Схема компонентов
 ![image](https://github.com/SaScp/native_manga_manager/assets/96395954/2180d464-eb1b-4e2d-b068-01d472e9a343)
