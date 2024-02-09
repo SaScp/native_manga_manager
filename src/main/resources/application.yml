@@ -31,3 +31,6 @@ jwt:
 logging:
   level:
     org.springframework.security: trace
+yandex:
+  disk:
+    token: ${YANDEX_DISK_TOKEN}
