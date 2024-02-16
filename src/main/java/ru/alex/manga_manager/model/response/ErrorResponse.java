@@ -9,10 +9,11 @@ import java.time.ZonedDateTime;
 @Data
 public class ErrorResponse {
 
-    public ZonedDateTime timestamp;
+    private ZonedDateTime timestamp;
 
-    public String code;
+    private String code;
 
+    private String path;
 
-    public String message;
+    private String message;
 }

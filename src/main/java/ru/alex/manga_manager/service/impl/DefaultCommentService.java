@@ -100,7 +100,7 @@ public class DefaultCommentService implements CommentService {
 
     @Transactional(readOnly = true)
     public Comment findById(String id) {
-        return commentRepository.findById(id).orElse(null);
+        return commentRepository.findById(id).orElseThrow(() -> new CommentNotFoundException());
     }
 
     @Transactional
