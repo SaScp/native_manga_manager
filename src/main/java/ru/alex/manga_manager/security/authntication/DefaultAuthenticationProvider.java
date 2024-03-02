@@ -24,11 +24,14 @@ public class DefaultAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         final var userDetails = userDetailsService.loadUserByUsername(authentication.getName());
+        String a = userDetails.getPassword();
+        String b = authentication.getCredentials().toString();
 
-        if (passwordEncoder.matches(authentication.getCredentials().toString(), userDetails.getPassword())) {
+        if (!passwordEncoder.matches(authentication.getCredentials().toString(), userDetails.getPassword())) {
             throw new BadCredentialsException("Password error");
         }
-        return new PreAuthenticatedAuthenticationToken(authentication.getPrincipal(), authentication.getCredentials(), authentication.getAuthorities());
+        return new PreAuthenticatedAuthenticationToken(authentication.getPrincipal(),
+                authentication.getCredentials(), userDetails.getAuthorities());
     }
 
     @Override

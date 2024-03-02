@@ -22,12 +22,12 @@ public class DefaultUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getEmail();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getPassword();
+        return user.getEmail();
     }
 
     @Override

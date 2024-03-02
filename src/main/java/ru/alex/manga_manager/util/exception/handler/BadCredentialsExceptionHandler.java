@@ -1,11 +1,13 @@
 package ru.alex.manga_manager.util.exception.handler;
 
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.WebRequest;
 import ru.alex.manga_manager.model.response.ErrorResponse;
 
 import java.time.ZonedDateTime;
 
+@Component
 public class BadCredentialsExceptionHandler implements ExceptionHandlerStrategy {
     @Override
     public ErrorResponse handleException(RuntimeException e, WebRequest webRequest) {

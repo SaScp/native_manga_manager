@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.yandexparser.baseLogic.Cloud;
 
 import java.util.List;
 
@@ -26,11 +25,4 @@ public class MySpringConfiguration implements WebMvcConfigurer {
         return new ModelMapper();
     }
 
-    @Value("${yandex.disk.token}")
-    private String yandexToken;
-
-    @Bean
-    public Cloud cloud() {
-        return Cloud.builder().token(yandexToken).build();
-    }
 }

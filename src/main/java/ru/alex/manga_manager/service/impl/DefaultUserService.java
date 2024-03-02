@@ -75,7 +75,7 @@ public class DefaultUserService implements UserService {
     @Cacheable(value = "DefaultUserService::findUserByAuthentication", key = "#authentication.name")
     @Transactional(readOnly = true)
     public User findUserByAuthentication(Authentication authentication) {
-        return this.userRepository.findById(authentication.getName()).orElseThrow(() ->
+        return this.userRepository.findByEmail(authentication.getName()).orElseThrow(() ->
                 new UserNotFoundException("User " + authentication.getName() + " not found"));
     }
 

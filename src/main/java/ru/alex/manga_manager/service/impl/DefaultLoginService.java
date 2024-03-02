@@ -3,6 +3,7 @@ package ru.alex.manga_manager.service.impl;
 import com.nimbusds.jose.KeyLengthException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,17 +30,15 @@ public class DefaultLoginService implements LoginService {
 
     private final JwtService jwtService;
 
-    @Qualifier("defaultAuthenticationProvider")
-    private final AuthenticationProvider authenticationProvider;
+    private final AuthenticationManager authenticationManager;
 
     public DefaultLoginService(UserService userService,
                                @Value("${jwt.secret.access}") String access,
-                               @Value("${jwt.secret.refresh}") String refresh,@Qualifier("defaultJwtService") JwtService jwtService,
-                               AuthenticationProvider authenticationProvider) throws ParseException, KeyLengthException {
+                               @Value("${jwt.secret.refresh}") String refresh, @Qualifier("defaultJwtService") JwtService jwtService,
+                               AuthenticationProvider authenticationProvider, AuthenticationManager authenticationManager) throws ParseException, KeyLengthException {
         this.userService = userService;
         this.jwtService = jwtService;
-
-        this.authenticationProvider = authenticationProvider;
+        this.authenticationManager = authenticationManager;
     }
 
 
@@ -49,15 +48,12 @@ public class DefaultLoginService implements LoginService {
         if (bindingResult.hasErrors()) {
             throw new LoginException(bindingResult.getFieldError().getDefaultMessage());
         }
-        User user = userService.findByEmail(userDto.getEmail());
 
         Authentication authentication =
-                new UsernamePasswordAuthenticationToken(user.getId(),
-                        user.getPassword(),
-                        user.getRoles().stream().map(r ->
-                                new SimpleGrantedAuthority(r.getRole())).toList());
+                new UsernamePasswordAuthenticationToken(userDto.getEmail(),
+                        userDto.getPassword());
 
-        authenticationProvider.authenticate(authentication);
+        authentication = authenticationManager.authenticate(authentication);
 
 
         return jwtService.createTokens(authentication);

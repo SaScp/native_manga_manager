@@ -44,9 +44,9 @@ public class DefaultCommentService implements CommentService {
             throw new ForbiddenException("Forbidden");
         }
 
-        String id = commentDto.getAuthentication().getName();
-        User user = userRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("User: " + id + " Not Found"));
+        final var name = commentDto.getAuthentication().getName();
+        User user = userRepository.findByEmail(name).orElseThrow(() ->
+                new ResourceNotFoundException("User: " + name + " Not Found"));
         Manga manga = mangaRepository.findById(commentDto.getMangaId()).orElseThrow(() ->
                 new MangaNotFoundException("Manga with id " + commentDto.getMangaId() + " Not Found"));
         Comment parentComment = commentDto.getParentId() == null ? null : findById(commentDto.getParentId());
@@ -78,7 +78,7 @@ public class DefaultCommentService implements CommentService {
     public boolean update(String id, CommentDto updateCommentDto, Authentication authentication) {
         try {
             Comment comment = findById(id);
-            if (authentication.getName().equals(comment.getAuthor().getId())) {
+            if (authentication.getName().equals(comment.getAuthor().getEmail())) {
                 new UpdateTextComment().execute(updateCommentDto, comment);
                 commentRepository.save(comment);
             } else {

@@ -1,12 +1,14 @@
 package ru.alex.manga_manager.util.exception.handler;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.WebRequest;
 import ru.alex.manga_manager.model.response.ErrorResponse;
 import ru.alex.manga_manager.util.exception.LoginException;
 
 import java.time.ZonedDateTime;
 
-public class LoginExceptionHandler implements ExceptionHandlerStrategy{
+@Component
+public class LoginExceptionHandler implements ExceptionHandlerStrategy {
     @Override
     public ErrorResponse handleException(RuntimeException e, WebRequest webRequest) {
         return ErrorResponse.builder()

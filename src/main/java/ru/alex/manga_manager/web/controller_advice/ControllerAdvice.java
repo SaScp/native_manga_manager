@@ -48,7 +48,7 @@ public class ControllerAdvice {
             UsernameNotFoundException.class,
             LoginException.class
     })
-    public ResponseEntity<ErrorResponse> AuthenticationExceptionHandler(AuthenticationException e, WebRequest webRequest) {
+    public ResponseEntity<ErrorResponse> AuthenticationExceptionHandler(RuntimeException e, WebRequest webRequest) {
         ExceptionHandlerStrategy exceptionHandlerStrategy = handler.get(e.getClass());
         ErrorResponse errorResponse = exceptionHandlerStrategy.handleException(e, webRequest);
         return ResponseEntity.status(Integer.parseInt(errorResponse.getCode())).body(errorResponse);

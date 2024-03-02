@@ -1,11 +1,13 @@
 package ru.alex.manga_manager.util.exception.handler;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.WebRequest;
 import ru.alex.manga_manager.model.response.ErrorResponse;
 import ru.alex.manga_manager.util.exception.UserNotFoundException;
 
 import java.time.ZonedDateTime;
 
+@Component
 public class UserNotFoundExceptionHandler implements ExceptionHandlerStrategy {
 
     @Override
