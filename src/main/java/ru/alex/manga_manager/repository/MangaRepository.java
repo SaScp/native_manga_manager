@@ -24,7 +24,7 @@ public interface MangaRepository extends JpaRepository<Manga, String> {
     List<Manga> findAllByTypeInAndGenresIn(@Param("types") Collection<Long> types, @Param("genre") Collection<Long> genres, Pageable pageable);
 
 
-    @Query(value = "select manga from Manga manga join manga.genres genres where genres.id in :genre")
+    @Query(value = "select manga from Manga manga join manga.genres genres where genres.id in :genres")
     List<Manga> findAllByGenresIn(@Param("genre") Collection<Long> genres, Pageable pageable);
 
     @Query(value = "select manga from Manga manga where manga.type.id in :types")

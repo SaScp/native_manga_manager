@@ -24,8 +24,6 @@ public class DefaultAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         final var userDetails = userDetailsService.loadUserByUsername(authentication.getName());
-        String a = userDetails.getPassword();
-        String b = authentication.getCredentials().toString();
 
         if (!passwordEncoder.matches(authentication.getCredentials().toString(), userDetails.getPassword())) {
             throw new BadCredentialsException("Password error");

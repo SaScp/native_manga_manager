@@ -13,6 +13,7 @@ import ru.alex.manga_manager.service.UserService;
 @Component
 @RequiredArgsConstructor
 public class DefaultUserDetailsService implements UserDetailsService {
+
     @Qualifier("defaultUserService")
     private final UserService userService;
 

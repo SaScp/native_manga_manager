@@ -40,7 +40,7 @@ public class DefaultMangaService implements MangaService {
     private boolean orderFlag = true;
 
 
-    @CachePut(value = "findAll", key = "#mangaDto", unless = "#result == null")
+    @CachePut(value = "save", key = "#mangaDto", unless = "#result == null")
     @Override
     public Manga save(MangaDto mangaDto) {
         Manga manga = mangaConverter.convertTo(mangaDto);

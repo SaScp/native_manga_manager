@@ -13,7 +13,8 @@ import java.util.Collection;
 public class DefaultUserDetails implements UserDetails {
 
     private User user;
-    Collection<SimpleGrantedAuthority> authorities;
+
+    private Collection<SimpleGrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
