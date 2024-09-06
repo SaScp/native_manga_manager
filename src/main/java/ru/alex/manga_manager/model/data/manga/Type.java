@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
@@ -26,7 +27,7 @@ public class Type  implements Serializable {
     @Column(name = "c_type", nullable = false)
     private String type;
 
-    @OneToMany(mappedBy = "type", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "type", fetch = FetchType.LAZY)
     private List<Manga> mangas;
 
     @Override

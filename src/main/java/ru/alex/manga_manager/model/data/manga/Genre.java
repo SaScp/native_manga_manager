@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -14,10 +15,10 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @Table(name = "t_genre")
 public class Genre  implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
@@ -26,8 +27,7 @@ public class Genre  implements Serializable {
     @Column(name = "genre", nullable = false)
     private String genre;
 
-    @ManyToMany(mappedBy = "genres")
-    @ToString.Exclude
+    @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY)
     private List<Manga> mangas;
 
     @Override

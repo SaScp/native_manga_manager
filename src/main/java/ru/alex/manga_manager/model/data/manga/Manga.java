@@ -5,20 +5,23 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.proxy.HibernateProxy;
 import ru.alex.manga_manager.model.data.comment.Comment;
 import ru.alex.manga_manager.model.data.user.User;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @Table(name = "t_manga")
 public class Manga implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 3762577047691911696L;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -36,6 +39,7 @@ public class Manga implements Serializable {
     @Column(name = "avg_rating", nullable = false)
     private Double avgRating;
 
+    @BatchSize(size = 30)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "c_type", referencedColumnName = "id")
     @ToString.Exclude
@@ -56,6 +60,7 @@ public class Manga implements Serializable {
     @Column(name = "en_name", nullable = false)
     private String enName;
 
+    @BatchSize(size = 30)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "t_manga_t_genre",
             joinColumns = @JoinColumn(name = "manga_id"),

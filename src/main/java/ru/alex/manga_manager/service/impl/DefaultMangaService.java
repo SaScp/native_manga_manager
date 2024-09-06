@@ -49,7 +49,7 @@ public class DefaultMangaService implements MangaService {
         return manga;
     }
 
-    @Cacheable(value = "search", unless = "#result == null", key = "#search.title")
+    @Cacheable(value = "search", key = "#search.title")
     @Override
     public List<Manga> search(SearchEntity search) {
         this.pageRequest = PageRequest.of(search.getPage(), 20);

@@ -13,7 +13,7 @@ import java.util.Date;
 
 
 @Data
-@Document
+@Document(collation = "contact")
 public class Contact  implements Serializable {
 
     @NotNull
