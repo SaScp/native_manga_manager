@@ -16,20 +16,20 @@ import ru.alex.manga_manager.model.dto.user.UserDto;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.service.MangaService;
 
-import ru.alex.manga_manager.util.converter.Converter;
-import ru.alex.manga_manager.util.converter.MangaConverter;
+
 import ru.alex.manga_manager.util.exception.MangaNotFoundException;
+import ru.alex.manga_manager.util.mapper.MangaMapper;
 
 
 import java.util.*;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class DefaultMangaService implements MangaService {
 
     private final MangaRepository mangaRepository;
 
-    private final MangaConverter mangaConverter;
 
     private PageRequest pageRequest;
 
@@ -43,7 +43,7 @@ public class DefaultMangaService implements MangaService {
     @CachePut(value = "save", key = "#mangaDto", unless = "#result == null")
     @Override
     public Manga save(MangaDto mangaDto) {
-        Manga manga = mangaConverter.convertTo(mangaDto);
+        Manga manga = MangaMapper.INSTANCE.mangaDtoToManga(mangaDto);
         mangaDto.setId(UUID.randomUUID().toString());
         mangaRepository.save(manga);
         return manga;
@@ -57,7 +57,6 @@ public class DefaultMangaService implements MangaService {
     }
 
     @Override
-    @Transactional
     public List<Manga> findAll(FilterEntity filterEntity) {
         checkOrderOnStartsWithPlus(filterEntity.getOrder());
         if (filterEntity.getOrder() != null) {
@@ -72,7 +71,6 @@ public class DefaultMangaService implements MangaService {
 
     @Override
     @Cacheable(value = "findMangaById", unless = "#result == null", key = "#id")
-    @Transactional(readOnly = true)
     public Manga findMangaById(String id) {
         return this.mangaRepository.findById(id)
                 .orElseThrow(() -> new MangaNotFoundException("Manga with id: " + id + " Not Found"));

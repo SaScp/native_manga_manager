@@ -4,6 +4,7 @@ import com.nimbusds.jose.KeyLengthException;
 import com.nimbusds.jose.crypto.DirectEncrypter;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,22 +27,24 @@ import java.text.ParseException;
 @Service
 public class DefaultJwtService implements JwtService {
 
-    private final AccessFactory accessFactory = new DefaultAccessFactory();
-
-    private final RefreshFactory refreshFactory = new DefaultRefreshFactory();
-
     private final AccessTokenJwsStringSerializer accessTokenJwsStringSerializer;
 
     private final RefreshTokenJweStringSerializer refreshTokenJweStringSerializer;
 
-    public DefaultJwtService(@Value("${jwt.secret.access}") String access,
-                                 @Value("${jwt.secret.refresh}") String refresh) throws ParseException, KeyLengthException {
-        this.accessTokenJwsStringSerializer = new DefaultAccessTokenJwsStringSerializer(
-                new MACSigner(OctetSequenceKey.parse(access))
-        );
-        this.refreshTokenJweStringSerializer = new DefaultRefreshTokenJweStringSerializer(
-                new DirectEncrypter(OctetSequenceKey.parse(refresh))
-        );
+    private final AccessFactory accessFactory;
+
+    private final RefreshFactory refreshFactory;
+
+    public DefaultJwtService(@Qualifier("defaultAccessFactory") AccessFactory accessFactory,
+                          @Qualifier("defaultRefreshFactory") RefreshFactory refreshFactory,
+                          AccessTokenJwsStringSerializer accessTokenJwsStringSerializer,
+                          RefreshTokenJweStringSerializer refreshTokenJweStringSerializer
+    ) {
+
+        this.accessTokenJwsStringSerializer = accessTokenJwsStringSerializer;
+        this.refreshTokenJweStringSerializer = refreshTokenJweStringSerializer;
+        this.accessFactory = accessFactory;
+        this.refreshFactory = refreshFactory;
     }
 
 

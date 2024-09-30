@@ -14,7 +14,8 @@ import ru.alex.manga_manager.model.dto.manga.MangaDto;
 import ru.alex.manga_manager.service.MangaService;
 import ru.alex.manga_manager.util.annotation.FilterParam;
 import ru.alex.manga_manager.util.annotation.SearchParam;
-import ru.alex.manga_manager.util.converter.MangaConverter;
+
+import ru.alex.manga_manager.util.mapper.MangaMapper;
 
 
 import java.util.List;
@@ -28,29 +29,52 @@ public class MangaController {
     @Qualifier("defaultMangaService")
     private final MangaService mangaService;
 
-    private final MangaConverter mangaConverter;
-
     @Operation(
             summary = "Просмотр всех манг",
-            description = "позволяет просматривать каталог всех доступных манг в API"
+            description = "позволяет просматривать каталог всех доступных манг в API",
+            parameters = {
+                    @Parameter(
+                            name = "type",
+                            required = true,
+                            allowEmptyValue = true),
+                    @Parameter(name = "genre",
+                            required = true,
+                            allowEmptyValue = true),
+                    @Parameter(name = "pageSize",
+                            required = true,
+                            allowEmptyValue = true),
+                    @Parameter(name = "pageNumber",
+                            required = true,
+                            allowEmptyValue = true)
+            }
+
     )
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/titles")
-    public List<MangaDto> findAllMangas(@FilterParam @Parameter(description = "Параметры для фильтрации") FilterEntity filterEntity) {
-        return mangaService.findAll(filterEntity)
-                .stream().map(mangaConverter::convertFrom).toList();
+    public List<MangaDto> findAllMangas(@FilterParam @Parameter(hidden = true) FilterEntity filterEntity) {
+        return MangaMapper.INSTANCE.mangasToMangaDtos(mangaService.findAll(filterEntity));
     }
 
     @Operation(
             summary = "Поиск манги",
-            description = "позволяет искать мангу доступную в API"
+            description = "позволяет искать мангу доступную в API",
+            parameters = {
+                    @Parameter(
+                            name = "query",
+                            required = true,
+                            allowEmptyValue = true),
+                    @Parameter(
+                            name = "page",
+                            required = true,
+                            allowEmptyValue = true)
+            }
+
     )
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/search")
     public List<MangaDto> searchMangaAboutTitle(@SearchParam @Parameter(description = "Параметры для поиска") SearchEntity search) {
-        return mangaService.search(search).stream().map(mangaConverter::convertFrom).toList();
+        return MangaMapper.INSTANCE.mangasToMangaDtos(mangaService.search(search));
     }
-
 
 
 }

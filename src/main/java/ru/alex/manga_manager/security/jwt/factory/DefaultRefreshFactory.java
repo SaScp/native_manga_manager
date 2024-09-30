@@ -2,6 +2,7 @@ package ru.alex.manga_manager.security.jwt.factory;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
 import ru.alex.manga_manager.model.data.Token;
 
 import java.time.Duration;
@@ -9,6 +10,7 @@ import java.time.Instant;
 import java.util.LinkedList;
 import java.util.UUID;
 
+@Component
 public class DefaultRefreshFactory implements RefreshFactory {
 
     private final Duration tokenTtl = Duration.ofDays(1);

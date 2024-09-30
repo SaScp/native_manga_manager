@@ -11,10 +11,10 @@ import ru.alex.manga_manager.model.data.comment.Comment;
 import ru.alex.manga_manager.model.dto.comment.CommentDto;
 import ru.alex.manga_manager.model.dto.comment.RegistrationNewCommentDto;
 import ru.alex.manga_manager.service.CommentService;
-import ru.alex.manga_manager.util.converter.CommentConverter;
 
 import ru.alex.manga_manager.util.exception.CommentAddException;
 import ru.alex.manga_manager.util.exception.ForbiddenException;
+import ru.alex.manga_manager.util.mapper.CommentMapper;
 
 import java.lang.module.ResolutionException;
 import java.util.Collections;
@@ -27,7 +27,6 @@ import java.util.Optional;
 @Tag(name = "CommentController", description = "Контроллер для взаимодействия с Комментариями")
 public class CommentController {
 
-    private final CommentConverter commentConverter;
 
     @Qualifier("defaultCommentService")
     private final CommentService commentService;
@@ -35,8 +34,7 @@ public class CommentController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
     public List<CommentDto> findCommentByMangaId(@PathVariable String id) {
-        List<CommentDto> commentDtos = commentService.findAllByMangaId(id).stream().map(commentConverter::convertFrom).toList();
-        return commentDtos;
+        return CommentMapper.INSTANCE.commentsToCommentDtos(commentService.findAllByMangaId(id));
     }
 
     @ResponseStatus(HttpStatus.OK)

@@ -1,6 +1,5 @@
 package ru.alex.manga_manager.config;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,9 +19,6 @@ public class MySpringConfiguration implements WebMvcConfigurer {
         resolvers.add(new SearchParamResolver(false));
     }
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
+
 
 }

@@ -12,8 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.alex.manga_manager.model.dto.user.UserDto;
 import ru.alex.manga_manager.service.UserService;
-import ru.alex.manga_manager.util.converter.UserConverter;
 import ru.alex.manga_manager.util.exception.ForbiddenException;
+import ru.alex.manga_manager.util.mapper.UserMapper;
 
 import java.util.Optional;
 
@@ -26,13 +26,11 @@ public class UserController {
     @Qualifier("defaultUserService")
     private final UserService userService;
 
-    private final UserConverter userDtoConverter;
-
     @Hidden
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
     public UserDto findUserByAuthentication(Authentication authentication) {
-        return userDtoConverter.convertFrom(userService.findUserByAuthentication(authentication));
+        return UserMapper.INSTANCE.userToUserDto(userService.findUserByAuthentication(authentication));
     }
 
     @Operation(
@@ -52,11 +50,16 @@ public class UserController {
 
     @Operation(
             summary = "Добавление новых манг",
-            description = "позволяет добавить новую мангу в коллекцию пользователя"
+            description = "позволяет добавить новую мангу в коллекцию пользователя",
+            parameters = {
+                    @Parameter(name = "title_id",
+                            required = true,
+                            allowEmptyValue = true)}
     )
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/add/{id}")
-    public ResponseEntity<Void> add(@PathVariable @Parameter(description = "ID пользователя") String id, Authentication authentication) {
+    @PostMapping("/add/")
+    public ResponseEntity<Void> add(@RequestParam("title_id") @Parameter(description = "ID манги") String id,
+                                    Authentication authentication) {
         userService.add(id, Optional.ofNullable(authentication).orElseThrow(() ->
                 new ForbiddenException("forbidden")));
         return ResponseEntity.ok().build();

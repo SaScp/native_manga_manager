@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.alex.manga_manager.model.data.contact.Contact;
 import ru.alex.manga_manager.model.dto.contact.ContactDto;
 import ru.alex.manga_manager.service.ContactService;
-import ru.alex.manga_manager.util.converter.ContactConverter;
+import ru.alex.manga_manager.util.mapper.ContactMapper;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,8 +26,6 @@ public class ContactController {
     @Qualifier("defaultContactService")
     private final ContactService contactService;
 
-    private final ContactConverter converter;
-
     @Operation(
             summary = "Оставить свои контакты"
     )
@@ -40,6 +38,6 @@ public class ContactController {
 
     @GetMapping("/all")
     public List<ContactDto> findAllContactInfo() {
-        return contactService.findAll().stream().map(converter::convertFrom).toList();
+        return ContactMapper.INSTANCE.contactsToContactDtos(contactService.findAll());
     }
 }

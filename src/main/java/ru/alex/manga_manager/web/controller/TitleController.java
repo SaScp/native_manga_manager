@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.alex.manga_manager.model.data.manga.Manga;
 import ru.alex.manga_manager.model.dto.manga.MangaDto;
 import ru.alex.manga_manager.service.MangaService;
-import ru.alex.manga_manager.util.converter.MangaConverter;
+
+import ru.alex.manga_manager.util.mapper.MangaMapper;
 
 
 import java.util.List;
@@ -25,12 +26,9 @@ public class TitleController {
     @Qualifier("defaultMangaService")
     private final MangaService mangaService;
 
-
-    private final MangaConverter mangaConverter;
-
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public MangaDto findMangaById(@PathVariable("id") String id) {
-        return mangaConverter.convertFrom(mangaService.findMangaById(id));
+        return MangaMapper.INSTANCE.mangaToMangaDto(mangaService.findMangaById(id));
     }
 
 

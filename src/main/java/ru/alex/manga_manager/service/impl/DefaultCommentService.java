@@ -27,6 +27,7 @@ import java.util.UUID;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class DefaultCommentService implements CommentService {
 
@@ -92,7 +93,6 @@ public class DefaultCommentService implements CommentService {
 
     }
     @Override
-    @Transactional(readOnly = true)
     public List<Comment> findAllByMangaId(String id) {
         List<Comment> comments = commentRepository.findAllByManga_IdAndParent_IdIsNull(id);
         return comments;

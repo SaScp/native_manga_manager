@@ -1,8 +1,11 @@
 package ru.alex.manga_manager.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.task.ThreadPoolTaskExecutorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -25,8 +28,10 @@ import java.util.concurrent.Executor;
                         email = "3048453@gmail.com",
                         url = "https://github.com/SaScp"
                 )
-        )
+        ),
+        security = @SecurityRequirement(name = "bearerAuth")
 )
+@SecurityScheme(type = SecuritySchemeType.HTTP, paramName = "Authorization", bearerFormat = "JWT", scheme = "bearer", name = "bearerAuth")
 public class OpenApiConfiguration {
 
 }

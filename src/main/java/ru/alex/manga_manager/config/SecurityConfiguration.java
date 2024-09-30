@@ -1,6 +1,7 @@
 package ru.alex.manga_manager.config;
 
 import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.KeyLengthException;
 import com.nimbusds.jose.crypto.DirectDecrypter;
 import com.nimbusds.jose.crypto.DirectEncrypter;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -24,10 +25,14 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ru.alex.manga_manager.repository.LogoutRepository;
 import ru.alex.manga_manager.security.configurer.RequestConfigurer;
+import ru.alex.manga_manager.security.jwt.deserializer.AccessTokenJwsStringDeserializer;
 import ru.alex.manga_manager.security.jwt.deserializer.DefaultAccessTokenJwsStringDeserializer;
 import ru.alex.manga_manager.security.jwt.deserializer.DefaultRefreshTokenJwsStringDeserializer;
+import ru.alex.manga_manager.security.jwt.deserializer.RefreshTokenJwsStringDeserializer;
+import ru.alex.manga_manager.security.jwt.serializer.AccessTokenJwsStringSerializer;
 import ru.alex.manga_manager.security.jwt.serializer.DefaultAccessTokenJwsStringSerializer;
 import ru.alex.manga_manager.security.jwt.serializer.DefaultRefreshTokenJweStringSerializer;
+import ru.alex.manga_manager.security.jwt.serializer.RefreshTokenJweStringSerializer;
 
 import java.text.ParseException;
 import java.util.List;
@@ -41,22 +46,11 @@ public class SecurityConfiguration {
     public RequestConfigurer requestConfigurer(@Value("${jwt.secret.access}") String accessToken,
                                                @Value("${jwt.secret.refresh}") String refreshToken,
                                                LogoutRepository logoutRepository) throws JOSEException, ParseException {
-        return new RequestConfigurer().accessTokenJwsStringSerializer(
-                new DefaultAccessTokenJwsStringSerializer(
-                        new MACSigner(OctetSequenceKey.parse(accessToken)))
-                )
-                .refreshTokenJweStringSerializer(
-                        new DefaultRefreshTokenJweStringSerializer(
-                                new DirectEncrypter(OctetSequenceKey.parse(refreshToken)))
-                )
-                .accessTokenJwsStringDeserializer(
-                        new DefaultAccessTokenJwsStringDeserializer(
-                                new MACVerifier(OctetSequenceKey.parse(accessToken)))
-                )
-                .refreshTokenJwsStringDeserializer(
-                        new DefaultRefreshTokenJwsStringDeserializer(
-                                new DirectDecrypter(OctetSequenceKey.parse(refreshToken)))
-                )
+        return new RequestConfigurer()
+                .accessTokenJwsStringSerializer(accessTokenJwsStringSerializer(accessToken))
+                .refreshTokenJweStringSerializer(refreshTokenJweStringSerializer(refreshToken))
+                .accessTokenJwsStringDeserializer(accessTokenJwsStringDeserializer(accessToken))
+                .refreshTokenJwsStringDeserializer(refreshTokenJwsStringDeserializer(refreshToken))
                 .logoutRepository(logoutRepository);
     }
 
@@ -111,6 +105,28 @@ public class SecurityConfiguration {
         return configuration.getAuthenticationManager();
     }
 
+    @Bean
+    public AccessTokenJwsStringSerializer accessTokenJwsStringSerializer(@Value("${jwt.secret.access}") String access) throws ParseException, KeyLengthException {
+        return new DefaultAccessTokenJwsStringSerializer(
+                new MACSigner(OctetSequenceKey.parse(access)));
+    }
 
+    @Bean
+    public RefreshTokenJweStringSerializer refreshTokenJweStringSerializer(@Value("${jwt.secret.refresh}") String refresh) throws ParseException, KeyLengthException {
+        return new DefaultRefreshTokenJweStringSerializer(
+                new DirectEncrypter(OctetSequenceKey.parse(refresh)));
+    }
+
+    @Bean
+    public AccessTokenJwsStringDeserializer accessTokenJwsStringDeserializer(@Value("${jwt.secret.access}") String access) throws ParseException, JOSEException {
+        return new DefaultAccessTokenJwsStringDeserializer(
+                new MACVerifier(OctetSequenceKey.parse(access)));
+    }
+
+    @Bean
+    public RefreshTokenJwsStringDeserializer refreshTokenJwsStringDeserializer(@Value("${jwt.secret.refresh}") String refresh) throws ParseException, KeyLengthException {
+        return new DefaultRefreshTokenJwsStringDeserializer(
+                new DirectDecrypter(OctetSequenceKey.parse(refresh)));
+    }
 
 }

@@ -23,18 +23,18 @@ import ru.alex.manga_manager.service.update.user.FullNameUpdateComponent;
 import ru.alex.manga_manager.service.update.user.PasswordUpdateComponent;
 import ru.alex.manga_manager.service.update.user.UpdateUserComponent;
 import ru.alex.manga_manager.service.update.user.UsernameUpdateComponent;
-import ru.alex.manga_manager.util.converter.Converter;
-import ru.alex.manga_manager.util.converter.UserConverter;
 
 import ru.alex.manga_manager.util.exception.MangaNotFoundException;
 import ru.alex.manga_manager.util.exception.RoleNotFoundException;
 import ru.alex.manga_manager.util.exception.UserNotFoundException;
+import ru.alex.manga_manager.util.mapper.UserMapper;
 
 import java.time.Instant;
 import java.util.*;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class DefaultUserService implements UserService {
 
@@ -44,7 +44,6 @@ public class DefaultUserService implements UserService {
 
     private final MangaRepository mangaRepository;
 
-    private final UserConverter userConverter;
 
     @Qualifier("passwordEncoder")
     private final PasswordEncoder passwordEncoder;
@@ -52,8 +51,7 @@ public class DefaultUserService implements UserService {
     @Override
     @Transactional
     public User save(UserDto userDto) {
-
-        User user = this.userConverter.convertTo(userDto);
+        User user = UserMapper.INSTANCE.userDtoToUser(userDto);
         Role role = this.roleRepository.findById(1L).orElseThrow(() -> new RoleNotFoundException("Role Not Found"));
 
         String id = UUID.randomUUID().toString();
@@ -73,21 +71,18 @@ public class DefaultUserService implements UserService {
 
     @Override
     @Cacheable(value = "DefaultUserService::findUserByAuthentication", key = "#authentication.name")
-    @Transactional(readOnly = true)
     public User findUserByAuthentication(Authentication authentication) {
         return this.userRepository.findByEmail(authentication.getName()).orElseThrow(() ->
                 new UserNotFoundException("User " + authentication.getName() + " not found"));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() ->
                 new UserNotFoundException("user with email:" + email + "not found"));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public User findById(String id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("user with id:" + id + "not found"));
@@ -108,7 +103,6 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-
     @CachePut(value = "DefaultUserService::findUserByAuthentication", key = "#authentication.name")
     @Transactional
     public User update(UserDto updateEntity, Authentication authentication) {

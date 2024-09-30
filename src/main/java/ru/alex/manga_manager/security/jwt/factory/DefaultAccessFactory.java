@@ -1,12 +1,14 @@
 package ru.alex.manga_manager.security.jwt.factory;
 
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 import ru.alex.manga_manager.model.data.Token;
 
 import java.time.Duration;
 import java.time.Instant;
 
 @Setter
+@Component
 public class DefaultAccessFactory implements AccessFactory {
 
     private Duration duration = Duration.ofMinutes(5);
