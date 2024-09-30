@@ -1,6 +1,6 @@
 spring:
   config:
-    import: file:.env[.properties]
+    import: optional:file:.env[.properties]
   cache:
     type: redis
   sql:
@@ -28,6 +28,8 @@ spring:
     compose:
       profiles:
         active: dev
+  flyway:
+    driver-class-name: D
 jwt:
   secret:
     access: '{"kty" : "oct", "k" : "hi7S5RX5ZRZooHA0RKGctZ-KtR9FoESgCnH-3BNg5XI"}'
