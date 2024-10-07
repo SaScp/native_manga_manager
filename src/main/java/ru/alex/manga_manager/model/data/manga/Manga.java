@@ -39,10 +39,9 @@ public class Manga implements Serializable {
     @Column(name = "avg_rating", nullable = false)
     private Double avgRating;
 
-    @BatchSize(size = 30)
+    @BatchSize(size = 15)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "c_type", referencedColumnName = "id")
-    @ToString.Exclude
     private Type type;
 
     @Column(name = "is_yaoi", nullable = false)
@@ -65,24 +64,26 @@ public class Manga implements Serializable {
     @JoinTable(name = "t_manga_t_genre",
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    @ToString.Exclude
     private List<Genre> genres;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "t_user_t_manga",
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    @ToString.Exclude
     private List<User> users;
 
-    @OneToMany(mappedBy = "manga")
+    @BatchSize(size = 25)
+    @OneToMany(mappedBy = "manga", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
     private Set<Comment> comments;
 
     public boolean addComment(Comment comment) {
+        comment.setManga(this);
         return comments.add(comment);
     }
+
     public void addUser(User user) {
         users.add(user);
+
     }
     @Override
     public final boolean equals(Object object) {

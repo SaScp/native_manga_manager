@@ -33,9 +33,8 @@ public class DefaultLoginService implements LoginService {
     private final AuthenticationManager authenticationManager;
 
     public DefaultLoginService(UserService userService,
-                               @Value("${jwt.secret.access}") String access,
-                               @Value("${jwt.secret.refresh}") String refresh, @Qualifier("defaultJwtService") JwtService jwtService,
-                               AuthenticationProvider authenticationProvider, AuthenticationManager authenticationManager) throws ParseException, KeyLengthException {
+                               @Qualifier("defaultJwtService") JwtService jwtService,
+                               AuthenticationManager authenticationManager) throws ParseException, KeyLengthException {
         this.userService = userService;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;

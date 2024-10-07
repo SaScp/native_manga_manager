@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.proxy.HibernateProxy;
 import ru.alex.manga_manager.model.data.comment.Comment;
 import ru.alex.manga_manager.model.data.manga.Manga;
@@ -37,7 +38,7 @@ public class User implements Serializable {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "t_user_t_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -50,18 +51,20 @@ public class User implements Serializable {
     @Column(name = "registration_date", nullable = false)
     private Date registrationDate;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
-    @ToString.Exclude
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Manga> mangas;
 
-    @OneToMany(mappedBy = "author")
+    @BatchSize(size = 25)
+    @OneToMany(mappedBy = "author" , fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
     private Set<Comment> comments;
 
     public boolean addComment(Comment comment) {
+        comment.setAuthor(this);
        return comments.add(comment);
     }
 
     public void addManga(Manga manga) {
+        manga.addUser(this);
         mangas.add(manga);
     }
 

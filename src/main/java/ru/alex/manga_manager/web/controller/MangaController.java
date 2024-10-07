@@ -72,7 +72,7 @@ public class MangaController {
     )
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/search")
-    public List<MangaDto> searchMangaAboutTitle(@SearchParam @Parameter(description = "Параметры для поиска") SearchEntity search) {
+    public List<MangaDto> searchMangaAboutTitle(@SearchParam @Parameter(hidden = true) SearchEntity search) {
         return MangaMapper.INSTANCE.mangasToMangaDtos(mangaService.search(search));
     }
 

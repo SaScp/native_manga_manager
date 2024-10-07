@@ -2,6 +2,7 @@ package ru.alex.manga_manager.model.data.comment;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.proxy.HibernateProxy;
 import ru.alex.manga_manager.model.data.manga.Manga;
 import ru.alex.manga_manager.model.data.user.User;
@@ -13,10 +14,12 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString
-@RequiredArgsConstructor
 @Entity
+@Builder
+@ToString
+@NoArgsConstructor
 @Table(name = "t_comment")
+@AllArgsConstructor
 public class Comment implements Serializable {
     @Id
     @Column(name = "id", nullable = false)
@@ -25,7 +28,7 @@ public class Comment implements Serializable {
     @Column(name = "text")
     private String text;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User author;
 
@@ -40,6 +43,7 @@ public class Comment implements Serializable {
     @JoinColumn(name = "parent_id")
     private Comment parent;
 
+    @BatchSize(size = 25)
     @OneToMany(mappedBy = "parent")
     private List<Comment> comments;
 

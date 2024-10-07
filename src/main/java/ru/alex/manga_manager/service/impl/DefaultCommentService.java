@@ -17,6 +17,7 @@ import ru.alex.manga_manager.repository.CommentRepository;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.repository.UserRepository;
 import ru.alex.manga_manager.service.CommentService;
+import ru.alex.manga_manager.service.factory.CreateFactory;
 import ru.alex.manga_manager.service.update.comment.UpdateTextComment;
 import ru.alex.manga_manager.util.exception.*;
 
@@ -37,10 +38,12 @@ public class DefaultCommentService implements CommentService {
 
     private final MangaRepository mangaRepository;
 
+    private final CreateFactory<Comment, RegistrationNewCommentDto> commentCreateFactory;
+
     @Override
     @Transactional
     public boolean add(RegistrationNewCommentDto commentDto) {
-        Comment comment = new Comment();
+
         if (commentDto.getAuthentication() == null) {
             throw new ForbiddenException("Forbidden");
         }
@@ -52,11 +55,8 @@ public class DefaultCommentService implements CommentService {
                 new MangaNotFoundException("Manga with id " + commentDto.getMangaId() + " Not Found"));
         Comment parentComment = commentDto.getParentId() == null ? null : findById(commentDto.getParentId());
 
-        comment.setId(UUID.randomUUID().toString());
-        comment.setCreateAt(ZonedDateTime.now());
-        comment.setUpdateAt(ZonedDateTime.now());
-        comment.setComments(new ArrayList<>());
-        comment.setText(commentDto.getText());
+        Comment comment = commentCreateFactory.create(commentDto);
+
         comment.setParent(parentComment);
         comment.setAuthor(user);
         comment.setManga(manga);
@@ -65,7 +65,6 @@ public class DefaultCommentService implements CommentService {
         user.addComment(comment);
         try {
 
-            commentRepository.save(comment);
             userRepository.save(user);
             mangaRepository.save(manga);
             return true;

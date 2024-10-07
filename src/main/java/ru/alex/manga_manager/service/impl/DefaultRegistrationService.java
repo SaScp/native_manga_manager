@@ -43,8 +43,7 @@ public class DefaultRegistrationService implements RegistrationService {
 
     public DefaultRegistrationService(UserService userService,
                                       UserValidator userValidator,
-                                      @Value("${jwt.secret.access}") String access,
-                                      @Value("${jwt.secret.refresh}") String refresh, JwtService jwtService) throws ParseException, KeyLengthException {
+                                      JwtService jwtService) throws ParseException, KeyLengthException {
         this.userService = userService;
         this.userValidator = userValidator;
         this.jwtService = jwtService;
