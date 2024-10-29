@@ -25,17 +25,12 @@ import java.text.ParseException;
 @Service
 public class DefaultLoginService implements LoginService {
 
-    @Qualifier("defaultUserService")
-    private final UserService userService;
-
     private final JwtService jwtService;
 
     private final AuthenticationManager authenticationManager;
 
-    public DefaultLoginService(UserService userService,
-                               @Qualifier("defaultJwtService") JwtService jwtService,
+    public DefaultLoginService(@Qualifier("defaultJwtService") JwtService jwtService,
                                AuthenticationManager authenticationManager) throws ParseException, KeyLengthException {
-        this.userService = userService;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }

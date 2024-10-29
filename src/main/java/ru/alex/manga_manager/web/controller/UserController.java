@@ -3,6 +3,8 @@ package ru.alex.manga_manager.web.controller;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,17 +29,20 @@ public class UserController {
     private final UserService userService;
 
     @Hidden
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
     public UserDto findUserByAuthentication(Authentication authentication) {
         return UserMapper.INSTANCE.userToUserDto(userService.findUserByAuthentication(authentication));
     }
 
     @Operation(
-            summary = "Обновление пароля пользователя",
-            description = "позволяет обновить пароль пользователя"
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Корректно выполненное обновление"),
+                    @ApiResponse(responseCode = "400", description = "Введены некорректные данные"),
+                    @ApiResponse(responseCode = "401", description = "Введен некорректный пароль")
+            },
+            summary = "Обновление данных пользователя",
+            description = "позволяет обновить данные пользователя"
     )
-    @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/update")
     public HttpStatus update(@RequestBody UserDto userDto, Authentication authentication) {
         if (Optional.ofNullable(authentication).isPresent()) {
@@ -54,14 +59,16 @@ public class UserController {
             parameters = {
                     @Parameter(name = "title_id",
                             required = true,
-                            allowEmptyValue = true)}
+                            allowEmptyValue = true)},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Манга добавлен успешно"),
+                    @ApiResponse(responseCode = "403", description = "Доступ закрыт")
+            }
     )
-    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/add/")
     public ResponseEntity<Void> add(@RequestParam("title_id") @Parameter(description = "ID манги") String id,
                                     Authentication authentication) {
-        userService.add(id, Optional.ofNullable(authentication).orElseThrow(() ->
-                new ForbiddenException("forbidden")));
+        userService.add(id, authentication);
         return ResponseEntity.ok().build();
     }
 }

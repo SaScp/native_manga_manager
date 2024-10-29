@@ -23,6 +23,7 @@ import java.util.*;
 public class User implements Serializable {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @Column(name = "email", nullable = false)

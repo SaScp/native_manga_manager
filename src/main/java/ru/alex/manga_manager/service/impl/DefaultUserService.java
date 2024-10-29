@@ -19,11 +19,13 @@ import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.repository.RoleRepository;
 import ru.alex.manga_manager.repository.UserRepository;
 import ru.alex.manga_manager.service.UserService;
+import ru.alex.manga_manager.service.factory.CreateFactory;
 import ru.alex.manga_manager.service.update.user.FullNameUpdateComponent;
 import ru.alex.manga_manager.service.update.user.PasswordUpdateComponent;
 import ru.alex.manga_manager.service.update.user.UpdateUserComponent;
 import ru.alex.manga_manager.service.update.user.UsernameUpdateComponent;
 
+import ru.alex.manga_manager.util.exception.ForbiddenException;
 import ru.alex.manga_manager.util.exception.MangaNotFoundException;
 import ru.alex.manga_manager.util.exception.RoleNotFoundException;
 import ru.alex.manga_manager.util.exception.UserNotFoundException;
@@ -48,20 +50,14 @@ public class DefaultUserService implements UserService {
     @Qualifier("passwordEncoder")
     private final PasswordEncoder passwordEncoder;
 
+    private final CreateFactory<User, UserDto> userCreateFactory;
+
     @Override
     @Transactional
     public User save(UserDto userDto) {
-        User user = UserMapper.INSTANCE.userDtoToUser(userDto);
         Role role = this.roleRepository.findById(1L).orElseThrow(() -> new RoleNotFoundException("Role Not Found"));
 
-        String id = UUID.randomUUID().toString();
-
-        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        user.setRegistrationDate(Date.from(Instant.now()));
-        user.setDateOfBirth(Date.from(Instant.now()));
-        user.setMangas(new ArrayList<>());
-        user.setRoles(Set.of(role));
-        user.setId(id);
+        User user = userCreateFactory.create(userDto);
 
         role.add(user);
         user = this.userRepository.save(user);
@@ -91,6 +87,8 @@ public class DefaultUserService implements UserService {
     @Transactional
     @CachePut(value = "DefaultUserService::findUserByAuthentication", key = "#authentication.name")
     public User add(String id, Authentication authentication) {
+        Optional.ofNullable(authentication).orElseThrow(() ->
+                new ForbiddenException("forbidden"));
         Manga manga = mangaRepository.findById(id).orElseThrow(() ->
                 new MangaNotFoundException("Manga " + id + " Not Found"));
         User user = findUserByAuthentication(authentication);
@@ -103,8 +101,8 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    @CachePut(value = "DefaultUserService::findUserByAuthentication", key = "#authentication.name")
     @Transactional
+    @CachePut(value = "DefaultUserService::findUserByAuthentication", key = "#authentication.name")
     public User update(UserDto updateEntity, Authentication authentication) {
         User user = findUserByAuthentication(authentication);
         List<UpdateUserComponent> components = List.of(new FullNameUpdateComponent(),

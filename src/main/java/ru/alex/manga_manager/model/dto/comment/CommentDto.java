@@ -14,8 +14,12 @@ import java.util.List;
 public class CommentDto implements Serializable {
 
     private String id;
+
     private String text;
+
     private ZonedDateTime createAt;
+
     private ZonedDateTime updateAt;
+
     private List<CommentDto> comments;
 }
