@@ -11,6 +11,7 @@ public interface MangaService {
     Manga save(MangaDto mangaDto);
 
     List<Manga> search(SearchEntity search);
+
     List<Manga> findAll(FilterEntity filterEntity);
 
     Manga findMangaById(String id);

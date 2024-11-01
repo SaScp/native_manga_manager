@@ -66,15 +66,20 @@ public class Manga implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genres;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "t_user_t_manga",
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
 
     @BatchSize(size = 25)
-    @OneToMany(mappedBy = "manga", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
+    @OneToMany(mappedBy = "manga", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     private Set<Comment> comments;
+
+
+    @BatchSize(size = 30)
+    @OneToMany(mappedBy = "manga", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    private Set<Chapter> chapters;
 
     public boolean addComment(Comment comment) {
         comment.setManga(this);
@@ -82,8 +87,12 @@ public class Manga implements Serializable {
     }
 
     public void addUser(User user) {
-        users.add(user);
+        user.addManga(this);
+    }
 
+    public void addChapter(Chapter chapter) {
+        chapter.setManga(this);
+        chapters.add(chapter);
     }
     @Override
     public final boolean equals(Object object) {
