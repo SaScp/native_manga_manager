@@ -39,12 +39,12 @@ public class User implements Serializable {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "t_user_t_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     @ToString.Exclude
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @Column(name = "date_of_birth", nullable = false)
     private Date dateOfBirth;
@@ -53,11 +53,11 @@ public class User implements Serializable {
     private Date registrationDate;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    private List<Manga> mangas;
+    private List<Manga> mangas = new ArrayList<>();
 
     @BatchSize(size = 25)
     @OneToMany(mappedBy = "author" , fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE})
-    private Set<Comment> comments;
+    private Set<Comment> comments = new HashSet<>();
 
     public boolean addComment(Comment comment) {
         comment.setAuthor(this);
@@ -67,6 +67,11 @@ public class User implements Serializable {
     public void addManga(Manga manga) {
         manga.addUser(this);
         mangas.add(manga);
+    }
+
+    public void addRole(Role role) {
+        role.add(this);
+        roles.add(role);
     }
 
     public static Builder builder() {

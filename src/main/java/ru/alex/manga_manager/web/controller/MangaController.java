@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.alex.manga_manager.model.data.entity.FilterEntity;
 import ru.alex.manga_manager.model.data.manga.Manga;
@@ -76,5 +77,9 @@ public class MangaController {
         return MangaMapper.INSTANCE.mangasToMangaDtos(mangaService.search(search));
     }
 
+    @GetMapping("/favorite")
+    public List<MangaDto> findFavourites(Authentication authentication) {
+        return MangaMapper.INSTANCE.mangasToMangaDtos(mangaService.findAllByUserId(authentication.getName()));
+    }
 
 }

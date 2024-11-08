@@ -59,8 +59,8 @@ public class DefaultUserService implements UserService {
 
         User user = userCreateFactory.create(userDto);
 
-        role.add(user);
-        user = this.userRepository.save(user);
+        user.addRole(role);
+        this.userRepository.save(user);
         this.roleRepository.save(role);
         return user;
     }
@@ -68,20 +68,20 @@ public class DefaultUserService implements UserService {
     @Override
     @Cacheable(value = "DefaultUserService::findUserByAuthentication", key = "#authentication.name")
     public User findUserByAuthentication(Authentication authentication) {
-        return this.userRepository.findByEmail(authentication.getName()).orElseThrow(() ->
+        return this.userRepository.findById(authentication.getName()).orElseThrow(() ->
                 new UserNotFoundException("User " + authentication.getName() + " not found"));
     }
 
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() ->
-                new UserNotFoundException("user with email:" + email + "not found"));
+                new UserNotFoundException("user with email: " + email + " not found"));
     }
 
     @Override
     public User findById(String id) {
         return userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException("user with id:" + id + "not found"));
+                new UserNotFoundException("user with id: " + id + " not found"));
     }
 
     @Transactional
@@ -93,9 +93,7 @@ public class DefaultUserService implements UserService {
                 new MangaNotFoundException("Manga " + id + " Not Found"));
         User user = findUserByAuthentication(authentication);
         user.addManga(manga);
-        manga.addUser(user);
 
-        userRepository.save(user);
         mangaRepository.save(manga);
         return user;
     }

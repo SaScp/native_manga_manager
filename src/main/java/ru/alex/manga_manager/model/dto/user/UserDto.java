@@ -48,7 +48,4 @@ public class UserDto implements  Serializable {
     @Schema(description = "дата рождения")
     private Date dateOfBirth;
 
-    @Schema(description = "манги в коллекции пользователя", accessMode = Schema.AccessMode.READ_ONLY)
-    private List<MangaDto> mangas;
-
 }

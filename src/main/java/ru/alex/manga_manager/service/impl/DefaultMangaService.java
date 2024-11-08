@@ -1,5 +1,9 @@
 package ru.alex.manga_manager.service.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -7,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.NodeList;
 import ru.alex.manga_manager.model.data.entity.FilterEntity;
 import ru.alex.manga_manager.model.data.manga.Manga;
 import ru.alex.manga_manager.model.data.entity.SearchEntity;
@@ -75,6 +80,13 @@ public class DefaultMangaService implements MangaService {
         return this.mangaRepository.findById(id)
                 .orElseThrow(() -> new MangaNotFoundException("Manga with id: " + id + " Not Found"));
     }
+
+    @Override
+    public List<Manga> findAllByUserId(String id) {
+        List<Manga> mangas1 = mangaRepository.findAllByUsersIs(id);
+        return mangas1;
+    }
+
 
     private void checkAllParams(String order,
                                 List<Long> types,

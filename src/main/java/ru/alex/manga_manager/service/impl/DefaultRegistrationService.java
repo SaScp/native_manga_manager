@@ -63,7 +63,7 @@ public class DefaultRegistrationService implements RegistrationService {
         User user = this.userService.save(userDto);
 
         Authentication authentication =
-                new PreAuthenticatedAuthenticationToken(user.getEmail(), user.getPassword(), user.getRoles().stream()
+                new PreAuthenticatedAuthenticationToken(user.getId(), user.getPassword(), user.getRoles().stream()
                         .map((Role role) -> new SimpleGrantedAuthority(role.getRole())).toList());
 
 

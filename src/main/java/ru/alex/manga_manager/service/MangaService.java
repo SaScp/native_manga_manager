@@ -16,5 +16,5 @@ public interface MangaService {
 
     Manga findMangaById(String id);
 
-
+     List<Manga> findAllByUserId(String id);
 }

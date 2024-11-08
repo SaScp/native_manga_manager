@@ -87,7 +87,7 @@ public class Manga implements Serializable {
     }
 
     public void addUser(User user) {
-        user.addManga(this);
+        users.add(user);
     }
 
     public void addChapter(Chapter chapter) {

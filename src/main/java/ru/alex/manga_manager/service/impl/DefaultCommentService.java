@@ -40,6 +40,7 @@ public class DefaultCommentService implements CommentService {
 
     private final CreateFactory<Comment, RegistrationNewCommentDto> commentCreateFactory;
 
+    // Optimization query to SQL (it so crazy!)
     @Override
     @Transactional
     public boolean add(RegistrationNewCommentDto commentDto) {
@@ -49,7 +50,7 @@ public class DefaultCommentService implements CommentService {
         }
 
         final var name = commentDto.getAuthentication().getName();
-        User user = userRepository.findByEmail(name).orElseThrow(() ->
+        User user = userRepository.findById(name).orElseThrow(() ->
                 new ResourceNotFoundException("User: " + name + " Not Found"));
         Manga manga = mangaRepository.findById(commentDto.getMangaId()).orElseThrow(() ->
                 new MangaNotFoundException("Manga with id " + commentDto.getMangaId() + " Not Found"));

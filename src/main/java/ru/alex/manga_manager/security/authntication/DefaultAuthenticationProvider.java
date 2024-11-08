@@ -28,7 +28,8 @@ public class DefaultAuthenticationProvider implements AuthenticationProvider {
         if (!passwordEncoder.matches(authentication.getCredentials().toString(), userDetails.getPassword())) {
             throw new BadCredentialsException("Password error");
         }
-        return new PreAuthenticatedAuthenticationToken(authentication.getPrincipal(),
+        return new PreAuthenticatedAuthenticationToken(
+                userDetails.getUsername(),
                 authentication.getCredentials(), userDetails.getAuthorities());
     }
 

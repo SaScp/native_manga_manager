@@ -3,6 +3,7 @@ package ru.alex.manga_manager.web.controller;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,11 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import ru.alex.manga_manager.model.dto.manga.MangaDto;
 import ru.alex.manga_manager.model.dto.user.UserDto;
 import ru.alex.manga_manager.service.UserService;
 import ru.alex.manga_manager.util.exception.ForbiddenException;
 import ru.alex.manga_manager.util.mapper.UserMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -28,9 +31,8 @@ public class UserController {
     @Qualifier("defaultUserService")
     private final UserService userService;
 
-    @Hidden
     @GetMapping("/")
-    public UserDto findUserByAuthentication(Authentication authentication) {
+    public UserDto findUserByAuthentication(@Schema(hidden = true) Authentication authentication) {
         return UserMapper.INSTANCE.userToUserDto(userService.findUserByAuthentication(authentication));
     }
 
@@ -71,4 +73,7 @@ public class UserController {
         userService.add(id, authentication);
         return ResponseEntity.ok().build();
     }
+
+
+
 }
