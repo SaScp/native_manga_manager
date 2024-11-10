@@ -1,5 +1,6 @@
 package ru.alex.manga_manager.web.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.alex.manga_manager.model.data.entity.FilterEntity;
 import ru.alex.manga_manager.model.data.manga.Manga;
 import ru.alex.manga_manager.model.data.entity.SearchEntity;
+import ru.alex.manga_manager.model.dto.group.ViewMangaJsonGroup;
 import ru.alex.manga_manager.model.dto.manga.MangaDto;
 import ru.alex.manga_manager.service.MangaService;
 import ru.alex.manga_manager.util.annotation.FilterParam;
@@ -52,6 +54,7 @@ public class MangaController {
     )
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/titles")
+    @JsonView(value = ViewMangaJsonGroup.CatalogDataTitle.class)
     public List<MangaDto> findAllMangas(@FilterParam @Parameter(hidden = true) FilterEntity filterEntity) {
         return MangaMapper.INSTANCE.mangasToMangaDtos(mangaService.findAll(filterEntity));
     }
@@ -73,11 +76,13 @@ public class MangaController {
     )
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/search")
+    @JsonView(value = ViewMangaJsonGroup.SearchDataTitle.class)
     public List<MangaDto> searchMangaAboutTitle(@SearchParam @Parameter(hidden = true) SearchEntity search) {
         return MangaMapper.INSTANCE.mangasToMangaDtos(mangaService.search(search));
     }
 
     @GetMapping("/favorite")
+    @JsonView(value = ViewMangaJsonGroup.CatalogDataTitle.class)
     public List<MangaDto> findFavourites(Authentication authentication) {
         return MangaMapper.INSTANCE.mangasToMangaDtos(mangaService.findAllByUserId(authentication.getName()));
     }

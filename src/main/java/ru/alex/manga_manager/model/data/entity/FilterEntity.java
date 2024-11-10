@@ -11,16 +11,16 @@ import java.util.List;
 public class FilterEntity  implements Serializable {
 
     @Schema(description = "типы")
-    private List<Long> types;
+    protected List<Long> types;
 
     @Schema(description = "количество страниц")
     private Integer pageNumber;
 
     @Schema(description = "жанры")
-    private List<Long> genres;
+    protected List<Long> genres;
 
     @Schema(description = "сортируемое поле")
-    private String order;
+    protected String order;
 
     @Schema(description = "размер страницы")
     private Integer pageSize;
@@ -32,4 +32,5 @@ public class FilterEntity  implements Serializable {
         this.order = order;
         this.pageSize = pageSize != null?  Integer.parseInt(pageSize) : 20;
     }
+    public FilterEntity(){}
 }

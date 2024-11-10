@@ -40,7 +40,7 @@ public class Manga implements Serializable {
     private Double avgRating;
 
     @BatchSize(size = 15)
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "c_type", referencedColumnName = "id")
     private Type type;
 
@@ -60,7 +60,7 @@ public class Manga implements Serializable {
     private String enName;
 
     @BatchSize(size = 30)
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "t_manga_t_genre",
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))

@@ -4,6 +4,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -22,6 +24,7 @@ import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.service.MangaService;
 
 
+import ru.alex.manga_manager.service.filterhandler.*;
 import ru.alex.manga_manager.util.exception.MangaNotFoundException;
 import ru.alex.manga_manager.util.mapper.MangaMapper;
 
@@ -30,20 +33,26 @@ import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
 public class DefaultMangaService implements MangaService {
 
     private final MangaRepository mangaRepository;
 
+    StartHandler startHandler;
 
-    private PageRequest pageRequest;
+    public DefaultMangaService(MangaRepository mangaRepository) {
+        this.mangaRepository = mangaRepository;
 
-    private List<Manga> mangas;
+        startHandler = new StartHandler(mangaRepository);
+        Handler allParametersHandler = new AllParametersHandler(mangaRepository);
+        Handler genresOrTypeOrderHandler = new GenresOrTypeOrderHandler(mangaRepository);
+        Handler orderIsEmptyHandler = new OrderIsEmptyHandler(mangaRepository);
+        Handler typesAndGenresIdsHandler = new TypesAndGenresIdsHandler(mangaRepository);
 
-    private String order;
-
-    private boolean orderFlag = true;
-
+        startHandler.setNextHandler(allParametersHandler);
+        allParametersHandler.setNextHandler(genresOrTypeOrderHandler);
+        genresOrTypeOrderHandler.setNextHandler(orderIsEmptyHandler);
+        orderIsEmptyHandler.setNextHandler(typesAndGenresIdsHandler);
+    }
 
     @CachePut(value = "save", key = "#mangaDto", unless = "#result == null")
     @Override
@@ -57,21 +66,13 @@ public class DefaultMangaService implements MangaService {
     @Cacheable(value = "search", key = "#search.title")
     @Override
     public List<Manga> search(SearchEntity search) {
-        this.pageRequest = PageRequest.of(search.getPage(), 20);
-        return mangaRepository.findByMainNameStartingWithOrSecondaryNameStartingWith(search.getTitle(), this.pageRequest);
+        PageRequest pageRequest = PageRequest.of(search.getPage(), 20);
+        return mangaRepository.findByMainNameStartingWithOrSecondaryNameStartingWith(search.getTitle(), pageRequest);
     }
 
     @Override
     public List<Manga> findAll(FilterEntity filterEntity) {
-        checkOrderOnStartsWithPlus(filterEntity.getOrder());
-        if (filterEntity.getOrder() != null) {
-            Sort sort = orderFlag ? Sort.by(this.order).descending() : Sort.by(this.order).ascending();
-            this.pageRequest = PageRequest.of(filterEntity.getPageNumber(),filterEntity.getPageSize(), sort);
-        } else {
-            this.pageRequest = PageRequest.of(filterEntity.getPageNumber(),filterEntity.getPageSize());
-        }
-        checkAllParams(order, filterEntity.getTypes(), filterEntity.getGenres());
-        return mangas;
+        return startHandler.handleRequest(filterEntity);
     }
 
     @Override
@@ -83,72 +84,6 @@ public class DefaultMangaService implements MangaService {
 
     @Override
     public List<Manga> findAllByUserId(String id) {
-        List<Manga> mangas1 = mangaRepository.findAllByUsersIs(id);
-        return mangas1;
+        return mangaRepository.findAllByUsersIs(id);
     }
-
-
-    private void checkAllParams(String order,
-                                List<Long> types,
-                                List<Long> genreIds
-    ) {
-        if (genreIds != null && types != null && order != null) {
-            mangas = this.mangaRepository.findAllByTypeInAndGenresIn(types, genreIds, pageRequest);
-        } else {
-            checkGenresOrTypeOrder(order, types, genreIds);
-        }
-    }
-
-    private void checkGenresOrTypeOrder(String order,
-                                        List<Long> types,
-                                        List<Long> genreIds
-    ) {
-        if (genreIds != null && order != null) {
-            mangas = this.mangaRepository.findAllByGenresIn(genreIds, pageRequest);
-        } else if (types != null && order != null) {
-            mangas = this.mangaRepository.findAllByTypesIn(types, pageRequest);
-        } else {
-            checkOrderIsEmpty(order, types, genreIds);
-        }
-    }
-
-    private void checkOrderIsEmpty(String order,
-                                   List<Long> types,
-                                   List<Long> genreIds
-    ) {
-        if (genreIds != null && types != null) {
-            mangas = this.mangaRepository.findAllByTypeInAndGenresIn(types, genreIds, this.pageRequest);
-        } else {
-            if (order != null) {
-                mangas = this.mangaRepository.findAll(pageRequest).toList();
-            } else {
-                checkTypesAndGenresIds(order, types, genreIds);
-            }
-        }
-
-    }
-
-    private void checkTypesAndGenresIds(String order,
-                                        List<Long> types,
-                                        List<Long> genreIds
-    ) {
-        if (types != null) {
-            mangas = this.mangaRepository.findAllByTypesIn(types, this.pageRequest);
-        } else {
-            if (genreIds != null) {
-                mangas = this.mangaRepository.findAllByGenresIn(genreIds, this.pageRequest);
-            } else {
-                mangas = this.mangaRepository.findAll(this.pageRequest).toList();
-            }
-        }
-    }
-
-    private void checkOrderOnStartsWithPlus(String order) {
-        if (order != null) {
-            this.orderFlag = order.startsWith(" ");
-            this.order = order.substring(1);
-        }
-    }
-
-
 }
