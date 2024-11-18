@@ -21,9 +21,10 @@ public class DefaultTitleService implements TitleService {
 
     private final TitleRepository titleRepository;
 
-    private final MangaService mangaService;
 
     private final MangaRepository mangaRepository;
+
+
 
     @Override
     public Set<ChapterDto> findAllByManga(String mangaId) {
@@ -34,7 +35,8 @@ public class DefaultTitleService implements TitleService {
     @Override
     public boolean addSetChapter(Set<ChapterDto> chapterDtos, String mangaId) {
         try{
-            Manga manga = mangaService.findMangaById(mangaId);
+            Manga manga = mangaRepository.findById(mangaId)
+                    .orElseThrow(() -> new MangaNotFoundException("Manga with id: " + mangaId + " Not Found"));
             Set<Chapter> chapters = TitleMapper.INSTANCE.setChapterDtoToSetChapter(chapterDtos);
             chapters.stream().map(e -> {
                 manga.addChapter(e);

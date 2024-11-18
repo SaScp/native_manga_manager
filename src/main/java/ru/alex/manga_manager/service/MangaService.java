@@ -10,11 +10,11 @@ import java.util.List;
 public interface MangaService {
     Manga save(MangaDto mangaDto);
 
-    List<Manga> search(SearchEntity search);
+    List<MangaDto> search(SearchEntity search);
 
     List<Manga> findAll(FilterEntity filterEntity);
 
-    Manga findMangaById(String id);
+    MangaDto findMangaById(String id);
 
      List<Manga> findAllByUserId(String id);
 }

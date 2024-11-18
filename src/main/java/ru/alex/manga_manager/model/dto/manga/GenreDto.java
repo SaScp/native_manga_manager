@@ -8,12 +8,14 @@ import lombok.Data;
 import ru.alex.manga_manager.model.data.manga.Genre;
 import ru.alex.manga_manager.model.dto.group.ViewMangaJsonGroup;
 
+import java.io.Serializable;
+
 
 /**
  * DTO for {@link Genre}
  */
 @Data
-public class GenreDto{
+public class GenreDto implements Serializable {
 
     @NotNull
     @JsonView(value = {ViewMangaJsonGroup.CatalogDataTitle.class, ViewMangaJsonGroup.InnerDataTitle.class , ViewMangaJsonGroup.SearchDataTitle.class})

@@ -7,8 +7,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import ru.alex.manga_manager.model.dto.group.ViewMangaJsonGroup;
 
+import java.io.Serializable;
+
 @Data
-public class TypeDto {
+public class TypeDto implements Serializable {
 
     @NotNull
     @JsonView(value = {ViewMangaJsonGroup.CatalogDataTitle.class, ViewMangaJsonGroup.InnerDataTitle.class , ViewMangaJsonGroup.SearchDataTitle.class})

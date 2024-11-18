@@ -1,25 +1,14 @@
 package ru.alex.manga_manager.service.impl;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.NodeList;
 import ru.alex.manga_manager.model.data.entity.FilterEntity;
 import ru.alex.manga_manager.model.data.manga.Manga;
 import ru.alex.manga_manager.model.data.entity.SearchEntity;
-import ru.alex.manga_manager.model.data.user.User;
 import ru.alex.manga_manager.model.dto.manga.MangaDto;
-import ru.alex.manga_manager.model.dto.user.UserDto;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.service.MangaService;
 
@@ -54,7 +43,7 @@ public class DefaultMangaService implements MangaService {
         orderIsEmptyHandler.setNextHandler(typesAndGenresIdsHandler);
     }
 
-    @CachePut(value = "save", key = "#mangaDto", unless = "#result == null")
+    @CachePut(value = "manga", key = "#mangaDto.id", unless = "#result == null")
     @Override
     public Manga save(MangaDto mangaDto) {
         Manga manga = MangaMapper.INSTANCE.mangaDtoToManga(mangaDto);
@@ -65,9 +54,9 @@ public class DefaultMangaService implements MangaService {
 
     @Cacheable(value = "search", key = "#search.title")
     @Override
-    public List<Manga> search(SearchEntity search) {
+    public List<MangaDto> search(SearchEntity search) {
         PageRequest pageRequest = PageRequest.of(search.getPage(), 20);
-        return mangaRepository.findByMainNameStartingWithOrSecondaryNameStartingWith(search.getTitle(), pageRequest);
+        return MangaMapper.INSTANCE.mangasToMangaDtos(mangaRepository.findByMainNameStartingWithOrSecondaryNameStartingWith(search.getTitle(), pageRequest));
     }
 
     @Override
@@ -76,10 +65,10 @@ public class DefaultMangaService implements MangaService {
     }
 
     @Override
-    @Cacheable(value = "findMangaById", unless = "#result == null", key = "#id")
-    public Manga findMangaById(String id) {
-        return this.mangaRepository.findById(id)
-                .orElseThrow(() -> new MangaNotFoundException("Manga with id: " + id + " Not Found"));
+    @Cacheable(value = "manga", unless = "#result == null", key = "#id")
+    public MangaDto findMangaById(String id) {
+        return MangaMapper.INSTANCE.mangaToMangaDto(this.mangaRepository.findById(id)
+                .orElseThrow(() -> new MangaNotFoundException("Manga with id: " + id + " Not Found")));
     }
 
     @Override

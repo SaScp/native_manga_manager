@@ -78,7 +78,7 @@ public class MangaController {
     @GetMapping(value = "/search")
     @JsonView(value = ViewMangaJsonGroup.SearchDataTitle.class)
     public List<MangaDto> searchMangaAboutTitle(@SearchParam @Parameter(hidden = true) SearchEntity search) {
-        return MangaMapper.INSTANCE.mangasToMangaDtos(mangaService.search(search));
+        return mangaService.search(search);
     }
 
     @GetMapping("/favorite")

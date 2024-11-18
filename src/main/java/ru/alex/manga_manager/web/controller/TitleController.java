@@ -1,11 +1,13 @@
 package ru.alex.manga_manager.web.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.alex.manga_manager.model.data.manga.Manga;
+import ru.alex.manga_manager.model.dto.group.ViewMangaJsonGroup;
 import ru.alex.manga_manager.model.dto.manga.ChapterDto;
 import ru.alex.manga_manager.model.dto.manga.MangaDto;
 import ru.alex.manga_manager.service.MangaService;
@@ -28,12 +30,13 @@ public class TitleController {
 
     private final TitleService titleService;
 
+    @JsonView(value = ViewMangaJsonGroup.InnerDataTitle.class)
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public MangaDto findMangaById(@PathVariable("id") String id) {
-        return MangaMapper.INSTANCE.mangaToMangaDto(mangaService.findMangaById(id));
+        return mangaService.findMangaById(id);
     }
 
-
+    @JsonView(value = ViewMangaJsonGroup.InnerDataTitle.class)
     @GetMapping(value = "/chapters", produces = MediaType.APPLICATION_JSON_VALUE)
     public Set<ChapterDto> findChaptersByMangaId(@PathVariable("id") String id) {
         return titleService.findAllByManga(id);
