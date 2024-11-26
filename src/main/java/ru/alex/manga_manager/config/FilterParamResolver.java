@@ -24,6 +24,7 @@ public class FilterParamResolver extends RequestParamMethodArgumentResolver {
 
     @Override
     protected Object resolveName(String name, MethodParameter parameter, NativeWebRequest request) throws Exception {
+
         List<String> types = request.getParameterValues("type") != null ?
                 Arrays.stream(Objects.requireNonNull(request.getParameterValues("type"))).toList() : null;
         List<String> genres = request.getParameterValues("genre") != null ?

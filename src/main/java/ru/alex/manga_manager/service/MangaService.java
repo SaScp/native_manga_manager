@@ -12,7 +12,7 @@ public interface MangaService {
 
     List<MangaDto> search(SearchEntity search);
 
-    List<Manga> findAll(FilterEntity filterEntity);
+    List<MangaDto> findAll(FilterEntity filterEntity);
 
     MangaDto findMangaById(String id);
 

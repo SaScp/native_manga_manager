@@ -60,8 +60,9 @@ public class DefaultMangaService implements MangaService {
     }
 
     @Override
-    public List<Manga> findAll(FilterEntity filterEntity) {
-        return startHandler.handleRequest(filterEntity);
+    @Cacheable(value = "catalog", key = "#filterEntity")
+    public List<MangaDto> findAll(FilterEntity filterEntity) {
+        return MangaMapper.INSTANCE.mangasToMangaDtos(startHandler.handleRequest(filterEntity));
     }
 
     @Override

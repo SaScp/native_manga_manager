@@ -56,7 +56,7 @@ public class MangaController {
     @GetMapping(value = "/titles")
     @JsonView(value = ViewMangaJsonGroup.CatalogDataTitle.class)
     public List<MangaDto> findAllMangas(@FilterParam @Parameter(hidden = true) FilterEntity filterEntity) {
-        return MangaMapper.INSTANCE.mangasToMangaDtos(mangaService.findAll(filterEntity));
+        return mangaService.findAll(filterEntity);
     }
 
     @Operation(

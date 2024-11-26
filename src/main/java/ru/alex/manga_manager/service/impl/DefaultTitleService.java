@@ -7,7 +7,6 @@ import ru.alex.manga_manager.model.data.manga.Manga;
 import ru.alex.manga_manager.model.dto.manga.ChapterDto;
 import ru.alex.manga_manager.repository.MangaRepository;
 import ru.alex.manga_manager.repository.TitleRepository;
-import ru.alex.manga_manager.service.MangaService;
 import ru.alex.manga_manager.service.TitleService;
 import ru.alex.manga_manager.util.exception.MangaNotFoundException;
 import ru.alex.manga_manager.util.mapper.TitleMapper;
@@ -28,8 +27,9 @@ public class DefaultTitleService implements TitleService {
 
     @Override
     public Set<ChapterDto> findAllByManga(String mangaId) {
-        return TitleMapper.INSTANCE.setChapterToSetChapterDto(titleRepository.findAllByMangaId(mangaId)
-                .orElseThrow(() -> new MangaNotFoundException("title by id not found")));
+        Set<Chapter> allByMangaId = titleRepository.findAllByManga_Id(mangaId);
+        Set<ChapterDto> chapterDtos = TitleMapper.INSTANCE.setChapterToSetChapterDto(allByMangaId);
+        return chapterDtos;
     }
 
     @Override

@@ -36,14 +36,14 @@ public class TitleController {
         return mangaService.findMangaById(id);
     }
 
-    @JsonView(value = ViewMangaJsonGroup.InnerDataTitle.class)
+
     @GetMapping(value = "/chapters", produces = MediaType.APPLICATION_JSON_VALUE)
     public Set<ChapterDto> findChaptersByMangaId(@PathVariable("id") String id) {
         return titleService.findAllByManga(id);
     }
 
     @PostMapping("/add")
-    public boolean addChapterInTitle(@PathVariable("id") String id,@RequestBody ChapterDto chapterDto) {
+    public boolean addChapterInTitle(@PathVariable("id") String id, @RequestBody ChapterDto chapterDto) {
         return false;
     }
 }
