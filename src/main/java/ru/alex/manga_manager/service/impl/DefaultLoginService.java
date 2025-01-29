@@ -3,6 +3,7 @@ package ru.alex.manga_manager.service.impl;
 import com.nimbusds.jose.KeyLengthException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +23,7 @@ import ru.alex.manga_manager.util.exception.LoginException;
 
 import java.text.ParseException;
 
+@Order
 @Service
 public class DefaultLoginService implements LoginService {
 

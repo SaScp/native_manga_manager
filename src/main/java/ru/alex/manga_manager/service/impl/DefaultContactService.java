@@ -2,6 +2,7 @@ package ru.alex.manga_manager.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alex.manga_manager.model.data.contact.Contact;
@@ -16,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@Order
 @Service
 @RequiredArgsConstructor
 public class DefaultContactService implements ContactService {

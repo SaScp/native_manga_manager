@@ -53,12 +53,4 @@ public class ControllerAdvice {
         return ResponseEntity.status(Integer.parseInt(errorResponse.getCode())).body(errorResponse);
     }
 
-    /*@ExceptionHandler({Exception.class})
-    public ResponseEntity<ErrorResponse> globalExceptionHandler(Exception e, WebRequest webRequest) {
-        return ResponseEntity.internalServerError().body(ErrorResponse.builder()
-                .path(webRequest.getDescription(false))
-                .code("500")
-                .message(e.getMessage())
-                .timestamp(ZonedDateTime.now()).build());
-    }*/
 }

@@ -25,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/manga")
+@RequestMapping("/manga")
 @Tag(name = "MangaController", description = "Контроллер для взаимодействия с данными Манг")
 public class MangaController {
 

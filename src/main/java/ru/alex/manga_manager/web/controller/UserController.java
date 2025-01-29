@@ -24,7 +24,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/user")
+@RequestMapping("/user")
 @Tag(name = "UserController", description = "Контроллер для взаимодействия с данными пользователя")
 public class UserController {
 

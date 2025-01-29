@@ -19,7 +19,7 @@ import ru.alex.manga_manager.service.RegistrationService;
 import java.net.URISyntaxException;
 
 @RestController
-@RequestMapping("/v1/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 @Tag(name = "AuthenticationController", description = "Контроллер для авторизации/аунтефикации")
 public class AuthenticationController {

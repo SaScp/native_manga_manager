@@ -2,6 +2,7 @@ package ru.alex.manga_manager.service.impl;
 
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import ru.alex.manga_manager.util.mapper.MangaMapper;
 import java.util.*;
 
 @Service
+@Order
 @Transactional(readOnly = true)
 public class DefaultMangaService implements MangaService {
 

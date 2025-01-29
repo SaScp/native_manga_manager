@@ -21,7 +21,7 @@ import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("v1/manga/{id}")
+@RequestMapping("/manga/{id}")
 @Tag(name = "TitleController", description = "Контроллер для взаимодействия с данными глав")
 public class TitleController {
 

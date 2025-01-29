@@ -23,7 +23,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/{id}/comment")
+@RequestMapping("/{id}/comment")
 @Tag(name = "CommentController", description = "Контроллер для взаимодействия с Комментариями")
 public class CommentController {
 

@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/contact")
+@RequestMapping("/contact")
 @Tag(name = "ContactController", description = "Контроллер для взаимодействия с Контактами пользователя")
 public class ContactController {
 
